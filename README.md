@@ -1,3 +1,7 @@
+> API for fiat currency exchange rate charts
+<p align="center"><img src="assets/Banner.png" alt="kekkai banner"></p>
+
+> Leoardo  Watch. ⓒ Kekkai sensen. Banner made by [Artem Bay](https://github.com/ArtemBay/)
 
 ### License. The project is under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) license.
 
