@@ -4,11 +4,11 @@ const fs = require("fs");
 const config = yaml.parse(fs.readFileSync("./config.yaml", "utf-8"));
 
 const pool = new pg.Pool({
-    user:  config['db_user'],
-    password: config['db_password'],
-    host: config['db_host'],
-    port: config['db_port'],
-    database: config['db_name']
+    user:  config['db']['user'],
+    password: config['db']['password'],
+    host: config['db']['host'],
+    port: config['db']['port'],
+    database: config['db']['name']
 });
 
 module.exports = pool;
