@@ -5,17 +5,19 @@ const axios = require("axios");
 const config = yaml.parse(fs.readFileSync("./config.yaml", "utf-8"));
 
 async function saveCourse() {
-    for (let i = 0; i < config['currency'].length; i++) {
-        for (let pair in config['currency'] ) {
-            const res = await axios.get(
-                `https://duckduckgo.com/js/spice/currency/1/${config['currency'][i]}/${config['currency'][pair]}`
-            )
-            console.log(res.data)
 
-            //TODO: добавить сохранение в бд
-        }
-    }
-
+    let pairs = [];
+    let currencies = ["USD", "RUB", "UAH", "JDF"]
+    config['currency'].forEach(
+        (value) => config['currency'].forEach(async (pair) => {
+            if(value !== pair) {
+                const res = await axios.get(
+                    `https://duckduckgo.com/js/spice/currency/1/${value}/${pair}`
+                )
+                console.log(res.data)
+            }
+        })
+    );
 
 }
 
