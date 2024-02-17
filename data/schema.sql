@@ -1,5 +1,6 @@
 CREATE TABLE currency(
-    code TEXT NOT NULL,
-    course FLOAT NOT NULL,
-    date INTEGER NOT NULL
+    from_currency TEXT NOT NULL,
+    conv_currency TEXT NOT NULL,
+    rate FLOAT NOT NULL,
+    date TEXT NOT NULL
 );
