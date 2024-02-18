@@ -2,7 +2,6 @@ const pool = require("../postgresql.js");
 const yaml = require("yaml")
 const fs = require("fs");
 const axios = require("axios");
-const {AxiosProxyConfig} = require("axios");
 const config = yaml.parse(fs.readFileSync("./config.yaml", "utf-8"));
 
 async function saveRate() {
@@ -34,9 +33,10 @@ async function saveRate() {
 
                 const point = data['to'][0]['mid'].toString().indexOf('.') + 4;
 
-                pool.query('SELECT * FROM currency WHERE from_currency = $1 AND date = $2',
+                pool.query('SELECT * FROM currency WHERE from_currency = $1 AND conv_currency = $2 AND date = $3',
                         [
                             value,
+                            pair,
                             new Date(data['timestamp']).toLocaleDateString()
                         ]
                     ).then(async (db) => {
