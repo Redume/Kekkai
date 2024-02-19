@@ -26,7 +26,7 @@ fastify.get('/api/getRate/', async function (req, reply) {
         'periodStart parameter is required'
     );
 
-    const data = await pool.query('SELECT * FROM currency WHERE from_currency = $1 AND date = $2', [
+    let data = await pool.query('SELECT * FROM currency WHERE from_currency = $1 AND date = $2', [
         req['query']['codeCurrency'],
         req['query']['periodStart'],
     ]).then(response('error', 500, 'Internal Server Error'));
@@ -36,6 +36,20 @@ fastify.get('/api/getRate/', async function (req, reply) {
         204,
         'There is no data for this time'
     );
+
+    if (req['query']?.['periodEnd']) {
+        let data = await pool.query('SELECT * FROM currency WHERE (date BETWEEN $2 AND $3) AND from_currency = $1', [
+            req['query']['codeCurrency'],
+            req['query']['periodStart'],
+            req['query']['periodEnd'],
+        ]);
+
+        console.log(data)
+
+        return data['rows'];
+    } else {
+        return response('error', 204, 'There is no data for this time')
+    }
 
     return data['rows'];
 });
