@@ -1,9 +1,12 @@
 const fastify = require('fastify')({ logger: true });
 const schedule = require('node-schedule');
 const pool = require("./postgresql.js");
+const yaml = require("yaml")
+const fs = require("fs");
+const config = yaml.parse(fs.readFileSync("./config.yaml", "utf-8"));
+
 const saveRate = require('./utils/saveRate.js');
 const response = require('./utils/errorResponse');
-
 
 schedule.scheduleJob('30 8 * * *', async function () {
     console.log('I save the currency data');
@@ -11,25 +14,36 @@ schedule.scheduleJob('30 8 * * *', async function () {
 });
 
 fastify.get('/api/getRate/', async function (req, reply) {
-    if (!req.query?.codeCurrency) return response(
+    if (!req['query']?.['codeCurrency']) return response(
         400,
         'error',
         'codeCurrency parameter is required'
         );
 
-    if (!req.query?.periodStart) return response(400, 'error', 'period parameter is required');
+    if (!req['query']?.['periodStart']) return response(
+        400,
+        'error',
+        'periodStart parameter is required'
+    );
 
     const data = await pool.query('SELECT * FROM currency WHERE from_currency = $1 AND date = $2', [
-        req.query.codeCurrency,
-        req.query.periodStart
+        req['query']['codeCurrency'],
+        req['query']['periodStart'],
     ]).then(response('error', 500, 'Internal Server Error'));
 
-    console.log(typeof data['rows'])
+    if (!data['rows']?.[0]) return response(
+        'error',
+        204,
+        'There is no data for this time'
+    );
 
     return data['rows'];
 });
 
-fastify.listen({ port: 3000 }, err => {
+fastify.listen({
+    host: config['server']['host'],
+    port: config['server']['port']
+}, err => {
     if (err) throw err
     console.log(`server listening on ${fastify.server.address().port}`)
 })
