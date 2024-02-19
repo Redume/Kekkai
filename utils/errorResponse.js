@@ -1,7 +1,7 @@
 function response(status, statusCode, message) {
     return {
         status: status,
-        statusCode: status,
+        statusCode: statusCode,
         data: {
             message: message
         }
