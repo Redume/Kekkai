@@ -44,11 +44,7 @@ fastify.get('/api/getRate/', async function (req, reply) {
             req['query']['periodEnd'],
         ]);
 
-        console.log(data)
-
         return data['rows'];
-    } else {
-        return response('error', 204, 'There is no data for this time')
     }
 
     return data['rows'];
