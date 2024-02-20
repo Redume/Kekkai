@@ -8,16 +8,17 @@ const config = yaml.parse(fs.readFileSync("./config.yaml", "utf-8"));
 const saveRate = require('./utils/saveRate.js');
 const response = require('./utils/errorResponse');
 
+saveRate()
 schedule.scheduleJob('30 8 * * *', async function () {
     console.log('I save the currency data');
     await saveRate();
 });
 
 fastify.get('/api/getRate/', async function (req, reply) {
-    if (!req['query']?.['codeCurrency']) return response(
+    if (!req['query']?.['fromCurrency'] || !req['query']?.['convCurrency']) return response(
         400,
         'error',
-        'codeCurrency parameter is required'
+        'fromCurrency and convCurrency parameter is required'
         );
 
     if (!req['query']?.['periodStart']) return response(
@@ -26,8 +27,9 @@ fastify.get('/api/getRate/', async function (req, reply) {
         'periodStart parameter is required'
     );
 
-    let data = await pool.query('SELECT * FROM currency WHERE from_currency = $1 AND date = $2', [
-        req['query']['codeCurrency'],
+    let data = await pool.query('SELECT * FROM currency WHERE from_currency = $1 AND conv_currency = $2 AND date = $3', [
+        req['query']['fromCurrency'],
+        req['query']['convCurrency'],
         req['query']['periodStart'],
     ]).then(response('error', 500, 'Internal Server Error'));
 
@@ -38,8 +40,9 @@ fastify.get('/api/getRate/', async function (req, reply) {
     );
 
     if (req['query']?.['periodEnd']) {
-        let data = await pool.query('SELECT * FROM currency WHERE (date BETWEEN $2 AND $3) AND from_currency = $1', [
-            req['query']['codeCurrency'],
+        let data = await pool.query('SELECT * FROM currency WHERE (date BETWEEN $3 AND $4) AND from_currency = $1 AND conv_currency = $2', [
+            req['query']['fromCurrency'],
+            req['query']['convCurrency'],
             req['query']['periodStart'],
             req['query']['periodEnd'],
         ]);
@@ -47,7 +50,7 @@ fastify.get('/api/getRate/', async function (req, reply) {
         return data['rows'];
     }
 
-    return data['rows'];
+    return data['rows'][0];
 });
 
 fastify.listen({
