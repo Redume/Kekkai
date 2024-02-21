@@ -1,7 +1,7 @@
 /**
  *
- * @param {number} status
- * @param {string} statusCode
+ * @param {string} status
+ * @param {number} statusCode
  * @param {string} message
  * @returns  {{data: {message}, status, statusCode}}
  */
