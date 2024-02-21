@@ -8,13 +8,12 @@ const config = yaml.parse(fs.readFileSync("./config.yaml", "utf-8"));
 const saveRate = require('./utils/saveRate.js');
 const response = require('./utils/errorResponse');
 
-saveRate()
 schedule.scheduleJob('30 8 * * *', async function () {
     console.log('I save the currency data');
     await saveRate();
 });
 
-fastify.get('/api/getRate/', async function (req, reply) {
+fastify.get('/api/getRate/', async function (req) {
     if (!req['query']?.['fromCurrency'] || !req['query']?.['convCurrency']) return response(
         'error',
         400,
