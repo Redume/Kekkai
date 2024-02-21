@@ -16,14 +16,14 @@ schedule.scheduleJob('30 8 * * *', async function () {
 
 fastify.get('/api/getRate/', async function (req, reply) {
     if (!req['query']?.['fromCurrency'] || !req['query']?.['convCurrency']) return response(
-        400,
         'error',
+        400,
         'fromCurrency and convCurrency parameter is required'
         );
 
     if (!req['query']?.['periodStart']) return response(
-        400,
         'error',
+        400,
         'periodStart parameter is required'
     );
 
@@ -55,7 +55,7 @@ fastify.get('/api/getRate/', async function (req, reply) {
 
 fastify.listen({
     host: config['server']['host'],
-    port: config['server']['port']
+    port: config['server']['port'],
 }, err => {
     if (err) throw err
     console.log(`server listening on ${fastify.server.address().port}`)
