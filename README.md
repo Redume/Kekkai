@@ -1,4 +1,4 @@
-> API for fiat currency exchange rate charts
+> API providing historical currency data
 <p align="center"><img src="assets/Banner.png" alt="kekkai banner"></p>
 
 > Leoardo  Watch. ⓒ Kekkai sensen. Banner made by [Artem Bay](https://github.com/ArtemBay/)
