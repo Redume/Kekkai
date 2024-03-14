@@ -8,6 +8,7 @@ const config = yaml.parse(fs.readFileSync("./config.yaml", "utf-8"));
 const saveRate = require('./utils/saveRate.js');
 const response = require('./utils/errorResponse');
 
+saveRate();
 schedule.scheduleJob('30 8 * * *', async function () {
     console.log('I save the currency data');
     await saveRate();
