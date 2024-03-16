@@ -1,9 +1,27 @@
-const fastify = require('fastify')({ logger: true });
 const schedule = require('node-schedule');
 const pool = require("./postgresql.js");
 const yaml = require("yaml")
 const fs = require("fs");
+const path = require('path');
 const config = yaml.parse(fs.readFileSync("./config.yaml", "utf-8"));
+
+let https = {}
+if (config['server']['ssl']['enabled']) {
+    https = {
+        https: {
+            key: fs.readFileSync(path.join(__dirname, config['server']['ssl']['privatekey'])),
+            cert: fs.readFileSync(path.join(__dirname, config['server']['ssl']['cert'])),
+        }
+    }
+}
+
+console.log(https)
+
+const fastify = require('fastify')({
+    logger: config['server']['logger'],
+    https
+})
+
 
 const saveRate = require('./utils/saveRate.js');
 const response = require('./utils/errorResponse');

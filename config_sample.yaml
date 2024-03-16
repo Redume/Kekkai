@@ -4,9 +4,14 @@ db:
   host: "DATABASE_HOST"
   name: "DATABASE_NAME"
   port: 5432
-  server:
+server:
     host: localhost
     port: 3000
+    logger: true
+    ssl:
+      privatekey: 
+      cert:
+      enabled: false
 currency:
   - USD
   - RUB
