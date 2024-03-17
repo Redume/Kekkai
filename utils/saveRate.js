@@ -19,7 +19,7 @@ async function saveRate() {
                     }
                 );
 
-                if (!config['proxy']['host'] && !res['data']) {
+                if (!config['proxy']['host'] && res['data'] !== 200) {
                     res.config.proxy = {
                         protocol: config['proxy']['protocol'],
                         host: config['proxy']['host'],

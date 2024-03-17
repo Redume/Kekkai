@@ -15,8 +15,6 @@ if (config['server']['ssl']['enabled']) {
     }
 }
 
-console.log(https)
-
 const fastify = require('fastify')({
     logger: config['server']['logger'],
     https

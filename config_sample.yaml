@@ -1,18 +1,21 @@
+# Official documentation
+# https://github.com/Redume/Kekkai/wiki/Config/
+
 db:
-  user: "DATABASE_USERNAME"
-  password: "DATABASE_PASSWORD"
-  host: "DATABASE_HOST"
-  name: "DATABASE_NAME"
+  user: 'DATABASE_USERNAME'
+  password: 'DATABASE_PASSWORD'
+  host: 'DATABASE_HOST'
+  name: 'DATABASE_NAME'
   port: 5432
 server:
     host: localhost
     port: 3000
-    logger: true
+    logger: true # Enable or disable logs from fastify (true | false)
     ssl:
-      privatekey: 
-      cert:
-      enabled: false
-currency:
+      privatekey: '' # The path where the SSL secret key is located (.key)
+      cert: '' # The path where SSL certificate itself is located (.pem)
+      enabled: false # Enable or disable SSL (true | false)
+currency: # List of fiat currency for data collection.
   - USD
   - RUB
   - EUR
@@ -20,9 +23,9 @@ currency:
   - TRY
   - KZT
 proxy:
-  protocol: 'https'
+  protocol: ''
   host: '127.0.0.1'
   port: 9000
   auth:
-    username: 'mikeymike'
-    password: 'rapunz3l'
+    username: ''
+    password: ''
