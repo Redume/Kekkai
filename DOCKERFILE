@@ -1,0 +1,5 @@
+FROM node:kekkai
+WORKDIR /
+COPY . .
+RUN npm install
+CMD ["node", "main.js"]
