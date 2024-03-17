@@ -23,9 +23,9 @@ currency: # List of fiat currency for data collection.
   - TRY
   - KZT
 proxy:
-  protocol: ''
-  host: '127.0.0.1'
-  port: 9000
-  auth:
+  protocol: '' # Proxy Protocol (sock5 | sock4 | https)
+  host: '127.0.0.1' # ipv4 servers where the proxy works
+  port: 9000 # the port on which the proxy is running
+  auth: # Authentication (optional)
     username: ''
     password: ''
