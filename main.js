@@ -5,9 +5,9 @@ const fs = require("fs");
 const path = require('path');
 const config = yaml.parse(fs.readFileSync("./config.yaml", "utf-8"));
 
-let https = {}
+let config_https = {}
 if (config['server']['ssl']['enabled']) {
-    https = {
+    config_https = {
         https: {
             key: fs.readFileSync(path.join(__dirname, config['server']['ssl']['privatekey'])),
             cert: fs.readFileSync(path.join(__dirname, config['server']['ssl']['cert'])),
@@ -17,46 +17,54 @@ if (config['server']['ssl']['enabled']) {
 
 const fastify = require('fastify')({
     logger: config['server']['logger'],
-    https
+    config_https
 })
 
 
 const saveRate = require('./utils/saveRate.js');
 const response = require('./utils/errorResponse');
 
-saveRate();
+//saveRate();
 schedule.scheduleJob('30 8 * * *', async function () {
     console.log('I save the currency data');
     await saveRate();
 });
 
-fastify.get('/api/getRate/', async function (req) {
-    if (!req['query']?.['fromCurrency'] || !req['query']?.['convCurrency']) return response(
+fastify.get('/api/v1/rate/', async function (req) {
+    if (!req['query']?.['typeGetRate']) return response(
         'error',
         400,
-        'fromCurrency and convCurrency parameter is required'
-        );
-
-    if (!req['query']?.['periodStart']) return response(
-        'error',
-        400,
-        'periodStart parameter is required'
+        'Specify the type of currency. Two types are available, fiat or cryptocurrency'
+    );
+    else if (req['query']?.['typeGetRate'] !== 'fiat' &&
+            req['query']?.['typeGetRate'] !== 'crypto') return response(
+                'error', 
+                400,
+                'Specify the correct currency type. There are two types available, fiat or cryptocurrency'
     );
 
-    let data = await pool.query('SELECT * FROM currency WHERE from_currency = $1 AND conv_currency = $2 AND date = $3', [
+    let data = await pool.query(`SELECT * FROM ${req['query']['typeGetRate']} WHERE from_currency = $1 AND
+            conv_currency = $2 AND
+            date = $3`,
+    [
         req['query']['fromCurrency'],
         req['query']['convCurrency'],
         req['query']['periodStart'],
-    ]).then(response('error', 500, 'Internal Server Error'));
+    ]
+    );
 
     if (!data['rows']?.[0]) return response(
         'error',
-        204,
-        'There is no data for this time'
+        400, 
+        'periodStart parameter is required'
     );
 
     if (req['query']?.['periodEnd']) {
-        let data = await pool.query('SELECT * FROM currency WHERE (date BETWEEN $3 AND $4) AND from_currency = $1 AND conv_currency = $2', [
+        let data = await pool.query(`SELECT * FROM ${req['query']['typeGetRate']} WHERE 
+                    (date BETWEEN $4 AND $5) 
+                      AND from_currency = $2 
+                      AND conv_currency = $3`,
+            [
             req['query']['fromCurrency'],
             req['query']['convCurrency'],
             req['query']['periodStart'],
