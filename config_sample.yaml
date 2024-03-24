@@ -15,13 +15,20 @@ server:
       privatekey: '' # The path where the SSL secret key is located (.key)
       cert: '' # The path where SSL certificate itself is located (.pem)
       enabled: false # Enable or disable SSL (true | false)
-currency: # List of fiat currency for data collection.
-  - USD
-  - RUB
-  - EUR
-  - UAH
-  - TRY
-  - KZT
+currency:
+  fiat: true # Enabling or disabling the collection of fiat currency data (true | false)
+  crypto: false # Enabling or disabling the collection of cryptocurrency data (true | false)
+  fiatList:
+    - USD
+    - RUB
+    - EUR
+    - UAH
+    - TRY
+    - KZT
+  cryptoList: 
+    - BTC
+    - TON
+    - ETH
 proxy:
   protocol: '' # Proxy Protocol (sock5 | sock4 | https)
   host: '127.0.0.1' # ipv4 servers where the proxy works
