@@ -7,8 +7,8 @@ const config = yaml.parse(fs.readFileSync('./config.yaml', 'utf-8'));
 async function saveRate() {
     if (!config['currency']['fiat']) return;
 
-    config['fiatList'].forEach(
-        (value) => config['fiatList'].forEach(async (pair) => {
+    config['currency']['fiatList'].forEach(
+        (value) => config['currency']['fiatList'].forEach(async (pair) => {
             if(value !== pair) {
                 const res = await axios.get(
                     `https://duckduckgo.com/js/spice/currency/1/${value}/${pair}`,
