@@ -10,6 +10,7 @@ val redis_version: String by project
 plugins {
     kotlin("jvm") version "1.9.23"
     id("io.ktor.plugin") version "2.3.10"
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 group = "su.redume"
@@ -27,6 +28,8 @@ repositories {
 }
 
 dependencies {
+    implementation("io.ktor:ktor-server-config-yaml")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
