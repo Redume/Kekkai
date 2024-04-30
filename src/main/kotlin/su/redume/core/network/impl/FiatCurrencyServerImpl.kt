@@ -8,13 +8,14 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.*
-import javax.inject.Inject
 import su.redume.core.network.api.FiatCurrencyServer
 import su.redume.core.network.model.CurrencyDto
+import su.redume.utils.js
 
-class FiatCurrencyServerImpl @Inject constructor() : FiatCurrencyServer {
+class FiatCurrencyServerImpl : FiatCurrencyServer {
     private val httpClient = HttpClient {
         install(ContentNegotiation) {
+            js()
             json(
                 Json {
                     ignoreUnknownKeys = true
