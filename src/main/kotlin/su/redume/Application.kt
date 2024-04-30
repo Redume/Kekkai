@@ -2,7 +2,7 @@ package su.redume
 
 import io.ktor.server.application.*
 import su.redume.database.DatabaseFactory
-import su.redume.plugins.*
+import su.redume.plugins.configureRouting
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
