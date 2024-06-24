@@ -19,7 +19,6 @@ async function save_fiat() {
 
                 const regExp = new RegExp('\\(\\s*(.*)\\s*\\);$', 'mg');
                 const data = JSON.parse(Array.from(res.data.matchAll(regExp))[0][1])
-                console.log(data)
 
                 delete data['terms'];
                 delete data['privacy'];
