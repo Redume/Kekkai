@@ -2,40 +2,25 @@ const pool = require('../postgresql.js');
 const yaml = require('yaml');
 const fs = require('fs');
 const axios = require('axios');
-const axiosRetry = require('axios-retry').default
 const config = yaml.parse(fs.readFileSync('./config.yaml', 'utf-8'));
 
-async function saveRate() {
-    config['currency'].forEach(
-        (value) => config['currency'].forEach(async (pair) => {
+async function save_fiat() {
+    if (!config['currency']['collecting']['fiat']) return;
+
+    config['currency']['fiat'].forEach(
+        (value) => config['currency']['fiat'].forEach(async (pair) => {
             if(value !== pair) {
                 const res = await axios.get(
                     `https://duckduckgo.com/js/spice/currency/1/${value}/${pair}`,
                     {
                         timeout: 3000,
-                        headers: {
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
-                        }
                     }
                 );
 
-                if (!config['proxy']['host'] && !res['data']) {
-                    res.config.proxy = {
-                        protocol: config['proxy']['protocol'],
-                        host: config['proxy']['host'],
-                        port: config['proxy']['port'],
-                        auth: {
-                            username: config['proxy']['auth']['username'],
-                            password: config['proxy']['auth']['password'],
-                        }
-                    }
-                }
+                const regExp = new RegExp('\\(\\s*(.*)\\s*\\);$', 'mg');
+                const data = JSON.parse(Array.from(res.data.matchAll(regExp))[0][1])
+                console.log(data)
 
-                axiosRetry(axios, {
-                    retries: 3
-                })
-
-                const data = JSON.parse(res.data.replace('ddg_spice_currency(', '').replace(');', ''));
                 delete data['terms'];
                 delete data['privacy'];
 
@@ -65,4 +50,4 @@ async function saveRate() {
     );
 }
 
-module.exports = saveRate;
+module.exports = save_fiat;
