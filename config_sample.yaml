@@ -1,23 +1,23 @@
-db:
+database:
   user: "DATABASE_USERNAME"
   password: "DATABASE_PASSWORD"
   host: "DATABASE_HOST"
   name: "DATABASE_NAME"
   port: 5432
 server:
-    host: localhost
-    port: 3000
+  host: localhost
+  port: 5050
 currency:
-  - USD
-  - RUB
-  - EUR
-  - UAH
-  - TRY
-  - KZT
-proxy:
-  protocol: 'https'
-  host: '127.0.0.1'
-  port: 9000
-  auth:
-    username: 'mikeymike'
-    password: 'rapunz3l'
+  collecting:
+    fiat: True
+    crypto: False
+  fiat:
+    - USD
+    - RUB
+    - EUR
+    - UAH
+    - TRY
+    - KZT
+  crypto:
+    - BTC
+    - ETH
