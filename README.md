@@ -1,5 +1,5 @@
 > API providing historical currency data
-<p align="center"><img src="assets/Banner.png" alt="kekkai banner"></p>
+<p align="center"><img src="assets/banner.png" alt="kekkai banner"></p>
 
 > Leoardo  Watch. ⓒ Kekkai sensen. Banner made by [Artem Bay](https://github.com/ArtemBay/)
 
@@ -21,10 +21,3 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <https://www.gnu.org/licenses/>.
 ```
-
-### Third-party library licenses
-- [fastify/fastify](https://github.com/fastify/fastify) — [MIT](https://github.com/fastify/fastify/blob/main/LICENSE)
-- [eemeli/yaml](https://github.com/eemeli/yaml) — [ISC](https://github.com/eemeli/yaml/blob/main/LICENSE)
-- [brianc/node-postgres](https://github.com/brianc/node-postgres) — [MIT](https://github.com/brianc/node-postgres/blob/master/LICENSE)
-- [node-schedule/node-schedule](https://github.com/node-schedule/node-schedule/) — [MIT](https://github.com/node-schedule/node-schedule/blob/master/LICENSE)
-- [axios/axios](https://github.com/axios/axios) — [MIT](https://github.com/axios/axios/blob/v1.x/LICENSE)
