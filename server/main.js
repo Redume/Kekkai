@@ -3,7 +3,7 @@ const rate = require('../database/main.js');
 
 fastify.get('/api/getRate/', async function (req, res){
     const query = req.query;
-    if (query['fromCurrency'] || query['convCurrency']) return;
+    if (!query['fromCurrency'] || !query['convCurrency']) return;
 
     if (query['date']) return rate.getDay(query['fromCurrency'], query['convCurrency'], query['date']);
     else if (query['startDate'] && query['endDate']) return rate.getPeriod(
