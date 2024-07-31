@@ -1,8 +1,6 @@
 const pool = require('../database/postgresql.js');
-const yaml = require('yaml');
-const fs = require('fs');
 const axios = require('axios');
-const config = yaml.parse(fs.readFileSync('./config.yaml', 'utf-8'));
+const config = require('../config/main.js')();
 
 async function save_fiat() {
     if (!config['currency']['collecting']['fiat']) return;
