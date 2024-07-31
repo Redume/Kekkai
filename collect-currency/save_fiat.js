@@ -12,12 +12,10 @@ async function save_fiat() {
                     `https://duckduckgo.com/js/spice/currency/1/${value}/${pair}`,
                     {
                         timeout: 3000,
-                    }
-                );
+                    });
 
                 const regExp = new RegExp('\\(\\s*(.*)\\s*\\);$', 'mg');
-                const data = JSON.parse(Array.from(res.data.matchAll(regExp))[0][1])
-                console.log(data)
+                const data = JSON.parse(Array.from(res.data.matchAll(regExp))[0][1]);
 
                 delete data['terms'];
                 delete data['privacy'];
@@ -29,19 +27,18 @@ async function save_fiat() {
                             value,
                             pair,
                             new Date(data['timestamp']).toLocaleDateString()
-                        ],
-                    ).then(async (db) => {
-                        if (!db['rows'][0]) {
-                            await pool.query(`INSERT INTO currency (from_currency, conv_currency, rate, date) 
-                                VALUES ($1, $2, $3, $4) RETURNING *`,
-                                [
-                                    value,
-                                    pair,
-                                    data['to'][0]['mid'].toString().slice(0, point),
-                                    new Date(data['timestamp']).toLocaleDateString()
-                                ],
-                            );
-                        }
+                        ]).then(async (db) => {
+                        if (db['rows'][0]) return;
+
+                        await pool.query(`INSERT INTO currency (from_currency, conv_currency, rate, date) 
+                            VALUES ($1, $2, $3, $4) RETURNING *`,
+                            [
+                                value,
+                                pair,
+                                data['to'][0]['mid'].toString().slice(0, point),
+                                new Date(data['timestamp']).toLocaleDateString()
+                            ],
+                        );
                 });
             }
         })
