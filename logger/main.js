@@ -1,12 +1,6 @@
 const pino = require('pino');
+const pretty = require('pino-pretty');
 
-const logger = pino({
-    messageKey: 'message',
-    formatters: {
-        level (logLevelString) {
-            return { severity: logLevelString }
-        }
-    }
-});
+const logger = pino(pretty());
 
 module.exports = logger;

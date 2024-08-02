@@ -17,7 +17,7 @@
   "homepage": "https://github.com/redume/kekkai#readme",
   "description": "Log management Service",
   "dependencies": {
-    "fastify": "^4.28.1",
-    "pino": "^9.3.2"
+    "pino": "^9.3.2",
+    "pino-pretty": "^11.2.2"
   }
 }
