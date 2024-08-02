@@ -10,6 +10,9 @@ async function main() {
     if (!config_schedule) throw new Error('The crontab schedule is not set');
     if (!cron.isValidCron(config_schedule, {alias: true})) throw new Error('The crontab is invalid');
 
+    await save_fiat();
+    await save_crypto();
+
     schedule.scheduleJob(config_schedule, async function () {
         await save_fiat();
         await save_crypto();
