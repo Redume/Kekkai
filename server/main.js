@@ -62,6 +62,12 @@ fastify.get('/api/getChart/', async function (req, res){
         query['end_date'],
     )
 
+    if (config['currency']['chart']['save_chart']) chart.save_chart(
+        charts,
+        `${query['from_currency']} ${query['conv_currency']} ` +
+        `(${query['start_date']} - ${query['end_date']}).png`
+    )
+
     return res.status(200).send({
         status: 200,
         message: charts,
