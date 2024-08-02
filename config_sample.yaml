@@ -5,7 +5,11 @@ database:
   name: "DATABASE_NAME"
   port: 5432
 server:
-  host: localhost
+  host: 'localhost'
+  private_key: '/CertSSL/private.key'
+  cert: '/CertSSL/fullchain.pem'
+  ssl: true
+  debug: true
 currency:
   collecting:
     fiat: True
@@ -21,7 +25,7 @@ currency:
   crypto:
     - BTC
     - ETH
-  cryptoKeys:
+  coinapiKeys:
    - CryptoKey1
    - CryptoKey2
    - CryptoKey3
