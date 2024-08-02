@@ -10,7 +10,7 @@ currency:
   collecting:
     fiat: True
     crypto: False
-    schedule: '@hourly'
+    schedule: '30 8 * * *'
   fiat:
     - USD
     - RUB
