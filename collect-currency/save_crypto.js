@@ -4,22 +4,22 @@ const pool = require('../database/postgresql.js');
 
 function save_fiat() {
     if (!config['currency']['collecting']['crypto']) return;
-    const depth = config['currency']['cryptoKeys']
+    const depth = config['currency']['coinapiKeys']
 
     if (depth <= 0) new Error('Rate limit on all API tokens');
 
     config['currency']['crypto'].forEach(
         (value) => config['currency']['crypto'].forEach(async (pair) => {
           if (value !== pair) {
-              const cryptoKeyActive = [0];
+              const coinapiKey = [0];
               const res = await axios.get(`https://rest.coinapi.io/v1/exchangerate/${value}/${pair}`, {
                   timeout: 3000,
                   headers: {
-                      'X-CoinAPI-Key': config['currency']['cryptoKeys'][cryptoKeyActive[0]],
+                      'X-CoinAPI-Key': config['currency']['coinapiKeys'][coinapiKey[0]],
                   }
               });
 
-              if (res.status === 429) rotate_key(config['currency']['cryptoKeys'], cryptoKeyActive);
+              if (res.status === 429) rotate_key(config['currency']['coinapiKeys'], coinapiKey);
 
               const data = res.data;
               const point = data['rate'].toString().indexOf('.') + 4;
