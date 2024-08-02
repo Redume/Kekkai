@@ -15,7 +15,7 @@
     "url": "https://github.com/redume/kekkai/issues"
   },
   "homepage": "https://github.com/redume/kekkai#readme",
-  "description": "",
+  "description": "Log management Service",
   "dependencies": {
     "fastify": "^4.28.1",
     "pino": "^9.3.2"

@@ -15,7 +15,7 @@
     "url": "https://github.com/Redume/Kekkai/issues"
   },
   "homepage": "https://github.com/Redume/Kekkai#readme",
-  "description": "",
+  "description": "Database management service",
   "dependencies": {
     "fastify": "^4.28.1",
     "pg": "^8.12.0",

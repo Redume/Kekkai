@@ -15,7 +15,7 @@
     "url": "https://github.com/Redume/Kekkai/issues"
   },
   "homepage": "https://github.com/Redume/Kekkai#readme",
-  "description": "",
+  "description": "Config management service",
   "dependencies": {
     "yaml": "^2.5.0"
   }
