@@ -1,7 +1,21 @@
 const logger = require('../logger/main.js');
-const fastify = require('fastify')({logger: logger});
+const config = require('../config/main.js')();
+const fs = require('fs');
+
+const fastify = require('fastify')({
+    logger: config['server']['debug'] ? logger : false,
+    ...config['server']['ssl'] ? {
+        https: {
+            key: fs.readFileSync(config['server']['private_key'], 'utf8'),
+            cert: fs.readFileSync(config['server']['cert'], 'utf8'),
+        }
+    } : false
+});
+
 const rate = require('../database/main.js');
 const chart = require('../chart/main.js');
+
+require('../collect-currency/main.js').main();
 
 fastify.get('/api/getRate/', async function (req, res){
     const query = req.query;
@@ -54,7 +68,10 @@ fastify.get('/api/getChart/', async function (req, res){
     });
 });
 
-fastify.listen({ port: 3000 }, function (err) {
+fastify.listen({
+        port: 3000,
+        host: config['server']['host'] ? config['server']['host'] : 'localhost',
+    }, function (err) {
     if (err) {
         fastify.log.error(err)
         process.exit(1)
