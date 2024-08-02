@@ -1,6 +1,16 @@
 const ChartJSImage = require('chart.js-image');
 const pool = require('../database/postgresql.js');
+const fs = require('fs');
+const request = require('request');
 
+/**
+ * Graph generation
+ * @param from_currency {String} - The currency that is being converted
+ * @param conv_currency {String} - The currency to be converted into
+ * @param start_date {String} - Start date of the period
+ * @param end_date {String} - End date of the period
+ * @returns {Promise<Error|string>}
+ */
 async function gen_chart(from_currency, conv_currency, start_date, end_date) {
     const data = await pool.query('SELECT date, rate FROM currency WHERE ' +
         '(date BETWEEN $3 AND $4) AND from_currency = $1 AND conv_currency = $2 ORDER BY date ', [
@@ -64,4 +74,17 @@ async function gen_chart(from_currency, conv_currency, start_date, end_date) {
     return chart.toURL();
 }
 
-module.exports = { gen_chart }
+
+/**
+ * Saving a graph to a file
+ * @param url {String} - URL (or Buffer) to the chart
+ * @param filename {String} - filename
+ */
+function save_chart(url, filename) {
+    if (!fs.existsSync('../charts')) fs.mkdirSync('../charts');
+    if (!url.startsWith('https://')) throw new Error('The passed parameter is not a URL');
+
+    request(url).pipe(fs.createWriteStream(`../charts/${filename}`));
+}
+
+module.exports = { gen_chart, save_chart }
