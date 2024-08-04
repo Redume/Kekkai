@@ -1,33 +1,36 @@
-database:
-  user: "DATABASE_USERNAME"
-  password: "DATABASE_PASSWORD"
-  host: "DATABASE_HOST"
-  name: "DATABASE_NAME"
+# For more information, see the documentation
+# https://github.com/Redume/Kekkai/wiki
+
+database: # Postgresql database data, for connection
+  user: 'DATABASE_USERNAME'
+  password: 'DATABASE_PASSWORD'
+  host: 'DATABASE_HOST'
+  name: 'DATABASE_NAME'
   port: 5432
 server:
   host: 'localhost'
-  private_key: '/CertSSL/private.key'
-  cert: '/CertSSL/fullchain.pem'
-  ssl: true
-  debug: true
+  private_key: '/CertSSL/private.key' # The path to the private SSL key file (String)
+  cert: '/CertSSL/fullchain.pem' # The path to the SSL certificate (String)
+  ssl: true # Enable or disable SSL support [Boolean]
+  debug: true # Enable or disable log [Boolean]
 currency:
   chart:
-    save_chart: false
+    save_chart: false # Enable or disable saving graphs to an image (Boolean)
   collecting:
-    fiat: True
-    crypto: False
-    schedule: '30 8 * * *'
-  fiat:
+    fiat: true # Turn off or turn on the collection of the fiat currency rate [Boolean]
+    crypto: false # Turn off or turn on the collection of the cryptocurrency rate [Boolean]
+    schedule: '30 8 * * *' # Currency collection schedule in crontab format [String]
+  fiat: # List of fiat currency to save the exchange rate [Array]
     - USD
     - RUB
     - EUR
     - UAH
     - TRY
     - KZT
-  crypto:
+  crypto: # List of cryptocurrency to save the exchange rate [Array]
     - BTC
     - ETH
-  coinapiKeys:
+  coinapiKeys: # List of keys for the coinapi API [Array]
    - CryptoKey1
    - CryptoKey2
    - CryptoKey3
