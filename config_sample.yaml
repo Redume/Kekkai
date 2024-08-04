@@ -11,6 +11,8 @@ server:
   ssl: true
   debug: true
 currency:
+  chart:
+    save_chart: false
   collecting:
     fiat: True
     crypto: False
