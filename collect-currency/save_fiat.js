@@ -2,6 +2,10 @@ const pool = require('../database/postgresql.js');
 const axios = require('axios');
 const config = require('../config/main.js')();
 
+/**
+ * Saves exchange rate of the fiat currency
+ * @returns {Object} -
+ */
 async function save_fiat() {
     if (!config['currency']['collecting']['fiat']) return;
 

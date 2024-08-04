@@ -1,5 +1,14 @@
 const pool = require('./postgresql.js');
 
+
+/**
+ * Getting the currency exchange rate for a specific day
+ * @param from_currency {String}
+ * @param conv_currency {String}
+ * @param date
+ * @returns {Promise<*|Error>}
+ */
+
 async function getDay(from_currency, conv_currency, date) {
     if (!from_currency || !conv_currency) return new Error('fromCurrency and convCurrency are required');
     else if (!date) return new Error('date is required')
@@ -15,6 +24,15 @@ async function getDay(from_currency, conv_currency, date) {
 
     return data['rows'][0];
 }
+
+/**
+ * Getting the exchange rate for a certain period
+ * @param {String} from_currency - The currency that is being converted
+ * @param {String} conv_currency - The currency to be converted into
+ * @param {String} start_date - Start date of the period
+ * @param {String} end_date - End date of the period
+ * @returns {Promise<*|Error>}
+ */
 
 async function getPeriod(from_currency, conv_currency, start_date, end_date) {
     if (!from_currency || !conv_currency) return new Error('from_currency and conv_currency are required');

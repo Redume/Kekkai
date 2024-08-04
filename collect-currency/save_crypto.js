@@ -2,6 +2,11 @@ const config = require('../config/main.js')();
 const axios = require('axios');
 const pool = require('../database/postgresql.js');
 
+
+/**
+ * Saves exchange rate of the cryptocurrency
+ * @return {Object}
+ */
 function save_fiat() {
     if (!config['currency']['collecting']['crypto']) return;
     const depth = config['currency']['coinapiKeys']
@@ -46,6 +51,13 @@ function save_fiat() {
         })
     );
 }
+
+/**
+ * Changing API keys
+ * @param {Array} list - List of all keys
+ * @param active - Active API key
+ * @returns {number} - Outputs the number of the key that should work
+ */
 
 function rotate_key(list, active) {
     return active[0] = (active + 1) % list.length;

@@ -5,10 +5,10 @@ const request = require('request');
 
 /**
  * Graph generation
- * @param from_currency {String} - The currency that is being converted
- * @param conv_currency {String} - The currency to be converted into
- * @param start_date {String} - Start date of the period
- * @param end_date {String} - End date of the period
+ * @param {String} from_currency - The currency that is being converted
+ * @param {String} conv_currency - The currency to be converted into
+ * @param {String} start_date - Start date of the period
+ * @param {String} end_date - End date of the period
  * @returns {Promise<Error|string>}
  */
 async function gen_chart(from_currency, conv_currency, start_date, end_date) {
@@ -77,8 +77,8 @@ async function gen_chart(from_currency, conv_currency, start_date, end_date) {
 
 /**
  * Saving a graph to a file
- * @param url {String} - URL (or Buffer) to the chart
- * @param filename {String} - filename
+ * @param {String} url  - URL (or Buffer) to the chart
+ * @param {String} filename - filename
  */
 function save_chart(url, filename) {
     if (!fs.existsSync('../charts')) fs.mkdirSync('../charts');
