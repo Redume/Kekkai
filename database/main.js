@@ -22,6 +22,9 @@ async function getDay(from_currency, conv_currency, date) {
 
     if (!data) return new Error('Missing data');
 
+    let set_date = data['rows'][0]['date']
+    set_date = new Date(set_date.setDate(set_date.getDate() + 1));
+
     return data['rows'][0];
 }
 
@@ -39,7 +42,7 @@ async function getPeriod(from_currency, conv_currency, start_date, end_date) {
     else if(!start_date || !end_date) return new Error('start_date and end_date are required')
 
     const data = await pool.query('SELECT * FROM currency WHERE ' +
-        '(date BETWEEN $3 AND $4) AND from_currency = $1 AND conv_currency = $2', [
+        '(date BETWEEN $3 AND $4) AND from_currency = $1 AND conv_currency = $2 ORDER BY date', [
             from_currency.toUpperCase(),
             conv_currency.toUpperCase(),
             start_date,
@@ -47,6 +50,11 @@ async function getPeriod(from_currency, conv_currency, start_date, end_date) {
     ]);
 
     if (!data) return new Error('Missing data');
+
+    for (let i = 0; i < data['rows'].length; i++) {
+        let date = data['rows'][i]['date']
+        date = new Date(date.setDate(date.getDate() + 1));
+    }
 
     return data['rows'];
 }
