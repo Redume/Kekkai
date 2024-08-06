@@ -33,10 +33,21 @@ async function gen_chart(from_currency, conv_currency, start_date, end_date) {
     const chart = ChartJSImage().chart({
         type: 'line',
         options: {
-              title: {
+            title: {
                   display: true,
                   text: `${from_currency} / ${conv_currency}`,
               },
+            scales: [
+                {
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: false,
+                            }
+                        }
+                    ]
+                }
+            ]
         },
         data: {
             labels: date,
