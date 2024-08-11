@@ -36,7 +36,7 @@ function save_crypto() {
 
                     logger.debug(JSON.stringify(data));
 
-                    const db = pool.query('SELECT * FROM currency WHERE from_currency = $1 AND conv_currency = $2 AND date = $3',
+                    const db = await pool.query('SELECT * FROM currency WHERE from_currency = $1 AND conv_currency = $2 AND date = $3',
                         [
                             value,
                             pair,
