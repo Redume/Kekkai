@@ -2,6 +2,7 @@ const ChartJSImage = require('chart.js-image');
 const pool = require('../database/postgresql.js');
 const fs = require('fs');
 const request = require('request');
+const logger = require('../logger/main.js')
 
 /**
  * Graph generation
@@ -54,8 +55,8 @@ async function gen_chart(from_currency, conv_currency, start_date, end_date) {
             datasets: [
                 {
                     label: 'rate',
-                    borderColor: rate[rate.length-2] < rate[rate.length-1] ? 'rgb(24, 218, 39)' : 'rgb(243, 85, 50)',
-                    backgroundColor:  rate[rate.length-2] < rate[rate.length-1] ? 'rgb(36, 175, 47)' : 'rgb(218, 56, 24)',
+                    borderColor: rate[0] < rate[rate.length-1] ? 'rgb(24, 218, 39)' : 'rgb(243, 85, 50)',
+                    backgroundColor:  rate[0] < rate[rate.length-1] ? 'rgb(36, 175, 47)' : 'rgb(218, 56, 24)',
                     data: rate,
                     borderWidth: 2,
                 },
@@ -82,6 +83,8 @@ async function gen_chart(from_currency, conv_currency, start_date, end_date) {
         },
     }).width(1000).height(1000);
 
+    logger.debug(chart.toURL());
+
     return chart.toURL();
 }
 
@@ -94,6 +97,8 @@ async function gen_chart(from_currency, conv_currency, start_date, end_date) {
 function save_chart(url, filename) {
     if (!fs.existsSync('../charts')) fs.mkdirSync('../charts');
     if (!url.startsWith('https://')) throw new Error('The passed parameter is not a URL');
+
+    logger.info(`The schedule has been saved. The path of the graph 'chart/${filename}'`);
 
     request(url).pipe(fs.createWriteStream(`../charts/${filename}`));
 }

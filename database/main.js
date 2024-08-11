@@ -1,5 +1,5 @@
 const pool = require('./postgresql.js');
-
+const logger = require('../logger/main.js');
 
 /**
  * Getting the currency exchange rate for a specific day
@@ -24,6 +24,8 @@ async function getDay(from_currency, conv_currency, date) {
 
     let set_date = data['rows'][0]['date']
     set_date = new Date(set_date.setDate(set_date.getDate() + 1));
+
+    logger.debug(data['rows'][0])
 
     return data['rows'][0];
 }
@@ -55,6 +57,8 @@ async function getPeriod(from_currency, conv_currency, start_date, end_date) {
         let date = data['rows'][i]['date']
         date = new Date(date.setDate(date.getDate() + 1));
     }
+
+    logger.debug(data['rows'])
 
     return data['rows'];
 }
