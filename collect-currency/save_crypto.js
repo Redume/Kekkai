@@ -1,53 +1,67 @@
 const config = require('../config/main.js')();
 const axios = require('axios');
 const pool = require('../database/postgresql.js');
+const logger = require('../logger/main.js');
 
+const coinapiKeys = config['currency']['coinapiKeys'];
+let apiKeyIndex = 0;
+let depth = coinapiKeys.length;
 
-/**
- * Saves exchange rate of the cryptocurrency
- * @return {Object}
- */
-function save_fiat() {
+function save_crypto() {
     if (!config['currency']['collecting']['crypto']) return;
-    const depth = config['currency']['coinapiKeys']
+    if (coinapiKeys[apiKeyIndex] === undefined) return;
 
-    if (depth <= 0) new Error('Rate limit on all API tokens');
+    if (depth <= 0) {
+        logger.info('Rate limit on all coinapi API keys');
+        new Error('Rate limit on all coinapi API keys');
+        return;
+    }
+
+    logger.info(`Active coinapi key: ${coinapiKeys[apiKeyIndex]} (${coinapiKeys.length-1} / ${apiKeyIndex})`);
 
     config['currency']['crypto'].forEach(
-        (value) => config['currency']['crypto'].forEach(async (pair) => {
-          if (value !== pair) {
-              const coinapiKey = [0];
-              const res = await axios.get(`https://rest.coinapi.io/v1/exchangerate/${value}/${pair}`, {
-                  timeout: 3000,
-                  headers: {
-                      'X-CoinAPI-Key': config['currency']['coinapiKeys'][coinapiKey[0]],
-                  }
-              });
+        (value) => config['currency']['crypto'].forEach((pair) => {
+            if (value === pair) return;
 
-              if (res.status === 429) rotate_key(config['currency']['coinapiKeys'], coinapiKey);
+            axios.get(`https://rest.coinapi.io/v1/exchangerate/${value}/${pair}`,
+                {
+                    timeout: 3000,
+                    headers: {
+                        'X-CoinAPI-Key': coinapiKeys[apiKeyIndex],
+                    }
+                }).then(async (res) => {
 
-              const data = res.data;
-              const point = data['rate'].toString().indexOf('.') + 4;
+                    const data = res.data;
+                    const point = data['rate'].toString().indexOf('.') + 4;
 
-              pool.query('SELECT * FROM currency WHERE from_currency = $1 AND conv_currency = $2 AND date = $3',
-                    [
-                        value,
-                        pair,
-                        new Date(data['time']).toLocaleDateString()
-                    ]).then(async (db) => {
-                    if (db['rows'][0]) return;
+                    logger.debug(JSON.stringify(data));
 
-                    await pool.query(`INSERT INTO currency (from_currency, conv_currency, rate, date) 
-                        VALUES ($1, $2, $3, $4) RETURNING *`,
+                    const db = pool.query('SELECT * FROM currency WHERE from_currency = $1 AND conv_currency = $2 AND date = $3',
                         [
                             value,
                             pair,
-                            data['rate'].toString().slice(0, point),
                             new Date(data['time']).toLocaleDateString()
-                        ],
-                    );
-                });
-          }
+                        ])
+
+                    if (db['rows'][0]) return;
+                    await pool.query(`INSERT INTO currency (from_currency, conv_currency, rate, date) 
+                                    VALUES ($1, $2, $3, $4)`,
+                                [
+                                    value,
+                                    pair,
+                                    data['rate'].toString().slice(0, point),
+                                    new Date(data['time']).toLocaleDateString()
+                                ]);
+
+            }).catch((err) => {
+               if (err.response?.data.detail) logger.error(err.response.data.detail);
+               if (err.response?.data.status === 429) {
+                   logger.info('CoinAPI rate limited, rotating token')
+                   rotate_key(coinapiKeys);
+                   depth--
+                   save_crypto();
+               }
+            });
         })
     );
 }
@@ -55,12 +69,11 @@ function save_fiat() {
 /**
  * Changing API keys
  * @param {Array} list - List of all keys
- * @param active - Active API key
  * @returns {number} - Outputs the number of the key that should work
  */
 
-function rotate_key(list, active) {
-    return active[0] = (active + 1) % list.length;
+function rotate_key(list) {
+    apiKeyIndex = list.indexOf(coinapiKeys[apiKeyIndex]) + 1
 }
 
-module.exports = save_fiat;
+module.exports = save_crypto;
