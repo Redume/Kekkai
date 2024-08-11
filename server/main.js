@@ -3,7 +3,7 @@ const config = require('../config/main.js')();
 const fs = require('fs');
 
 const fastify = require('fastify')({
-    logger: config['server']['debug'] ? logger : false,
+    logger: config['server']['log']['print'] ? logger : false,
     ...config['server']['ssl'] ? {
         https: {
             key: fs.readFileSync(config['server']['private_key'], 'utf8'),
