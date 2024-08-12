@@ -21,7 +21,7 @@ async function gen_chart(from_currency, conv_currency, start_date, end_date) {
         end_date
     ]);
 
-    if (!data) return new Error('Missing data');
+    if (!data['rows'][0]) return 'Missing data';
 
     const date = [];
     const rate = [];
@@ -54,7 +54,6 @@ async function gen_chart(from_currency, conv_currency, start_date, end_date) {
             labels: date,
             datasets: [
                 {
-                    label: 'rate',
                     borderColor: rate[0] < rate[rate.length-1] ? 'rgb(24, 218, 39)' : 'rgb(243, 85, 50)',
                     backgroundColor:  rate[0] < rate[rate.length-1] ? 'rgb(36, 175, 47)' : 'rgb(218, 56, 24)',
                     data: rate,
