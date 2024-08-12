@@ -4,10 +4,10 @@ const fs = require('fs');
 
 const fastify = require('fastify')({
     logger: config['server']['log']['print'] ? logger : false,
-    ...config['server']['ssl'] ? {
+    ...config['server']['ssl']['work'] ? {
         https: {
-            key: fs.readFileSync(config['server']['private_key'], 'utf8'),
-            cert: fs.readFileSync(config['server']['cert'], 'utf8'),
+            key: fs.readFileSync(config['server']['ssl']['private_key'], 'utf8'),
+            cert: fs.readFileSync(config['server']['ssl']['cert'], 'utf8'),
         }
     } : false
 });

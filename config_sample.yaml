@@ -9,9 +9,10 @@ database: # Postgresql database data, for connection
   port: 5432
 server:
   host: 'localhost'
-  private_key: '/CertSSL/private.key' # The path to the private SSL key file (String)
-  cert: '/CertSSL/fullchain.pem' # The path to the SSL certificate (String)
-  ssl: true # Enable or disable SSL support [Boolean]
+  ssl:
+    private_key: '/CertSSL/private.key' # The path to the private SSL key file (String)
+    cert: '/CertSSL/fullchain.pem' # The path to the SSL certificate (String)
+    work: true # Enable or disable SSL support [Boolean]
   log:
     print: true # Enable or disable logging [Boolean]
     level: 'info' # Log level (Fatal/Error/Warn/Log/Debug) [String]
