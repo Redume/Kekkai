@@ -15,8 +15,6 @@ const fastify = require('fastify')({
 const rate = require('../database/main.js');
 const chart = require('../chart/main.js');
 
-require('../collect-currency/main.js').main();
-
 fastify.get('/api/getRate/', async function (req, res){
     const query = req.query;
     if (!query['from_currency'] || !query['conv_currency']) {
@@ -62,7 +60,7 @@ fastify.get('/api/getChart/', async function (req, res){
         query['end_date'],
     )
 
-    if (config['currency']['chart']['save_chart']) chart.save_chart(
+    if (config['currency']['chart']['save']) chart.save_chart(
         charts,
         `${query['from_currency']} ${query['conv_currency']} ` +
         `(${query['start_date']} - ${query['end_date']}).png`
