@@ -1,7 +1,7 @@
 const ChartJSImage = require('chart.js-image');
 const pool = require('../database/postgresql.js');
 const fs = require('fs');
-const request = require('request');
+const axios = require('axios');
 const logger = require('../logger/main.js')
 
 /**
@@ -98,8 +98,15 @@ function save_chart(url, filename) {
     if (!url.startsWith('https://')) throw new Error('The passed parameter is not a URL');
 
     logger.info(`The schedule has been saved. The path of the graph 'chart/${filename}'`);
-
-    request(url).pipe(fs.createWriteStream(`../charts/${filename}`));
+    axios({url, responseType: 'stream',}).then(
+        response =>
+            new Promise((resolve, reject) => {
+                response.data
+                    .pipe(fs.createWriteStream(`../charts/${filename}`))
+                    .on('finish', () => resolve())
+                    .on('error', e => reject(e));
+            })
+    );
 }
 
 module.exports = { gen_chart, save_chart }
