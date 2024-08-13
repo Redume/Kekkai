@@ -18,7 +18,7 @@ server:
     level: 'info' # Log level (Fatal/Error/Warn/Log/Debug) [String]
 currency:
   chart:
-    save_chart: false # Enable or disable saving graphs to an image (Boolean)
+    save: false # Enable or disable saving graphs to an image (Boolean)
   collecting:
     fiat: true # Turn off or turn on the collection of the fiat currency rate [Boolean]
     crypto: false # Turn off or turn on the collection of the cryptocurrency rate [Boolean]
