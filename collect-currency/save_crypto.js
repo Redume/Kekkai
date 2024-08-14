@@ -1,7 +1,7 @@
-const config = require('../config/main.js')();
+const config = require('../shared/config/src/main.js')();
 const axios = require('axios');
-const pool = require('../database/postgresql.js');
-const logger = require('../logger/main.js');
+const pool = require('../shared/database/src/postgresql.js');
+const logger = require('../shared/logger/src/main.js');
 
 const coinapiKeys = config['currency']['coinapiKeys'];
 let apiKeyIndex = 0;

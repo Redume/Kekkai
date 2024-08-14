@@ -1,5 +1,5 @@
-const logger = require('../logger/main.js');
-const config = require('../config/main.js')();
+const logger = require('../shared/logger/src/main.js');
+const config = require('../shared/config/src/main.js')();
 const fs = require('fs');
 
 const fastify = require('fastify')({
@@ -12,8 +12,8 @@ const fastify = require('fastify')({
     } : false
 });
 
-const rate = require('../database/main.js');
-const chart = require('../chart/main.js');
+const rate = require('../shared/database/src/main.js');
+const chart = require('../chart/chart.js');
 
 fastify.get('/api/getRate/', async function (req, res){
     const query = req.query;

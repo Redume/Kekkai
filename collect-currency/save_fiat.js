@@ -1,7 +1,7 @@
-const pool = require('../database/postgresql.js');
+const pool = require('../shared/database/src/postgresql.js');
 const axios = require('axios');
-const config = require('../config/main.js')();
-const logger = require('../logger/main.js');
+const config = require('../shared/config/src/main.js')();
+const logger = require('../shared/logger/src/main.js');
 
 /**
  * Saves exchange rate of the fiat currency

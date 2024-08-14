@@ -1,5 +1,5 @@
 const schedule = require('node-schedule');
-const config = require('../config/main.js')();
+const config = require('../shared/config/src/main.js')();
 const cron = require('cron-validator');
 
 const save_fiat = require('./save_fiat');
