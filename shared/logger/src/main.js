@@ -1,7 +1,7 @@
 const pino = require('pino');
 const pretty = require('pino-pretty');
 const path = require('path');
-const config = require('../config/main.js')();
+const config = require('../../config/src/main.js')();
 
 function getCallerFile() {
     const originalFunc = Error.prepareStackTrace;

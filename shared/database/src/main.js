@@ -1,5 +1,5 @@
 const pool = require('./postgresql.js');
-const logger = require('../logger/main.js');
+const logger = require('../../logger/src/main.js');
 
 /**
  * Getting the currency exchange rate for a specific day
