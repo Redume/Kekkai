@@ -1,8 +1,8 @@
 const ChartJSImage = require('chart.js-image');
-const pool = require('../database/postgresql.js');
+const pool = require('../shared/database/src/postgresql.js');
 const fs = require('fs');
 const axios = require('axios');
-const logger = require('../logger/main.js')
+const logger = require('../shared/logger/src/main.js')
 
 /**
  * Graph generation
