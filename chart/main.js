@@ -20,9 +20,9 @@ function main() {
                         fs.unlinkSync(`../charts/${files[i]}`);
                     }
                 }
-            } catch { return }
+            } catch { return; }
         }
-    })
+    });
 }
 
 schedule.scheduleJob('9 20 * * *', async function () {

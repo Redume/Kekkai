@@ -18,7 +18,7 @@ function getCallerFile() {
             callerFile = err.stack.shift().getFileName();
             if (currentFile !== callerFile) break;
         }
-    } catch (e) {}
+    } catch { return; }
 
     Error.prepareStackTrace = originalFunc;
 

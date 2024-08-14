@@ -41,7 +41,7 @@ function save_crypto() {
                             value,
                             pair,
                             new Date(data['time']).toLocaleDateString()
-                        ])
+                        ]);
 
                     if (db['rows'][0]) return;
                     await pool.query(`INSERT INTO currency (from_currency, conv_currency, rate, date) 
@@ -56,9 +56,9 @@ function save_crypto() {
             }).catch((err) => {
                if (err.response?.data.detail) logger.error(err.response.data.detail);
                if (err.response?.data.status === 429) {
-                   logger.info('CoinAPI rate limited, rotating token')
+                   logger.info('CoinAPI rate limited, rotating token');
                    rotate_key(coinapiKeys);
-                   depth--
+                   depth--;
                    save_crypto();
                }
             });
@@ -73,7 +73,7 @@ function save_crypto() {
  */
 
 function rotate_key(list) {
-    apiKeyIndex = list.indexOf(coinapiKeys[apiKeyIndex]) + 1
+    apiKeyIndex = list.indexOf(coinapiKeys[apiKeyIndex]) + 1;
 }
 
 module.exports = save_crypto;

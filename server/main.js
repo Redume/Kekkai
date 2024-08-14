@@ -21,7 +21,7 @@ fastify.get('/api/getRate/', async function (req, res){
         return res.status(400).send({
             status: 400,
             message: 'The from_currency and conv_currency fields are required'
-        })
+        });
     }
 
 
@@ -58,13 +58,13 @@ fastify.get('/api/getChart/', async function (req, res){
         query['conv_currency'],
         query['start_date'],
         query['end_date'],
-    )
+    );
 
     if (config['currency']['chart']['save']) chart.save_chart(
         charts,
         `${query['from_currency']} ${query['conv_currency']} ` +
         `(${query['start_date']} - ${query['end_date']}).png`
-    )
+    );
 
     return res.status(200).send({
         status: 200,
@@ -75,9 +75,9 @@ fastify.get('/api/getChart/', async function (req, res){
 fastify.listen({
         port: 3000,
         host: config['server']['host'] ? config['server']['host'] : 'localhost',
-    }, function (err) {
+    }, (err) => {
     if (err) {
-        fastify.log.error(err)
-        process.exit(1)
+        fastify.log.error(err);
+        process.exit(1);
     }
 });

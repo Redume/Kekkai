@@ -41,7 +41,7 @@ async function save_fiat() {
                             new Date(data['timestamp']).toLocaleDateString()
                         ]);
             }).catch((err) => {
-                logger.error(err)
+                logger.error(err);
                 setTimeout(save_fiat, err.config.timeout);
             });
 

@@ -2,7 +2,7 @@ const ChartJSImage = require('chart.js-image');
 const pool = require('../shared/database/src/postgresql.js');
 const fs = require('fs');
 const axios = require('axios');
-const logger = require('../shared/logger/src/main.js')
+const logger = require('../shared/logger/src/main.js');
 
 /**
  * Graph generation
@@ -109,4 +109,4 @@ function save_chart(url, filename) {
     );
 }
 
-module.exports = { gen_chart, save_chart }
+module.exports = { gen_chart, save_chart };
