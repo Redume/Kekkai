@@ -1,5 +1,6 @@
 .idea
 CertSSL/
 charts/
+node_modules/
 
 config.yaml

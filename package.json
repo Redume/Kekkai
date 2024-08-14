@@ -1,0 +1,27 @@
+{
+  "name": "kekkai",
+  "version": "1.0.0",
+  "description": "Historical data on the rate of fiat and crypto currencies",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Redume/Kekkai.git"
+  },
+  "author": "Redume",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Redume/Kekkai/issues"
+  },
+  "homepage": "https://github.com/Redume/Kekkai#readme",
+  "devDependencies": {
+    "@eslint/js": "^8.57.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.9.0",
+    "prettier": "3.3.3"
+  }
+}
