@@ -19,6 +19,7 @@ server:
 currency:
   chart:
     save: false # Enable or disable saving graphs to an image (Boolean)
+    max_size: 1 #kb
   collecting:
     fiat: true # Turn off or turn on the collection of the fiat currency rate [Boolean]
     crypto: false # Turn off or turn on the collection of the cryptocurrency rate [Boolean]
