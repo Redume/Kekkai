@@ -10,20 +10,22 @@ const logger = require('../../logger/src/main.js');
  */
 
 async function getDay(from_currency, conv_currency, date) {
-    if (!from_currency || !conv_currency) return new Error('fromCurrency and convCurrency are required');
+    if (!from_currency || !conv_currency)
+        return new Error('fromCurrency and convCurrency are required');
     else if (!date) return new Error('date is required');
 
-    const data = await pool.query('SELECT from_currency, conv_currency, date, rate FROM currency ' +
-        'WHERE from_currency = $1 AND conv_currency = $2 AND date = $3', [
-            from_currency.toUpperCase(),
-            conv_currency.toUpperCase(),
-            date
-        ]);
+    const data = await pool.query(
+        'SELECT from_currency, conv_currency, date, rate FROM currency ' +
+            'WHERE from_currency = $1 AND conv_currency = $2 AND date = $3',
+        [from_currency.toUpperCase(), conv_currency.toUpperCase(), date],
+    );
 
     if (!data) return new Error('Missing data');
 
     const set_date = data['rows'][0]['date'];
-    data['rows'][0]['date'] = new Date(set_date.setDate(set_date.getDate() + 1));
+    data['rows'][0]['date'] = new Date(
+        set_date.setDate(set_date.getDate() + 1),
+    );
 
     logger.debug(data['rows'][0]);
 
@@ -40,16 +42,21 @@ async function getDay(from_currency, conv_currency, date) {
  */
 
 async function getPeriod(from_currency, conv_currency, start_date, end_date) {
-    if (!from_currency || !conv_currency) return new Error('from_currency and conv_currency are required');
-    else if(!start_date || !end_date) return new Error('start_date and end_date are required');
+    if (!from_currency || !conv_currency)
+        return new Error('from_currency and conv_currency are required');
+    else if (!start_date || !end_date)
+        return new Error('start_date and end_date are required');
 
-    const data = await pool.query('SELECT * FROM currency WHERE ' +
-        '(date BETWEEN $3 AND $4) AND from_currency = $1 AND conv_currency = $2 ORDER BY date', [
+    const data = await pool.query(
+        'SELECT * FROM currency WHERE ' +
+            '(date BETWEEN $3 AND $4) AND from_currency = $1 AND conv_currency = $2 ORDER BY date',
+        [
             from_currency.toUpperCase(),
             conv_currency.toUpperCase(),
             start_date,
-            end_date
-    ]);
+            end_date,
+        ],
+    );
 
     if (!data) return new Error('Missing data');
 

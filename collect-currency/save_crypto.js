@@ -17,52 +17,62 @@ function save_crypto() {
         return;
     }
 
-    logger.info(`Active coinapi key: ${coinapiKeys[apiKeyIndex]} (${coinapiKeys.length-1} / ${apiKeyIndex})`);
+    logger.info(
+        `Active coinapi key: ${coinapiKeys[apiKeyIndex]} (${coinapiKeys.length - 1} / ${apiKeyIndex})`,
+    );
 
-    config['currency']['crypto'].forEach(
-        (value) => config['currency']['crypto'].forEach((pair) => {
+    config['currency']['crypto'].forEach((value) =>
+        config['currency']['crypto'].forEach((pair) => {
             if (value === pair) return;
 
-            axios.get(`https://rest.coinapi.io/v1/exchangerate/${value}/${pair}`,
-                {
-                    timeout: 3000,
-                    headers: {
-                        'X-CoinAPI-Key': coinapiKeys[apiKeyIndex],
-                    }
-                }).then(async (res) => {
-
+            axios
+                .get(
+                    `https://rest.coinapi.io/v1/exchangerate/${value}/${pair}`,
+                    {
+                        timeout: 3000,
+                        headers: {
+                            'X-CoinAPI-Key': coinapiKeys[apiKeyIndex],
+                        },
+                    },
+                )
+                .then(async (res) => {
                     const data = res.data;
                     const point = data['rate'].toString().indexOf('.') + 4;
 
                     logger.debug(JSON.stringify(data));
 
-                    const db = await pool.query('SELECT * FROM currency WHERE from_currency = $1 AND conv_currency = $2 AND date = $3',
+                    const db = await pool.query(
+                        'SELECT * FROM currency WHERE from_currency = $1 AND conv_currency = $2 AND date = $3',
                         [
                             value,
                             pair,
-                            new Date(data['time']).toLocaleDateString()
-                        ]);
+                            new Date(data['time']).toLocaleDateString(),
+                        ],
+                    );
 
                     if (db['rows'][0]) return;
-                    await pool.query(`INSERT INTO currency (from_currency, conv_currency, rate, date) 
+                    await pool.query(
+                        `INSERT INTO currency (from_currency, conv_currency, rate, date) 
                                     VALUES ($1, $2, $3, $4)`,
-                                [
-                                    value,
-                                    pair,
-                                    data['rate'].toString().slice(0, point),
-                                    new Date(data['time']).toLocaleDateString()
-                                ]);
-
-            }).catch((err) => {
-               if (err.response?.data.detail) logger.error(err.response.data.detail);
-               if (err.response?.data.status === 429) {
-                   logger.info('CoinAPI rate limited, rotating token');
-                   rotate_key(coinapiKeys);
-                   depth--;
-                   save_crypto();
-               }
-            });
-        })
+                        [
+                            value,
+                            pair,
+                            data['rate'].toString().slice(0, point),
+                            new Date(data['time']).toLocaleDateString(),
+                        ],
+                    );
+                })
+                .catch((err) => {
+                    if (err.response?.data.detail)
+                        logger.error(err.response.data.detail);
+                    if (err.response?.data.status === 429) {
+                        logger.info('CoinAPI rate limited, rotating token');
+                        rotate_key(coinapiKeys);
+                        depth--;
+                        save_crypto();
+                    }
+                });
+        }),
     );
 }
 

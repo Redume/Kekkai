@@ -12,7 +12,8 @@ function main() {
 
         for (const file of files) {
             try {
-                const fileSize = fs.statSync(`../charts/${file}`)['size'] / 1024;
+                const fileSize =
+                    fs.statSync(`../charts/${file}`)['size'] / 1024;
                 folderSize += fileSize;
 
                 if (folderSize > config['currency']['chart']['max_size']) {
@@ -20,7 +21,9 @@ function main() {
                         fs.unlinkSync(`../charts/${files[i]}`);
                     }
                 }
-            } catch { return; }
+            } catch {
+                return;
+            }
         }
     });
 }
