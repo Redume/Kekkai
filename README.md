@@ -1,6 +1,3 @@
-> [!NOTE]
-> The first free Open-Source Tool for Saving Historical Currency data
-
 <div align='center'>
     <a href="https://github.com/redume/kekkai/blob/main/LICENSE">
         <img alt="GPLv3 license" src="https://img.shields.io/github/license/redume/kekkai?color=blue">
@@ -9,6 +6,9 @@
         <img alt="Latest release" src="https://img.shields.io/github/v/release/redume/kakkai?display_name=release">
     </a>
 </div>
+
+> [!NOTE]
+> The first free Open-Source Tool for Saving Historical Currency data
 
 <p align="center">
     <img src="assets/banner.png" alt="kekkai banner">
