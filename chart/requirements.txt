@@ -1,0 +1,6 @@
+matplotlib~=3.9.1
+PyYAML~=6.0.1
+uvicorn~=0.29.0
+fastapi[standard]~=0.111.0
+psycopg2~=2.9.9
+starlette~=0.37.2
