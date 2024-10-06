@@ -20,10 +20,8 @@ const fastify = require('fastify')({
         : false),
 });
 
-const getChartRoute = require('./routes/getChart.js');
 const getRateRoute = require('./routes/getRate.js');
 
-fastify.register(getChartRoute);
 fastify.register(getRateRoute);
 
 fastify.listen(
