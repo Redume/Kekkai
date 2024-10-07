@@ -21,8 +21,10 @@ const fastify = require('fastify')({
 });
 
 const getRateRoute = require('./routes/getRate.js');
+const configurationRoutes = require('./routes/configuration.js');
 
 fastify.register(getRateRoute);
+fastify.register(configurationRoutes);
 
 fastify.listen(
     {
