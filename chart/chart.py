@@ -3,9 +3,14 @@ import psycopg2
 import uvicorn
 import yaml
 import matplotlib.pyplot as plt
+import locale
+import datetime
+import dateutil.relativedelta
+
 from fastapi import FastAPI, Response, status
 from psycopg2.extras import DictCursor
 from starlette.staticfiles import StaticFiles
+
 
 app = FastAPI()
 
@@ -20,6 +25,9 @@ con = psycopg2.connect(host=config['database']['host'],
 cur = con.cursor(cursor_factory=DictCursor)
 con.autocommit = True
 
+if not os.path.exists('../charts'):
+    os.mkdir('../charts')
+
 app.mount('/static/charts', StaticFiles(directory='../charts/'))
 
 
@@ -27,30 +35,66 @@ app.mount('/static/charts', StaticFiles(directory='../charts/'))
 async def get_chart(response: Response,
                     from_currency: str, conv_currency: str,
                     start_date: str, end_date: str):
-    """
-    :param response:
-    :param from_currency: The currency to convert from
-    :type from_currency: str
-    :param conv_currency: The currency to be converted into
-    :type conv_currency: str
-    :param start_date: The start date of the schedule period
-    :type start_date: str
-    :param end_date: The last date of the schedule period
-    :type end_date: str
-    :return:
-    """
+
+    chart = await create_chart(from_currency, conv_currency, start_date, end_date)
+
+    if not chart:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'message': 'No data found.', 'status_code': status.HTTP_404_NOT_FOUND}
+
+    return {'message': f'./static/charts/{from_currency}-{conv_currency}.png',
+            'status_code': status.HTTP_201_CREATED,
+            }
+
+
+@app.get("/api/getChart/{period}")
+async def get_chart_period(response: Response, from_currency: str, conv_currency: str, period: str):
+    if period not in ['week', 'month', 'quarter', 'year']:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return {'message': 'Invalid period.', 'status_code': status.HTTP_400_BAD_REQUEST}
+
+    days, month, years = 0, 0, 0
+
+    if period == 'week':
+        days = -7
+    elif period == 'month':
+        month = -1
+    elif period == 'quarter':
+        month = -3
+    elif period == 'year':
+        years = -1
+
+    end_date = datetime.datetime.now()
+    start_date = end_date + dateutil.relativedelta.relativedelta(months=month, days=days, years=years)
+
+    chart = await create_chart(from_currency,
+                               conv_currency,
+                               start_date.strftime('%Y-%m-%d'),
+                               end_date.strftime('%Y-%m-%d')
+                               )
+
+    if not chart:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'message': 'No data found.', 'status_code': status.HTTP_404_NOT_FOUND}
+
+    return {'message': f'./static/charts/{from_currency}-{conv_currency}.png',
+            'status_code': status.HTTP_201_CREATED,
+            }
+
+
+async def create_chart(from_currency: str, conv_currency: str, start_date: str, end_date: str) -> bool:
     cur.execute('SELECT date, rate FROM currency WHERE (date BETWEEN %s AND %s) '
                 'AND from_currency = %s AND conv_currency = %s ORDER BY date',
                 [
                     start_date, end_date,
                     from_currency.upper(), conv_currency.upper()
                 ])
+
     con.commit()
     data = cur.fetchall()
 
-    if not data:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {'message': 'No data found', 'status_code': status.HTTP_404_NOT_FOUND}
+    if not data or len(data) <= 1:
+        return False
 
     date, rate = [], []
 
@@ -71,15 +115,10 @@ async def get_chart(response: Response,
     fig = plt.gcf()
     fig.set_size_inches(18.5, 9.5)
 
-    if not os.path.exists('../charts'):
-        os.mkdir('../charts')
-
     fig.savefig(f'../charts/{from_currency}-{conv_currency}.png')
     fig.clear()
 
-    return {'message': f'./static/charts/{from_currency}-{conv_currency}.png',
-            'status_code': status.HTTP_201_CREATED,
-            }
+    return True
 
 
 if __name__ == '__main__':
