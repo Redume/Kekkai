@@ -6,6 +6,8 @@ const save_fiat = require('./save_fiat');
 const save_crypto = require('./save_crypto');
 
 async function main() {
+    await require('../shared/database/src/create_table')();
+
     const config_schedule = config['currency']['collecting']['schedule'];
     if (!config_schedule) throw new Error('The crontab schedule is not set');
     if (!cron.isValidCron(config_schedule, { alias: true }))

@@ -2,6 +2,8 @@ const logger = require('../shared/logger/src/main.js');
 const config = require('../shared/config/src/main.js')();
 const fs = require('fs');
 
+require('../shared/database/src/create_table.js')();
+
 const fastify = require('fastify')({
     logger: config['server']['log']['print'] ? logger : false,
     ...(config['server']['ssl']['work']
