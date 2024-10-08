@@ -57,7 +57,7 @@ async function save_fiat() {
                 })
                 .catch((err) => {
                     logger.error(err);
-                    setTimeout(save_fiat, err.config.timeout);
+                    setTimeout(save_fiat, err.config.timeout ? err.config.timeout : 3000);
                 });
         }),
     );
