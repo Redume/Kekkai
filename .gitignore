@@ -2,5 +2,7 @@
 CertSSL/
 charts/
 node_modules/
+postgres-data/
 
 config.yaml
+.env

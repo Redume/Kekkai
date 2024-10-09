@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile-server
+    restart: unless-stopped
+    ports:
+      - '0.0.0.0:3000:3000'
+    volumes:
+      - './CertSSL:/CertSSL'
+      - './config.yaml:/config.yaml'
+    depends_on:
+      - postgres
+
+  chart:
+    build:
+      context: ./chart
+    restart: unless-stopped
+    ports:
+      - '0.0.0.0:3030:3030'
+    volumes:
+      - './CertSSL:/CertSSL'
+      - './config.yaml:/config.yaml'
+    depends_on:
+      - postgres
+
+  collect-currency:
+    build:
+      context: ./
+      dockerfile: Dockerfile-collect-currency
+    restart: unless-stopped
+    volumes:
+      - './config.yaml:/config.yaml'
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+volumes:
+  server:
+    driver: local
+  chart:
+    driver: local
+  collect-currency:
+    driver: local
+  postgres:
+    driver: local
