@@ -13,25 +13,6 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  pre-jobs:
-    runs-on: ubuntu-latest
-    outputs:
-      should_run_server: ${{ steps.found_paths.outputs.server == 'true' || steps.should_force.outputs.should_force == 'true' }}
-      should_run_cl: ${{ steps.found_paths.outputs.CL == 'true' || steps.should_force.outputs.should_force == 'true' }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - id: found_paths
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            server:
-              - './server'
-            chart:
-              - './chart'
-            CL:
-              - './collect-currency'
-
   build-and-push-server:
     runs-on: ubuntu-latest
     permissions:
