@@ -1,22 +1,22 @@
-FROM node:20 as shared-config
+FROM node:20 AS shared-config
 # Устанавливаем зависимости shared/config
 WORKDIR /
 COPY ./shared/config/package*.json .
 RUN npm install
 
-FROM node:20 as shared-database
+FROM node:20 AS shared-database
 # Устанавливаем зависимости shared/database
 WORKDIR /
 COPY ./shared/database/package*.json .
 RUN npm install
 
-FROM node:20 as shared-logger
+FROM node:20 AS shared-logger
 # Устанавливаем зависимости shared/logger
 WORKDIR /
 COPY ./shared/logger/package*.json .
 RUN npm install
 
-FROM node:20 as server
+FROM node:20 AS server
 
 WORKDIR /
 
