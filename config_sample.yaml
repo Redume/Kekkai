@@ -8,9 +8,9 @@ database: # Postgresql database data, for connection
   name: 'DATABASE_NAME'
   port: 5432
 server:
-  host: 'localhost'
+  host: '0.0.0.0'
   ssl:
-    private_key: '/CertSSL/private.key' # The path to the private SSL key file (String)
+    private_key: '/CertSSL/privkey.pem' # The path to the private SSL key file (String)
     cert: '/CertSSL/fullchain.pem' # The path to the SSL certificate (String)
     work: true # Enable or disable SSL support [Boolean]
   log:
