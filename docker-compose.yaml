@@ -1,13 +1,23 @@
-version: '3.8'
-
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./CertSSL:/etc/nginx/ssl
+    depends_on:
+      - server
+      - chart
+
   server:
     build:
       context: ./
       dockerfile: Dockerfile-server
     restart: unless-stopped
     ports:
-      - '0.0.0.0:3000:3000'
+      - '3000:3000'
     volumes:
       - './CertSSL:/CertSSL'
       - './config.yaml:/config.yaml'
@@ -19,12 +29,13 @@ services:
       context: ./chart
     restart: unless-stopped
     ports:
-      - '0.0.0.0:3030:3030'
+      - '3030:3030'
     volumes:
       - './CertSSL:/CertSSL'
       - './config.yaml:/config.yaml'
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   collect-currency:
     build:
@@ -40,8 +51,15 @@ services:
     image: postgres:latest
     restart: unless-stopped
     env_file: .env
+    ports:
+      - '5432:5432'
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   server:
