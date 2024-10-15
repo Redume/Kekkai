@@ -16,6 +16,11 @@ server:
   log:
     print: true # Enable or disable logging [Boolean]
     level: 'info' # Log level (Fatal/Error/Warn/Log/Debug) [String]
+analytics:
+    plausible_api: 'https://plausible.io/api/event'
+    plausible_domain: 'PLAUSIBLE_DOMAIN'
+    plausible_token: 'PLAUSIBLE_TOKEN'
+    work: true
 currency:
   chart:
     save: false # Enable or disable saving graphs to an image (Boolean)

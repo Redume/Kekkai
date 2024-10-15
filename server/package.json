@@ -17,7 +17,9 @@
   "homepage": "https://github.com/Redume/Kekkai#readme",
   "description": "The main service. Web server",
   "dependencies": {
+    "axios": "^1.7.7",
     "fastify": "^4.28.1",
-    "pino": "^9.3.2"
+    "pino": "^9.3.2",
+    "ua-parser-js": "^1.0.39"
   }
 }
