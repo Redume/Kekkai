@@ -34,7 +34,7 @@ fastify.register(configurationRoutes);
 fastify.register(HomeRoute);
 
 fastify.addHook('onResponse', async (request, reply) => {
-    if (!config['analytics']['work']) return;
+    if (!config?.['analytics']['work']) return;
 
     const userAgent = request.headers['user-agent'];
     const parser = new UAParser(userAgent);
@@ -43,22 +43,23 @@ fastify.addHook('onResponse', async (request, reply) => {
 
     const event = {
       domain: config['analytics']['plausible_domain'],
-      name: request.routerPath || '404 - Not Found',
+      name: request.routeOptions.url ? request.routeOptions.url : '404 - Not Found',
       url: request.raw.url,
       props: {
           method: request.method,
           statusCode: reply.statusCode,
           browser: `${browser.name} ${browser.version}`,
           os: `${os.name} ${os.version}`,
-          source: request.headers['referer'] || 'direct',
+          source: request.headers['referer'] ? request.headers['referer'] : 'direct',
       },
     };
 
     try {
-      await axios.post(config['analytics']['plausible_api'], event, {
-        headers: {
-          Authorization: `Bearer ${config['analytics']['plausible_token']}`,
-          'Content-Type': 'application/json',
+        await axios.post(config['analytics']['plausible_api'], event, {
+            headers: {
+                Authorization: `Bearer ${config['analytics']['plausible_token']}`,
+                'Content-Type': 'application/json',
+                'User-Agent': userAgent,
         },
       });
     } catch (error) {
