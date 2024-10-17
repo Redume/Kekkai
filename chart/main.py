@@ -3,13 +3,13 @@ import psycopg2
 import uvicorn
 import yaml
 import matplotlib.pyplot as plt
-import locale
 import datetime
 import dateutil.relativedelta
 
 from fastapi import FastAPI, Response, status
 from psycopg2.extras import DictCursor
 from starlette.staticfiles import StaticFiles
+from middleware.plausible_analytics import PlausibleAnalytics
 
 
 app = FastAPI()
@@ -30,6 +30,7 @@ if not os.path.exists('../charts'):
 
 app.mount('/static/charts', StaticFiles(directory='../charts/'))
 
+app.middleware('http')(PlausibleAnalytics())
 
 @app.get("/api/getChart/")
 async def get_chart(response: Response,
