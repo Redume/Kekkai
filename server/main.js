@@ -34,7 +34,7 @@ fastify.register(configurationRoutes);
 fastify.register(HomeRoute);
 
 fastify.addHook('onResponse', async (request, reply) => {
-    if (!config?.['analytics']['work']) return;
+    if (!config?.['analytics']['work'] ? config?.['analytics']['work'] : false) return;
 
     const userAgent = request.headers['user-agent'];
     const parser = new UAParser(userAgent);
