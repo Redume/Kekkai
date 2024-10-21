@@ -3,16 +3,14 @@ const axios = require('axios');
 const config = require('../shared/config/src/main.js')();
 const logger = require('../shared/logger/src/main.js');
 
-/**
- * Saves exchange rate of the fiat currency
- * @returns {Object} -
- */
-async function save_fiat() {
+async function save_fiat(depth = 0) {
     if (!config['currency']['collecting']['fiat']) return;
+    const max_depth = 5;
 
     config['currency']['fiat'].forEach((value) =>
         config['currency']['fiat'].forEach(async (pair) => {
             if (value === pair) return;
+
             await axios
                 .get(
                     `https://duckduckgo.com/js/spice/currency/1/${value}/${pair}`,
@@ -55,12 +53,19 @@ async function save_fiat() {
                         ],
                     );
                 })
-                .catch((err) => {
+                .catch(async (err) => {
                     logger.error(err);
-                    setTimeout(
-                        save_fiat,
-                        err.config?.timeout ? err.config?.timeout : 3000,
-                    );
+
+                    if (depth < max_depth) {
+                        await new Promise((resolve) =>
+                            setTimeout(resolve, max_depth),
+                        );
+                        await save_fiat(depth + 1);
+                    } else {
+                        logger.error(
+                            'Max retry limit reached for saving fiat data.',
+                        );
+                    }
                 });
         }),
     );
