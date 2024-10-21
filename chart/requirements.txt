@@ -3,5 +3,5 @@ PyYAML~=6.0.1
 uvicorn~=0.29.0
 fastapi[standard]~=0.115.2
 psycopg2~=2.9.9
-starlette~=0.41.0
+starlette~=0.40.0
 user_agents==2.2.0
