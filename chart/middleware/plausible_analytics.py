@@ -12,9 +12,6 @@ class PlausibleAnalytics:
         user_agent = request.headers.get('user-agent', 'unknown')
         user_agent_parsed = ua_parse(user_agent)
 
-        if 400 <= response.status_code < 500:
-            return
-
         event = {
             "domain": config['analytics']['plausible_domain'],
             "name": request.url.path or '404 - Not Found',
