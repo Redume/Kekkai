@@ -6,7 +6,8 @@ module.exports = async function getRateRoute(fastify) {
         if (!query['from_currency'] || !query['conv_currency']) {
             return res.status(400).send({
                 status: 400,
-                message: 'The from_currency and conv_currency fields are required',
+                message:
+                    'The from_currency and conv_currency fields are required',
             });
         }
 
@@ -32,4 +33,4 @@ module.exports = async function getRateRoute(fastify) {
                     'Read more in the documentation',
             });
     });
-}
+};
