@@ -2,6 +2,7 @@ import httpx
 import yaml
 
 from user_agents import parse as ua_parse
+from http import HTTPStatus
 
 config = yaml.safe_load(open('../config.yaml'))
 
@@ -11,6 +12,9 @@ class PlausibleAnalytics:
 
         user_agent = request.headers.get('user-agent', 'unknown')
         user_agent_parsed = ua_parse(user_agent)
+
+        if HTTPStatus(response.status_code).is_client_error:
+            return
 
         event = {
             "domain": config['analytics']['plausible_domain'],

@@ -34,12 +34,23 @@ fastify.register(configurationRoutes);
 fastify.register(HomeRoute);
 
 fastify.addHook('onResponse', async (request, reply) => {
+    const routePart = request.raw.url.split('/')
+    const routePartFiltered = routePart
+                                    .filter(part => part !== '')
+                                    .map(part => `${part}/`);
+
+    routePartFiltered.unshift('/');
+
     if (!config?.['analytics']['work'] ? config?.['analytics']['work'] : false) return;
+    else if (!fastify.printRoutes().includes(routePartFiltered.at(-1))) return;
 
     const userAgent = request.headers['user-agent'];
     const parser = new UAParser(userAgent);
     const browser = parser.getBrowser();
     const os = parser.getOS();
+
+    const formattedOS = (os.name && os.version) ? `${os.name} ${os.version}` : 'N/A';
+    const formattedBrowser = (browser.name && browser.version) ? `${browser.name} ${browser.version}` : 'N/A';
 
     const event = {
       domain: config['analytics']['plausible_domain'],
@@ -48,8 +59,8 @@ fastify.addHook('onResponse', async (request, reply) => {
       props: {
           method: request.method,
           statusCode: reply.statusCode,
-          browser: `${browser.name} ${browser.version}`,
-          os: `${os.name} ${os.version}`,
+          browser: formattedBrowser,
+          os: formattedOS,
           source: request.headers['referer'] ? request.headers['referer'] : 'direct',
       },
     };
