@@ -2,12 +2,16 @@ import httpx
 import yaml
 
 from user_agents import parse as ua_parse
+from http import HTTPStatus
 
 config = yaml.safe_load(open('../config.yaml'))
 
 class PlausibleAnalytics:
     async def __call__(self, request, call_next):
         response = await call_next(request)
+
+        if HTTPStatus(response.status_code).is_client_error:
+            return response
 
         user_agent = request.headers.get('user-agent', 'unknown')
         user_agent_parsed = ua_parse(user_agent)
