@@ -1,13 +1,18 @@
 import os
 import psycopg2
 import uvicorn
+
 import yaml
 import matplotlib.pyplot as plt
 import datetime
+
 import dateutil.relativedelta
+import random
+import string
 
 from fastapi import FastAPI, Response, status
 from psycopg2.extras import DictCursor
+
 from starlette.staticfiles import StaticFiles
 from middleware.plausible_analytics import PlausibleAnalytics
 
@@ -29,26 +34,23 @@ if not os.path.exists('../charts'):
     os.mkdir('../charts')
 
 app.mount('/static/charts', StaticFiles(directory='../charts/'))
-
 app.middleware('http')(PlausibleAnalytics())
 
-@app.get("/api/getChart/")
-async def get_chart(response: Response,
-                    from_currency: str, conv_currency: str,
-                    start_date: str, end_date: str):
-
+@app.get("/api/getChart/", status_code=status.HTTP_201_CREATED)
+async def get_chart(response: Response, from_currency: str, conv_currency: str, start_date: str, end_date: str):
     chart = await create_chart(from_currency, conv_currency, start_date, end_date)
 
     if not chart:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'message': 'No data found.', 'status_code': status.HTTP_404_NOT_FOUND}
 
-    return {'message': f'./static/charts/{from_currency}-{conv_currency}.png',
-            'status_code': status.HTTP_201_CREATED,
+    return {
+                'message': f'./static/charts/{chart}.png',
+                'status_code': status.HTTP_201_CREATED,
             }
 
 
-@app.get("/api/getChart/{period}")
+@app.get("/api/getChart/{period}", status_code=status.HTTP_201_CREATED)
 async def get_chart_period(response: Response, from_currency: str, conv_currency: str, period: str):
     if period not in ['week', 'month', 'quarter', 'year']:
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -78,12 +80,13 @@ async def get_chart_period(response: Response, from_currency: str, conv_currency
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'message': 'No data found.', 'status_code': status.HTTP_404_NOT_FOUND}
 
-    return {'message': f'./static/charts/{from_currency}-{conv_currency}.png',
-            'status_code': status.HTTP_201_CREATED,
+    return {
+                'message': f'./static/charts/{chart}.png',
+                'status_code': status.HTTP_201_CREATED,
             }
 
 
-async def create_chart(from_currency: str, conv_currency: str, start_date: str, end_date: str) -> bool:
+async def create_chart(from_currency: str, conv_currency: str, start_date: str, end_date: str) -> (str, bool):
     cur.execute('SELECT date, rate FROM currency WHERE (date BETWEEN %s AND %s) '
                 'AND from_currency = %s AND conv_currency = %s ORDER BY date',
                 [
@@ -95,7 +98,7 @@ async def create_chart(from_currency: str, conv_currency: str, start_date: str, 
     data = cur.fetchall()
 
     if not data or len(data) <= 1:
-        return False
+        return
 
     date, rate = [], []
 
@@ -116,10 +119,23 @@ async def create_chart(from_currency: str, conv_currency: str, start_date: str, 
     fig = plt.gcf()
     fig.set_size_inches(18.5, 9.5)
 
-    fig.savefig(f'../charts/{from_currency}-{conv_currency}.png')
+    name = await generate_unique_name(
+                                f'{from_currency.upper()}_{conv_currency.upper()}',
+                                datetime.datetime.now()
+                                )
+
+    fig.savefig(f'../charts/{name}.png')
     fig.clear()
 
-    return True
+    return name
+
+
+async def generate_unique_name(currency_pair: str, date: datetime) -> str:
+    date_str = date.strftime("%Y%m%d")
+    random_suffix = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    unique_name = f"{currency_pair}_{date_str}_{random_suffix}"
+
+    return unique_name
 
 
 if __name__ == '__main__':
