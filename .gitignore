@@ -6,3 +6,5 @@ postgres-data/
 
 config.yaml
 .env
+
+.DS_Store
