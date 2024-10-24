@@ -1,0 +1,5 @@
+- Go to [coinapi.io](https://www.coinapi.io/get-free-api-key?product_id=market-data-api) website
+- Enter any name and your current email, where the api keys will be sent
+- In the `What products are you interested in?` section, you can click from one to four items. I recommend clicking all four, because this affects the number of API keys
+- Check the email you specified. If there is no letter, then check your spam. You should receive as many keys as you specified in the `What products are you interested in?`
+- Keys can be specified in the config `currency.coinapiKeys`

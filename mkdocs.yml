@@ -1,0 +1,50 @@
+site_name: Kekkai
+site_url: https://kekkai-docs.redume.su
+site_author: Redume
+site_description: The first free Open-Source Tool for Saving Historical Currency data
+
+repo_name: Redume/Kekkai
+repo_url: https://github.com/Redume/Kekkai
+edit_uri: ''
+
+copyright: Copyright &copy; 2024 Redume
+
+nav:
+  - Getting started:
+    - Docker [Recommended]: getting-started/docker.md
+    - Manual: getting-started/manual.md
+    - Contributing: getting-started/contributing.md
+  - Config:
+    - How to create API keys for coinapi: config/coinapi-keys.md
+theme:
+  language: en
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+  features:
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
