@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://kekkai-docs.redume.su/</loc>
+         <lastmod>2024-10-24</lastmod>
+    </url>
+    <url>
+         <loc>https://kekkai-docs.redume.su/config/coinapi-keys/</loc>
+         <lastmod>2024-10-24</lastmod>
+    </url>
+    <url>
+         <loc>https://kekkai-docs.redume.su/getting-started/contributing/</loc>
+         <lastmod>2024-10-24</lastmod>
+    </url>
+    <url>
+         <loc>https://kekkai-docs.redume.su/getting-started/docker/</loc>
+         <lastmod>2024-10-24</lastmod>
+    </url>
+    <url>
+         <loc>https://kekkai-docs.redume.su/getting-started/manual/</loc>
+         <lastmod>2024-10-24</lastmod>
+    </url>
+</urlset>
