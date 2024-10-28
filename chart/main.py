@@ -10,7 +10,7 @@ import dateutil.relativedelta
 import random
 import string
 
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, Request
 from psycopg2.extras import DictCursor
 
 from starlette.staticfiles import StaticFiles
@@ -37,21 +37,39 @@ app.mount('/static/charts', StaticFiles(directory='../charts/'))
 app.middleware('http')(PlausibleAnalytics())
 
 @app.get("/api/getChart/", status_code=status.HTTP_201_CREATED)
-async def get_chart(response: Response, from_currency: str, conv_currency: str, start_date: str, end_date: str):
+async def get_chart(
+                    response: Response,
+                    request: Request,
+                    from_currency: str,
+                    conv_currency: str,
+                    start_date: str,
+                    end_date: str
+                    ):
+
     chart = await create_chart(from_currency, conv_currency, start_date, end_date)
 
     if not chart:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'message': 'No data found.', 'status_code': status.HTTP_404_NOT_FOUND}
 
+    host = request.headers.get("host")
+    url_schema = request.url.scheme
+
     return {
-                'message': f'./static/charts/{chart}.png',
+                'message': f'{url_schema}://{host}/static/charts/{chart}.png',
                 'status_code': status.HTTP_201_CREATED,
             }
 
 
 @app.get("/api/getChart/{period}", status_code=status.HTTP_201_CREATED)
-async def get_chart_period(response: Response, from_currency: str, conv_currency: str, period: str):
+async def get_chart_period(
+                            response: Response,
+                            request: Request,
+                            from_currency: str,
+                            conv_currency: str,
+                            period: str
+                           ):
+
     if period not in ['week', 'month', 'quarter', 'year']:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {'message': 'Invalid period.', 'status_code': status.HTTP_400_BAD_REQUEST}
@@ -80,8 +98,11 @@ async def get_chart_period(response: Response, from_currency: str, conv_currency
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'message': 'No data found.', 'status_code': status.HTTP_404_NOT_FOUND}
 
+    host = request.headers.get("host")
+    url_schema = request.url.scheme
+
     return {
-                'message': f'./static/charts/{chart}.png',
+                'message': f'{url_schema}://{host}/static/charts/{chart}.png',
                 'status_code': status.HTTP_201_CREATED,
             }
 
