@@ -20,7 +20,7 @@ async function getDay(from_currency, conv_currency, date) {
         [from_currency.toUpperCase(), conv_currency.toUpperCase(), date],
     );
 
-    if (!data) return new Error('Missing data');
+    if (data?.['rows'].length <= 0) return 'Missing data';
 
     const set_date = data['rows'][0]['date'];
     data['rows'][0]['date'] = new Date(
@@ -58,7 +58,7 @@ async function getPeriod(from_currency, conv_currency, start_date, end_date) {
         ],
     );
 
-    if (!data) return new Error('Missing data');
+    if (data?.['rows'].length <= 0) return 'Missing data';
 
     for (let i = 0; i < data['rows'].length; i++) {
         let date = data['rows'][i]['date'];

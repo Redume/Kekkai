@@ -10,15 +10,16 @@ module.exports = async function getRateRoute(fastify) {
                     'The from_currency and conv_currency fields are required',
             });
         }
+        let rate_res;
 
         if (query['date'])
-            return rate.getDay(
+            rate_res = await rate.getDay(
                 query['from_currency'],
                 query['conv_currency'],
                 query['date'],
             );
         else if (query['start_date'] && query['end_date'])
-            return rate.getPeriod(
+            rate_res = await rate.getPeriod(
                 query['from_currency'],
                 query['conv_currency'],
                 query['start_date'],
@@ -32,5 +33,13 @@ module.exports = async function getRateRoute(fastify) {
                     "There must be fields 'date' or 'start_date' and 'end_date'. " +
                     'Read more in the documentation',
             });
+
+        if (typeof rate_res !== "object") return res.status(400).send({
+            status: 400,
+            message: rate_res,
+        });
+        else return res.status(200).send(
+            rate_res
+        )
     });
 };
