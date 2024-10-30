@@ -21,7 +21,7 @@ cd Kekkai
         ...
     ```
 
-??? note "The main config is `config_sample.yaml` for Kekkai"
+??? note "The main config is `config.sample.yaml` for Kekkai"
     ```yaml
     database: 
         user: 'DATABASE_USERNAME'

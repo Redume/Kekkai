@@ -35,7 +35,7 @@ cd Kekkai
     ssl_certificate_key /etc/nginx/ssl/privkey.pem;
     ```
 
-??? note "The main config is `config_sample.yaml` for Kekkai"
+??? note "The main config is `config.sample.yaml` for Kekkai"
     ```yaml
     database: 
         user: 'DATABASE_USERNAME'
@@ -49,7 +49,7 @@ cd Kekkai
     Fill in the data in the `database` item, as well as in the `.env` config
 
 
-??? note "`.env-sample` config for PostgreSQL"
+??? note "`.env.sample` config for PostgreSQL"
     ```.env
     # Connection secret for postgres. You should change it to a random password
     # Please use only the characters `A-Za-z0-9`, without special characters or spaces
@@ -67,7 +67,7 @@ cd Kekkai
     - Consider changing `DB_PASSWORD` to a custom value. Postgres is not publically exposed, so this password is only used for - local authentication. To avoid issues with Docker parsing this value, it is best to use only the characters `A-Za-z0-9`.
 
 !!! note 
-    After editing, rename the config files by removing `sample` in the name
+    After editing, rename the config files by removing `.sample` in the name
 
 
 ### Steps 3 - Start the containers
