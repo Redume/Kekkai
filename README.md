@@ -1,4 +1,11 @@
 <div align='center'>
+    <a href="https://kekkai-docs.redume.su/">
+        <img alt="Documentation" src="https://img.shields.io/badge/Documentation-blue">
+    </a>
+    <a href="https://kekkai.redume.su/">
+        <img alt="Website" src="https://img.shields.io/badge/Website-blue">
+    </a>
+    <br>
     <a href="https://github.com/redume/kekkai/blob/main/LICENSE">
         <img alt="GPLv3 license" src="https://img.shields.io/github/license/redume/kekkai?color=blue">
     </a>
