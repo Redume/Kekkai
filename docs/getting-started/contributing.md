@@ -18,7 +18,9 @@ git checkout <name_new_branch>
 6. Submit a new Pull Request
 
 ### Testing
+Before sending a Pull Request, test the functionality. Everything should work both in Docker Compose and without it.
 
+It is recommended to use Debugger and Debug log for testing. The logging level is changed in `config.yaml`
 
 ### Code Style
 [`Pylint`][pylint], [`mypy`][mypy],  [`eslint`][eslint] and [`prettier`][prettier] are used as code syntax checks
