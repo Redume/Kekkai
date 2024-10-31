@@ -13,12 +13,32 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  check-paths:
+    runs-on: ubuntu-latest
+    outputs:
+      server: ${{ steps.filter.outputs.server }}
+      chart: ${{ steps.filter.outputs.chart }}
+      cr: ${{ steps.filter.outputs.cr }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Filter paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            server:
+              - 'server/**'
+            chart:
+              - 'chart/**'
+            cr:
+              - 'collect-currency/**'
+
   build-and-push-server:
+    if: ${{ needs.check-paths.outputs.server == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -50,11 +70,11 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
   build-and-push-chart:
+    if: ${{ needs.check-paths.outputs.chart == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -85,13 +105,12 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
 
-
-  build-and-push-CR:
+  build-and-push-cr:
+    if: ${{ needs.check-paths.outputs.cr == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
