@@ -40,11 +40,22 @@ app.middleware('http')(PlausibleAnalytics())
 async def get_chart(
                     response: Response,
                     request: Request,
-                    from_currency: str,
-                    conv_currency: str,
-                    start_date: str,
-                    end_date: str
                     ):
+    from_currency, conv_currency, start_date, end_date = None, None, None, None
+
+    if not from_currency or not conv_currency:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return {
+                'status': status.HTTP_400_BAD_REQUEST,
+                'message': 'The from_currency and conv_currency fields are required.',
+                }
+    elif not start_date and not end_date:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return {
+                'status': status.HTTP_400_BAD_REQUEST,
+                'message': 'The start_date and end_date fields are required.',
+        }
+
 
     chart = await create_chart(from_currency, conv_currency, start_date, end_date)
 
@@ -56,8 +67,8 @@ async def get_chart(
     url_schema = request.url.scheme
 
     return {
+                'status': status.HTTP_400_BAD_REQUEST,
                 'message': f'{url_schema}://{host}/static/charts/{chart}.png',
-                'status_code': status.HTTP_201_CREATED,
             }
 
 
@@ -65,10 +76,16 @@ async def get_chart(
 async def get_chart_period(
                             response: Response,
                             request: Request,
-                            from_currency: str,
-                            conv_currency: str,
-                            period: str
                            ):
+
+    from_currency, conv_currency, period = None, None, None
+
+    if not from_currency or not conv_currency:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return {
+                'status': status.HTTP_400_BAD_REQUEST,
+                'message': 'The from_currency and conv_currency fields are required.',
+                }
 
     if period not in ['week', 'month', 'quarter', 'year']:
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -102,8 +119,8 @@ async def get_chart_period(
     url_schema = request.url.scheme
 
     return {
-                'message': f'{url_schema}://{host}/static/charts/{chart}.png',
-                'status_code': status.HTTP_201_CREATED,
+            'status': status.HTTP_201_CREATED,
+            'message': f'{url_schema}://{host}/static/charts/{chart}.png',
             }
 
 
