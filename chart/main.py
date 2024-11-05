@@ -128,7 +128,7 @@ async def get_chart_period(
             }
 
 
-async def create_chart(from_currency: str, conv_currency: str, start_date: str, end_date: str) -> str:
+async def create_chart(from_currency: str, conv_currency: str, start_date: str, end_date: str) -> (str, None):
     cur.execute('SELECT date, rate FROM currency WHERE (date BETWEEN %s AND %s) '
                 'AND from_currency = %s AND conv_currency = %s ORDER BY date',
                 [
@@ -140,7 +140,7 @@ async def create_chart(from_currency: str, conv_currency: str, start_date: str, 
     data = cur.fetchall()
 
     if not data or len(data) <= 1:
-        return
+        return None
 
     date, rate = [], []
 
@@ -149,9 +149,9 @@ async def create_chart(from_currency: str, conv_currency: str, start_date: str, 
         rate.append(data[i][1])
 
     if rate[0] < rate[-1]:
-        plt.plot(date, rate, color='green')
+        plt.plot(date, rate, color='green', marker='o')
     elif rate[0] > rate[-1]:
-        plt.plot(date, rate, color='red')
+        plt.plot(date, rate, color='red', marker='o')
     else:
         plt.plot(date, rate, color='grey')
 
