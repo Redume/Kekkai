@@ -40,8 +40,11 @@ app.middleware('http')(PlausibleAnalytics())
 async def get_chart(
                     response: Response,
                     request: Request,
+                    from_currency: str = None,
+                    conv_currency: str = None,
+                    start_date: str = None,
+                    end_date: str = None,
                     ):
-    from_currency, conv_currency, start_date, end_date = None, None, None, None
 
     if not from_currency or not conv_currency:
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -76,9 +79,10 @@ async def get_chart(
 async def get_chart_period(
                             response: Response,
                             request: Request,
+                            from_currency: str = None,
+                            conv_currency: str = None,
+                            period: str = None,
                            ):
-
-    from_currency, conv_currency, period = None, None, None
 
     if not from_currency or not conv_currency:
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -124,7 +128,7 @@ async def get_chart_period(
             }
 
 
-async def create_chart(from_currency: str, conv_currency: str, start_date: str, end_date: str) -> (str, bool):
+async def create_chart(from_currency: str, conv_currency: str, start_date: str, end_date: str) -> str:
     cur.execute('SELECT date, rate FROM currency WHERE (date BETWEEN %s AND %s) '
                 'AND from_currency = %s AND conv_currency = %s ORDER BY date',
                 [
