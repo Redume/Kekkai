@@ -34,7 +34,7 @@ jobs:
               - 'collect-currency/**'
 
   build-and-push-server:
-    if: ${{ needs.check-paths.outputs.server == 'true' }}
+    if: steps.changes.outputs.server == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -70,7 +70,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
   build-and-push-chart:
-    if: ${{ needs.check-paths.outputs.chart == 'true' }}
+    if: steps.changes.outputs.chart == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -106,7 +106,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
   build-and-push-cr:
-    if: ${{ needs.check-paths.outputs.cr == 'true' }}
+    if: steps.changes.outputs.cr == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read

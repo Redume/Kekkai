@@ -24,7 +24,7 @@ jobs:
               - 'docs/**'
 
   deploy:
-    if: ${{ needs.check-paths.outputs.docs == 'true' }}
+    if: steps.changes.outputs.docs == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
