@@ -30,7 +30,6 @@ Kekkai can be configured using the `config.yaml` file in the working directory. 
             save: false
         collecting:
             fiat: true
-            crypto: false
             schedule: '30 8 * * *'
         fiat:
             - USD
@@ -39,13 +38,6 @@ Kekkai can be configured using the `config.yaml` file in the working directory. 
             - UAH
             - TRY
             - KZT
-        crypto:
-            - BTC
-            - ETH
-        coinapiKeys: # List of keys for the coinapi API [Array]
-            - CryptoKey1
-            - CryptoKey2
-            - CryptoKey3
     ```
 
 ## Database
@@ -99,7 +91,7 @@ Kekkai uses [`Plausbile`](https://plausible.io/) as an analyst. Minimal data is 
 - `work`: Enable or disable analytics. 
 
 ## Currency
-`DuckDuckGo` (fiat currency collection) and `CoinAPI` (cryptocurrency collection) are used to collect currency rates.
+`DuckDuckGo` (fiat currency collection) is used to collect currency rates.
 
 ??? note
     ```yaml
@@ -109,7 +101,6 @@ Kekkai uses [`Plausbile`](https://plausible.io/) as an analyst. Minimal data is 
             save: false
     collecting:
         fiat: true
-        crypto: false
         schedule: '30 8 * * *'
     fiat:
         - USD
@@ -118,19 +109,9 @@ Kekkai uses [`Plausbile`](https://plausible.io/) as an analyst. Minimal data is 
         - UAH
         - TRY
         - KZT
-    crypto:
-        - BTC
-        - ETH
-    coinapiKeys:
-        - CryptoKey1
-        - CryptoKey2
-        - CryptoKey3
-    ...
     ```
 
 - `currency.chart.save`: Enable or disable saving graphs.
 - `currency.collecting`: Enable or disable cryptocurrency or fiat currency exchange rate collection.
 - `currency.schedule`: Currency collection interval (Configurable via cron. It is recommended to use [crontab.guru](https://crontab.guru), not supported in `Non-standard format`, like `@daily`).
 - `currency.fiat`: A list of fiat currencies that will be saved to the database.
-- `currency.crypto`:  A list of cryptocurrencies that will be saved to the database.
-- `currency.coinapiKeys`: List of API keys of the coinapi service

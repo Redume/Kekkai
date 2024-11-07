@@ -15,7 +15,6 @@ nav:
     - Manual: getting-started/manual.md
     - Contributing: getting-started/contributing.md
   - Config:
-    - How to create API keys for coinapi: config/coinapi-keys.md
     - Configure config.yaml: config/config-yaml.md
     - Configure .env: config/config-env.md
     - Configure nginx.conf: config/conf-nginx.md
