@@ -33,6 +33,14 @@ fastify.register(getRateRoute);
 fastify.register(configurationRoutes);
 fastify.register(HomeRoute);
 
+fastify.setNotFoundHandler(function (res, reply) {
+   return reply.status(404).send({
+       status: 404,
+       message: 'Page not found!',
+       documentation: 'https://kekkai-docs.redume.su/'
+   });
+});
+
 fastify.addHook('onResponse', async (request, reply) => {
     const routePart = request.raw.url.split('/');
     const routePartFiltered = routePart
