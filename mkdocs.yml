@@ -14,6 +14,9 @@ nav:
     - Docker [Recommended]: getting-started/docker.md
     - Manual: getting-started/manual.md
     - Contributing: getting-started/contributing.md
+  - Endpoints:
+    - Get currency rate - /api/getRate: endpoints/get-rate.md
+    - Create Charts - /api/getChart: endpoints/create-chart.md
   - Config:
     - Configure config.yaml: config/config-yaml.md
     - Configure .env: config/config-env.md
@@ -39,8 +42,11 @@ theme:
 
   features:
     - content.code.copy
+    - content.tabs.link
 
 markdown_extensions:
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -51,3 +57,4 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - tables
