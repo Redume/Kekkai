@@ -1,0 +1,84 @@
+name: Report an issue with Kekkai
+description: Report an issue with Kekkai
+body:
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: The bug
+      description: >-
+        Describe the issue you are experiencing here, to communicate to the
+        maintainers. Tell us what you were trying to do and what happened.
+
+        Provide a clear and concise description of what the problem is.
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: The OS that Kekkai Server is running on
+      placeholder: Ubuntu 22.10, Debian, Arch...etc
+
+  - type: input
+    id: version
+    validations:
+      required: true
+    attributes:
+      label: Version of Kekkai Server
+      placeholder: v1.0.0
+
+  - type: checkboxes
+    validations:
+      required: true
+    attributes:
+      label: Platform with the issue
+      options:
+        - label: MainService
+        - label: Collect-Currency
+        - label: Charts
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: "How do you trigger this bug? Please walk us through it step by step."
+      value: |
+        1.
+        2.
+        3.
+        ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant logs below. (code formatting is
+        enabled, no need for backticks)
+      render: shell
+    validations:
+      required: false
+      
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us, use the field below.
+
+  - type: markdown
+    attributes:
+      value: Thank you for submitting the form
+
+  - type: checkboxes
+    id: acknowledgements
+    attributes:
+        label: Acknowledgements
+        options:
+            - label: This is not a duplicate of an existing issue. Please look through the list of [open issues](https://github.com/Redume/Kekkai/issues) before creating a new one.
+              required: true
