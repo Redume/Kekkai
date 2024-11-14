@@ -1,4 +1,4 @@
-name: Report an issue with Kekkai
+name: 🐞 Bug report
 description: Report an issue with Kekkai
 body:
   - type: textarea
@@ -33,8 +33,6 @@ body:
       placeholder: v1.0.0
 
   - type: checkboxes
-    validations:
-      required: true
     attributes:
       label: Platform with the issue
       options:
