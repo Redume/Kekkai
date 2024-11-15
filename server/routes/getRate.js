@@ -13,7 +13,6 @@ module.exports = async function getRateRoute(fastify) {
         let rate_res;
 
         try {
-
             if (query['date'])
                 rate_res = await rate.getDay(
                     query['from_currency'],
@@ -36,20 +35,18 @@ module.exports = async function getRateRoute(fastify) {
                         'Read more in the documentation',
                 });
 
-
-            if (typeof rate_res !== "object") return res.status(400).send({
-                status: 400,
-                message: rate_res,
-            });
-            else return res.status(200).send(
-                rate_res
-            )
+            if (typeof rate_res !== 'object')
+                return res.status(400).send({
+                    status: 400,
+                    message: rate_res,
+                });
+            else return res.status(200).send(rate_res);
         } catch (err) {
             fastify.log.error(err.message);
             res.status(500).send({
                 status: 500,
-                message: err.message
-            })
+                message: err.message,
+            });
         }
     });
 };
