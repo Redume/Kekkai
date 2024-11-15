@@ -34,8 +34,9 @@ npm install
 
 `eslint` and `prettier` is used to check and automatically correct the Node.JS code
 ```bash
-npm eslint .
+npx eslint .
 ```
+Or add the `--fix` flag to automatically fix the code
 
 #### Checking the Python code
 To check code, you need to install libraries `mypy` and `pylint`
