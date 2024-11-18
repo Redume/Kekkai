@@ -15,6 +15,7 @@ nav:
     - Manual: getting-started/manual.md
     - Contributing: getting-started/contributing.md
   - Endpoints:
+    - Endpoints list: endpoints/list-endpoints.md
     - Get currency rate - /api/getRate: endpoints/get-rate.md
     - Create Charts - /api/getChart: endpoints/create-chart.md
   - Config:
