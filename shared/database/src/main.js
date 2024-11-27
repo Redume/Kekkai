@@ -1,14 +1,6 @@
 const pool = require('./postgresql.js');
 const logger = require('../../logger/src/main.js');
 
-/**
- * Getting the currency exchange rate for a specific day
- * @param from_currency {String}
- * @param conv_currency {String}
- * @param date
- * @returns {Promise<*|Error>}
- */
-
 async function getDay(from_currency, conv_currency, date) {
     if (!from_currency || !conv_currency)
         return new Error('fromCurrency and convCurrency are required');
@@ -22,24 +14,10 @@ async function getDay(from_currency, conv_currency, date) {
 
     if (data?.['rows'].length <= 0) return 'Missing data';
 
-    const set_date = data['rows'][0]['date'];
-    data['rows'][0]['date'] = new Date(
-        set_date.setDate(set_date.getDate() + 1),
-    );
-
     logger.debug(data['rows'][0]);
 
     return data['rows'][0];
 }
-
-/**
- * Getting the exchange rate for a certain period
- * @param {String} from_currency - The currency that is being converted
- * @param {String} conv_currency - The currency to be converted into
- * @param {String} start_date - Start date of the period
- * @param {String} end_date - End date of the period
- * @returns {Promise<*|Error>}
- */
 
 async function getPeriod(from_currency, conv_currency, start_date, end_date) {
     if (!from_currency || !conv_currency)
@@ -59,11 +37,6 @@ async function getPeriod(from_currency, conv_currency, start_date, end_date) {
     );
 
     if (data?.['rows'].length <= 0) return 'Missing data';
-
-    for (let i = 0; i < data['rows'].length; i++) {
-        let date = data['rows'][i]['date'];
-        date = new Date(date.setDate(date.getDate() + 1));
-    }
 
     logger.debug(data['rows']);
 
