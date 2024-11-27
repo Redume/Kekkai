@@ -3,9 +3,8 @@ const axios = require('axios');
 const config = require('../shared/config/src/main.js')();
 const logger = require('../shared/logger/src/main.js');
 
-async function save_fiat(depth = 0) {
+async function save_fiat() {
     if (!config['currency']['collecting']['fiat']) return;
-    const max_depth = 5;
 
     config['currency']['fiat'].forEach((value) =>
         config['currency']['fiat'].forEach(async (pair) => {
@@ -38,7 +37,7 @@ async function save_fiat(depth = 0) {
                         [
                             value,
                             pair,
-                            new Date(data['timestamp']).toLocaleDateString(),
+                            new Date(data['timestamp']).toISOString().substring(0, 10),
                         ],
                     );
 
@@ -49,23 +48,12 @@ async function save_fiat(depth = 0) {
                             value,
                             pair,
                             data['to'][0]['mid'].toString().slice(0, point),
-                            new Date(data['timestamp']).toLocaleDateString(),
+                            new Date(data['timestamp']).toISOString().substring(0, 10),
                         ],
                     );
                 })
                 .catch(async (err) => {
                     logger.error(err);
-
-                    if (depth < max_depth) {
-                        await new Promise((resolve) =>
-                            setTimeout(resolve, max_depth),
-                        );
-                        await save_fiat(depth + 1);
-                    } else {
-                        logger.error(
-                            'Max retry limit reached for saving fiat data.',
-                        );
-                    }
                 });
         }),
     );
