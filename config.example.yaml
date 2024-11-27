@@ -12,7 +12,7 @@ server:
   ssl:
     private_key: '/CertSSL/privkey.pem' # The path to the private SSL key file (String)
     cert: '/CertSSL/fullchain.pem' # The path to the SSL certificate (String)
-    work: true # Enable or disable SSL support [Boolean]
+    work: false # Enable or disable SSL support [Boolean]
   log:
     print: true # Enable or disable logging [Boolean]
     level: 'info' # Log level (Fatal/Error/Warn/Log/Debug) [String]
@@ -20,7 +20,7 @@ analytics:
     plausible_api: 'https://plausible.io/api/event/'
     plausible_domain: 'PLAUSIBLE_DOMAIN'
     plausible_token: 'PLAUSIBLE_TOKEN'
-    work: true
+    work: false
 currency:
   chart:
     save: false # Enable or disable saving graphs to an image (Boolean)
