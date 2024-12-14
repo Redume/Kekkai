@@ -9,19 +9,19 @@ router = APIRouter()
 
 @router.get("/api/getChart/{period}", status_code=status.HTTP_201_CREATED)
 async def get_chart_period(
-                            response: Response,
-                            request: Request,
-                            from_currency: str = None,
-                            conv_currency: str = None,
-                            period: str = None,
-                           ):
+        response: Response,
+        request: Request,
+        from_currency: str = None,
+        conv_currency: str = None,
+        period: str = None,
+):
 
     if not from_currency or not conv_currency:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {
-                'status': status.HTTP_400_BAD_REQUEST,
-                'message': 'The from_currency and conv_currency fields are required.',
-                }
+            'status': status.HTTP_400_BAD_REQUEST,
+            'message': 'The from_currency and conv_currency fields are required.',
+        }
 
     if period not in ['week', 'month', 'quarter', 'year']:
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -41,13 +41,15 @@ async def get_chart_period(
     end_date = datetime.now()
     start_date = end_date + dateutil.relativedelta.relativedelta(months=month, days=days, years=years)
 
-    chart = await create_chart(from_currency,
-                               conv_currency,
-                               start_date.strftime('%Y-%m-%d'),
-                               end_date.strftime('%Y-%m-%d')
-                               )
+    chart = await create_chart(
+        from_currency,
+        conv_currency,
+        start_date.strftime('%Y-%m-%d'),
+        end_date.strftime('%Y-%m-%d')
+    )
 
     return await prepare_chart_response(response, request, chart)
+
 
 async def prepare_chart_response(response: Response, request: Request, chart_name: str):
     if not chart_name:
