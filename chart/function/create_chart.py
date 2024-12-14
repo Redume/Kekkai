@@ -8,6 +8,9 @@ from ..database.server import create_pool
 async def create_chart(from_currency: str, conv_currency: str, start_date: str, end_date: str) -> (str, None):
     pool = await create_pool()
 
+    if not validate_date(start_date) or not validate_date(end_date):
+        return None
+
     start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
     end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
 
@@ -52,3 +55,11 @@ async def create_chart(from_currency: str, conv_currency: str, start_date: str, 
     fig.clear()
 
     return name
+
+
+def validate_date(date_str: str) -> bool:
+    try:
+        datetime.strptime(date_str, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
