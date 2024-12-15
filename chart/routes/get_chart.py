@@ -13,9 +13,7 @@ router = APIRouter()
 class ChartRequestParams(BaseModel):
     """
     A Pydantic model that represents the request parameters for generating a chart.
-
-    This model is used to validate and group the request parameters:
-    from_currency, conv_currency, start_date, and end_date.
+    This model is used to validate and group the request parameters: from_currency, conv_currency, start_date, and end_date.
     """
     from_currency: str
     conv_currency: str
@@ -26,25 +24,30 @@ class ChartRequestParams(BaseModel):
 async def get_chart(
         response: Response,
         request: Request,
-        params: ChartRequestParams
+        from_currency: str,
+        conv_currency: str,
+        start_date: str,
+        end_date: str
 ):
     """
     Fetches a chart for a given currency pair and date range.
 
     :param response: The response object used for returning the HTTP response.
     :param request: The request object containing details about the incoming request.
-    :param params: Contains the request parameters:
-    from_currency, conv_currency, start_date, and end_date.
+    :param from_currency: The base currency for conversion.
+    :param conv_currency: The target currency for conversion.
+    :param start_date: The start date for the chart data.
+    :param end_date: The end date for the chart data.
     :return: A chart or an error message if the request is invalid.
     """
-    if not params.from_currency or not params.conv_currency:
+    if not from_currency or not conv_currency:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {
             'status': status.HTTP_400_BAD_REQUEST,
             'message': 'The from_currency and conv_currency fields are required.',
         }
 
-    if not params.start_date or not params.end_date:
+    if not start_date or not end_date:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {
             'status': status.HTTP_400_BAD_REQUEST,
@@ -52,9 +55,9 @@ async def get_chart(
         }
 
     chart = await create_chart(
-        params.from_currency,
-        params.conv_currency,
-        params.start_date,
-        params.end_date
+        from_currency,
+        conv_currency,
+        start_date,
+        end_date
     )
     return await prepare_chart_response(response, request, chart)
