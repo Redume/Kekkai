@@ -7,7 +7,7 @@ from http import HTTPStatus
 import httpx
 from user_agents import parse as ua_parse
 
-from chart.utils.load_config import load_config
+from utils.load_config import load_config
 
 config = load_config('config.yaml')
 

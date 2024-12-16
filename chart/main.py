@@ -11,9 +11,9 @@ import uvicorn
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 
-from chart.middleware.plausible_analytics import PlausibleAnalytics
-from chart.routes import get_chart, get_chart_period
-from chart.utils.load_config import load_config
+from middleware.plausible_analytics import PlausibleAnalytics
+from routes import get_chart, get_chart_period
+from utils.load_config import load_config
 
 app = FastAPI()
 config = load_config('config.yaml')

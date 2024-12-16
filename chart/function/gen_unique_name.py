@@ -1,5 +1,5 @@
 """
-This module provides a function to generate a unique name for chart files.
+This module provides a function to generate a unique name for src files.
 """
 import datetime
 import random

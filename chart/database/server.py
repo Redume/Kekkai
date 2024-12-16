@@ -7,7 +7,7 @@ that can be used throughout the application for database operations.
 
 import asyncpg
 
-from chart.utils.load_config import load_config
+from utils.load_config import load_config
 
 config = load_config('config.yaml')
 

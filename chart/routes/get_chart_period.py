@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 
 from fastapi import APIRouter, status, Request, Response
 
-from chart.function.create_chart import create_chart
+from function.create_chart import create_chart
 
 router = APIRouter()
 

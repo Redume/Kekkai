@@ -7,8 +7,8 @@ from datetime import datetime
 
 from matplotlib import pyplot as plt
 
-from chart.function.gen_unique_name import generate_unique_name
-from ..database.server import create_pool
+from function.gen_unique_name import generate_unique_name
+from database.server import create_pool
 
 async def create_chart(
         from_currency: str,

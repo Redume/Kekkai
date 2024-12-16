@@ -5,8 +5,8 @@ It defines the `/api/getChart/` endpoint that processes requests for generating 
 from fastapi import APIRouter, status, Request, Response
 from pydantic import BaseModel
 
-from chart.function.create_chart import create_chart
-from chart.routes.get_chart_period import prepare_chart_response
+from function.create_chart import create_chart
+from .get_chart_period import prepare_chart_response
 
 router = APIRouter()
 
