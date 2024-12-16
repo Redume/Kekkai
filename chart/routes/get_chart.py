@@ -3,31 +3,22 @@ This module contains the route for retrieving a chart based on a given currency 
 It defines the `/api/getChart/` endpoint that processes requests for generating charts.
 """
 from fastapi import APIRouter, status, Request, Response
-from pydantic import BaseModel
 
 from function.create_chart import create_chart
 from .get_chart_period import prepare_chart_response
 
+# pylint: disable=duplicate-code
 router = APIRouter()
 
-class ChartRequestParams(BaseModel):
-    """
-    A Pydantic model that represents the request parameters for generating a chart.
-    This model is used to validate and group the request parameters: from_currency, conv_currency, start_date, and end_date.
-    """
-    from_currency: str
-    conv_currency: str
-    start_date: str
-    end_date: str
-
+# pylint: disable=too-many-arguments, too-many-positional-arguments
 @router.get("/api/getChart/", status_code=status.HTTP_201_CREATED)
 async def get_chart(
         response: Response,
         request: Request,
-        from_currency: str,
-        conv_currency: str,
-        start_date: str,
-        end_date: str
+        from_currency: str = None,
+        conv_currency: str = None,
+        start_date: str = None,
+        end_date: str = None,
 ):
     """
     Fetches a chart for a given currency pair and date range.

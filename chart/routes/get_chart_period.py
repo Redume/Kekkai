@@ -12,6 +12,7 @@ from fastapi import APIRouter, status, Request, Response
 
 from function.create_chart import create_chart
 
+# pylint: disable=duplicate-code
 router = APIRouter()
 
 @router.get("/api/getChart/{period}", status_code=status.HTTP_201_CREATED)

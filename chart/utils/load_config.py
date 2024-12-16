@@ -1,3 +1,4 @@
+# pylint: disable=R0801
 """
 This module provides a function for loading a YAML configuration file.
 The function reads the file content and returns it as a Python dictionary.
@@ -17,5 +18,3 @@ def load_config(file_path: str) -> dict:
     """
     with open(file_path, 'r', encoding='utf-8') as file:
         return yaml.safe_load(file)
-
-config = load_config('config.yaml')
