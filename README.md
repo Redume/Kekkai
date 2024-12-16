@@ -10,7 +10,7 @@
         <img alt="GPLv3 license" src="https://img.shields.io/github/license/redume/kekkai?color=blue">
     </a>
     <a href="https://github.com/redume/kekkai/releases/latest">
-        <img alt="Latest release" src="https://img.shields.io/github/v/release/redume/kakkai?display_name=release">
+        <img alt="Latest release" src="https://img.shields.io/github/v/release/redume/kekkai?display_name=release">
     </a>
 </div>
 
@@ -45,15 +45,3 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <https://www.gnu.org/licenses/>.
 ```
-
-### Third-party library license
-- [eslint/eslint](https://github.com/eslint/eslint) — [MIT](https://github.com/eslint/eslint/blob/main/LICENSE)
-- [prettier/prettier](https://github.com/prettier/prettier) — [MIT](https://github.com/prettier/prettier/blob/main/LICENSE)
-- [pinojs/pino](https://github.com/pinojs/pino) - [MIT](https://github.com/pinojs/pino/blob/main/LICENSE)
-- [pinojs/pino-prettier](https://github.com/pinojs/pino-pretty) - [MIT](https://github.com/pinojs/pino-pretty/blob/master/LICENSE)
-- [brianc/pg](https://github.com/brianc/node-postgres) - [MIT](https://github.com/brianc/node-postgres/blob/master/LICENSE)
-- [eemeli/pg](https://github.com/eemeli/yaml) - [ISC](https://github.com/eemeli/yaml/blob/main/LICENSE)
-- [fastify/fastify](https://github.com/fastify/fastify) — [MIT](https://github.com/fastify/fastify/blob/main/LICENSE)
-- [axios/axios](https://github.com/axios/axios) - [MIT](https://github.com/axios/axios/blob/v1.x/LICENSE)
-- [GuillaumeRochat/cron-validator](https://github.com/GuillaumeRochat/cron-validator) - [MIT](https://github.com/GuillaumeRochat/cron-validator/blob/master/LICENSE)
-- [node-schedule/node-schedule](https://github.com/node-schedule/node-schedule) - [MIT](https://github.com/node-schedule/node-schedule/blob/master/LICENSE)
