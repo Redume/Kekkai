@@ -1,7 +1,7 @@
 const pool = require('./postgresql.js');
 const logger = require('../../logger/src/main.js');
 
-async function getDay(from_currency, conv_currency, date) {
+async function getDay(from_currency, conv_currency, date, conv_amount) {
     if (!from_currency || !conv_currency)
         return new Error('fromCurrency and convCurrency are required');
     else if (!date) return new Error('date is required');
@@ -12,7 +12,15 @@ async function getDay(from_currency, conv_currency, date) {
         [from_currency.toUpperCase(), conv_currency.toUpperCase(), date],
     );
 
+
     if (data?.['rows'].length <= 0) return 'Missing data';
+
+    if (conv_amount) {
+        let conv_rate = data?.['rows'][0]['rate'] * conv_amount;
+        const point = conv_rate.toString().indexOf('.') + 4;
+
+        data['rows'][0]['rate'] = Number(conv_rate.toString().slice(0, point));
+    }
 
     logger.debug(data['rows'][0]);
 
