@@ -7,5 +7,4 @@ It is a simple tool for collecting historical currency data from open sources, w
 
 - Free & Open-Source
 - The ability to create graphs
-- Decentralized data collection and use. You are not dependent on any particular server
 - Plausible support. Anonymous data collection with the ability to disable it. Available only to server owners
