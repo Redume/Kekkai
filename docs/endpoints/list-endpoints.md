@@ -13,4 +13,3 @@ Kekkai has 3 API endpoints: `getRate`, `getChart` and `configurations`. Below yo
 |--------------|--------------------------------------------------------|--------------------------------------------------------------------|
 | Get Rate     | `https://kekkai-api.redume.su/api/getRate/`            | Get currency exchange rate for a specific day or period            |
 | Create Chart | `https://kekkai-api.redume.su/api/getChart`            | Creating a chart with exchange rate                                |
-| Get Config   | `https://kekkai-api.redume.su/api/configurations/json` | Get instance config file                                           |
