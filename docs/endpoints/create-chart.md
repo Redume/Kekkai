@@ -41,15 +41,17 @@ Creating a currency rate chart.
         ```
 
 ### Query params
-| Parameter     | Description                                                             |
-|---------------|-------------------------------------------------------------------------|
-| `from_currency` | `ISO 4217` code of the currency from which the conversion takes place |
-| `conv_currency` | `ISO 4217` code of the currency to which the conversion is performed  |
+| Parameter      | Description                                                             |
+|----------------|-------------------------------------------------------------------------|
+| `from_currency`* | `ISO 4217` code of the currency from which the conversion takes place |
+| `conv_currency`* | `ISO 4217` code of the currency to which the conversion is performed  |
 
 ### URL params
 | Parameter     | Description                                                             |
 |---------------|-------------------------------------------------------------------------|
 | `period`      | Available parameters: `week`, `month`, `quarter`, `year`                |
+
+`*` - Required arguments
 
 ### Response
 !!! info "Output"
@@ -106,12 +108,14 @@ Creating a currency rate chart.
         ```
 
 ### Query params
-| Parameter     | Description                                                             |
-|---------------|-------------------------------------------------------------------------|
-| `from_currency` | `ISO 4217` code of the currency from which the conversion takes place |
-| `conv_currency` | `ISO 4217` code of the currency to which the conversion is performed  |
-| `start_date`    | Start date of the period in the format `YYYYY-DD-MM`                  |
-| `end_date`      | Period end date in the format `YYYYY-DD-MM`                           |
+| Parameter      | Description                                                             |
+|----------------|-------------------------------------------------------------------------|
+| `from_currency`* | `ISO 4217` code of the currency from which the conversion takes place |
+| `conv_currency`* | `ISO 4217` code of the currency to which the conversion is performed  |
+| `start_date`*    | Start date of the period in the format `YYYYY-DD-MM`                  |
+| `end_date`*      | Period end date in the format `YYYYY-DD-MM`                           |
+
+`*` - Required arguments
 
 ### Response
 !!! info "Output"
@@ -128,3 +132,5 @@ Example: ``.../RUB_USD_20241108_DQVDN7.png``
 - `RUB_USD` - Name of currencies.
 - `20241108` - Schedule request date in `YYYMMDD` format.
 - `DQVDN7` - Random file character identifier.
+
+All charts are in the charts folder, which is in the root directory (`./kekkai/chart`)

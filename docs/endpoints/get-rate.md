@@ -46,11 +46,14 @@ Currencies are identified by standard three-letter `ISO 4217` currency codes.
         ```
 
 ### Query Parameters
-| Parameter     | Description                                                             |
-|---------------|-------------------------------------------------------------------------|
-| `from_currency` | `ISO 4217` code of the currency from which the conversion takes place |
-| `conv_currency` | `ISO 4217` code of the currency to which the conversion is performed  |
-| `date`          | Currency rate date in the format `YYYYY-DD-MM`                        |
+| Parameter       | Description                                                            |
+|-----------------|------------------------------------------------------------------------|
+| `from_currency`* | `ISO 4217` code of the currency from which the conversion takes place |
+| `conv_currency`* | `ISO 4217` code of the currency to which the conversion is performed  |
+| `date`*          | Currency rate date in the format `YYYYY-DD-MM`                        |
+| `conv_amount`   | Multiplier for number conversion (Optional)
+
+`*` - Required arguments
 
 ### Response
 !!! info "Output"
@@ -114,12 +117,14 @@ Getting the list of the array with currency rate for a certain period of time.
         ```
 
 ### Query params
-| Parameter     | Description                                                             |
-|---------------|-------------------------------------------------------------------------|
-| `from_currency` | `ISO 4217` code of the currency from which the conversion takes place |
-| `conv_currency` | `ISO 4217` code of the currency to which the conversion is performed  |
-| `start_date`    | Start date of the period in the format `YYYYY-DD-MM`                  |
-| `end_date`      | Period end date in the format `YYYYY-DD-MM`                           |
+| Parameter        | Description                                                             |
+|------------------|-------------------------------------------------------------------------|
+| `from_currency`* | `ISO 4217` code of the currency from which the conversion takes place   |
+| `conv_currency`* | `ISO 4217` code of the currency to which the conversion is performed    |
+| `start_date`*    | Start date of the period in the format `YYYYY-DD-MM`                    |
+| `end_date`*      | Period end date in the format `YYYYY-DD-MM`                             |
+
+`*` - Required arguments
 
 ### Response
 !!! info "Output"
