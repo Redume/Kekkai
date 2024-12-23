@@ -1,7 +1,7 @@
 ## What is Kekkai?
 Kekkai — The first free Open-Source Tool for Saving Historical Currency data
 
-It is a simple tool for collecting historical currency data from open sources, with the ability to create currency exchange rate charts. Cryptocurrencies and fiat currency are supported
+It is a simple tool for collecting historical currency data from open sources, with the ability to create currency exchange rate charts.
 
 ## Why Kekkai?
 
