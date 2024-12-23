@@ -44,7 +44,7 @@ async def create_chart(
     async with pool.acquire() as conn:
         data = await conn.fetch(
             'SELECT date, rate FROM currency '
-            'WHERE (date BETWEEN $1 AND $2) AND from_currency = $3 AND conv_currency = $4',
+            'WHERE (date BETWEEN $1 AND $2) AND from_currency = $3 AND conv_currency = $4 ORDER BY date',
             start_date_obj,
             end_date_obj,
             from_currency.upper(),
