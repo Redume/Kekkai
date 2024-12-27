@@ -1,22 +1,22 @@
-FROM node:20 AS shared-config
+FROM node:20-alpine AS shared-config
 # Install shared/config dependencies
 WORKDIR /
 COPY ./shared/config/package*.json .
 RUN npm install
 
-FROM node:20 AS shared-database
+FROM node:20-alpine AS shared-database
 # Install shared/database dependencies
 WORKDIR /
 COPY ./shared/database/package*.json .
 RUN npm install
 
-FROM node:20 AS shared-logger
+FROM node:20-alpine AS shared-logger
 # Install the shared/logger dependencies
 WORKDIR /
 COPY ./shared/logger/package*.json .
 RUN npm install
 
-FROM node:20 AS server
+FROM node:20-alpine AS server
 
 WORKDIR /
 
