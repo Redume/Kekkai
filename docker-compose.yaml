@@ -8,6 +8,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./CertSSL:/etc/nginx/ssl
       - ./robots.txt:/etc/nginx/robots.txt
+      - ./assets/logo.png:/etc/nginx/assets/logo.png
     depends_on:
       - server
       - chart
