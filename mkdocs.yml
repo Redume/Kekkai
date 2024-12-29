@@ -24,17 +24,17 @@ nav:
     - Configure nginx.conf: config/conf-nginx.md
 
 theme:
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
   language: en
   name: material
   palette:
-    # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default 
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
 
-    # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       toggle:
