@@ -24,8 +24,8 @@ nav:
     - Configure nginx.conf: config/conf-nginx.md
 
 theme:
-  logo: assets/logo.svg
-  favicon: assets/logo.svg
+  logo: assets/logo.png
+  favicon: assets/logo.png
   language: en
   name: material
   palette:
