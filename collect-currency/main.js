@@ -3,6 +3,7 @@ const config = require('../shared/config/src/main.js')();
 const cron = require('cron-validator');
 
 const save_fiat = require('./save_fiat');
+const save_crypto = require('./save_crypto');
 const logger = require('../shared/logger/src/main.js');
 
 async function validateSchedule(schedule) {
@@ -16,7 +17,7 @@ async function initialize() {
 }
 
 async function runTasks() {
-    await Promise.all([save_fiat()]);
+    await Promise.all([save_fiat(), save_crypto()]);
 }
 
 async function main() {
