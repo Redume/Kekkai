@@ -14,9 +14,6 @@
     </a>
 </div>
 
-> [!IMPORTANT]
->  After Nov. 1, the coinAPI service removed the plan with free 100 requests. At the moment, cryptocurrency collection is limited (free of charge). Some cryptocurrencies are possible to get through DuckDuckGO, but the list of available currencies is unknown. More details can be found in the [discussion](https://github.com/Redume/Kekkai/discussions/1)
-
 > [!NOTE]
 > The first free Open-Source Tool for Saving Historical Currency data
 
