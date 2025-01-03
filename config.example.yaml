@@ -26,7 +26,9 @@ currency:
     save: false # Enable or disable saving graphs to an image (Boolean)
   collecting:
     fiat: true # Turn off or turn on the collection of the fiat currency rate [Boolean]
+    crypto: false
     schedule: '30 8 * * *' # Currency collection schedule in crontab format [String]
+    crypto_apikey: 'APIKEY'
   fiat: # List of fiat currency to save the exchange rate [Array]
     - USD
     - RUB
@@ -34,3 +36,7 @@ currency:
     - UAH
     - TRY
     - KZT
+  crypto:
+    - ETH
+    - TON
+    - USDT
