@@ -55,10 +55,14 @@ async def create_chart(
         return None
 
     date, rate = [], []
+    fig = plt.gcf()
 
     for row in data:
         date.append(str(row['date']))
         rate.append(row['rate'])
+        width = 18.5 + (len(date) // 5) * 2 
+        fig.set_size_inches(width, 9.5)
+
 
     if rate[0] < rate[-1]:
         plt.plot(date, rate, color='green', marker='o')
@@ -70,8 +74,6 @@ async def create_chart(
     plt.xlabel('Date')
     plt.ylabel('Rate')
 
-    fig = plt.gcf()
-    fig.set_size_inches(18.5, 9.5)
 
     name = await generate_unique_name(
         f'{from_currency.upper()}_{conv_currency.upper()}',
