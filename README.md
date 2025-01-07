@@ -27,7 +27,7 @@
 ### License. The project is under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) license.
 
 ```
-    Kekkai Copyright (C) 2024 Redume
+    Kekkai Copyright (C) 2024-2025 Redume
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
