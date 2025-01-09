@@ -17,9 +17,7 @@ async function getDay(from_currency, conv_currency, date, conv_amount) {
 
     if (conv_amount) {
         let conv_rate = data?.['rows'][0]['rate'] * conv_amount;
-        const point = conv_rate.toString().indexOf('.') + 4;
-
-        data['rows'][0]['conv_amount'] = Number(conv_rate.toString().slice(0, point));
+        data['rows'][0]['conv_amount'] = Number(conv_rate.toFixed(2));
     }
 
     logger.debug(data['rows'][0]);
