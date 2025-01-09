@@ -60,7 +60,7 @@ async def create_chart(
     for row in data:
         date.append(str(row['date']))
         rate.append(row['rate'])
-        width = 18.5 + (len(date) // 5) * 2 
+        width = 18.5 + (len(date) // 5) * 3 
         fig.set_size_inches(width, 9.5)
 
 
