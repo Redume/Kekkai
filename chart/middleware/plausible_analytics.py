@@ -23,7 +23,7 @@ class PlausibleAnalytics:
     async def __call__(self, request, call_next):
         response = await call_next(request)
 
-        if HTTPStatus(response.status_code).is_client_error:
+        if HTTPStatus(response.status_code).is_client_error or not config['analytics']['work']:
             return response
 
         user_agent = request.headers.get('user-agent', 'unknown')
