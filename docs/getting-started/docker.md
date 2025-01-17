@@ -1,4 +1,5 @@
-Docker Compose is the recommended method to run Kekkai in production. Below are the steps to deploy Kekkai with Docker Compose.
+Docker Compose is the recommended method to run Kekkai in production. 
+Below are the steps to deploy Kekkai with Docker Compose.
 
 Kekkai requires Docker Compose version 2.x.
 
@@ -64,7 +65,9 @@ cd Kekkai
     ```
 
     - Populate custom database information if necessary.
-    - Consider changing `DB_PASSWORD` to a custom value. Postgres is not publically exposed, so this password is only used for - local authentication. To avoid issues with Docker parsing this value, it is best to use only the characters `A-Za-z0-9`.
+    - Consider changing `DB_PASSWORD` to a custom value. 
+    Postgres is not publically exposed, so this password is only used for - local authentication. 
+    To avoid issues with Docker parsing this value, it is best to use only the characters `A-Za-z0-9`.
 
 !!! note 
     After editing, rename the config files by removing `.sample` in the name

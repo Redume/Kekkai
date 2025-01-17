@@ -2,7 +2,8 @@ Kekkai is used by `Nginx` to redirect to the correct microservice.
 
 ## Change domain
 
-Change localhost to your `domain` or `ipv4` based on your needs. If you need to use Kekkai locally, you don't need to change anything,
+Change localhost to your `domain` or `ipv4` based on your needs. 
+If you need to use Kekkai locally, you don't need to change anything,
 
 ??? note
     ```

@@ -68,10 +68,13 @@ mkdir CertSSL
 
 Copy your certificates to the CertSSL folder. 
 
-It is recommended to rename the certificates to `privkey.pem` and `fullchain.pem`. If this is not possible, you need to change the SSL name in `nginx.conf` (if using Docker Compose)
+It is recommended to rename the certificates to `privkey.pem` and `fullchain.pem`. 
+If this is not possible, you need to change the SSL name in `nginx.conf` (if using Docker Compose)
 
 ## Analytics
-Kekkai uses [`Plausbile`](https://plausible.io/) as an analyst. Minimal data is transferred for anilithics. Such as: browser, OS, status code, url, where the user came from. Most of the data is built on User Agent. It is possible to disable analytics in Kekkai.
+Kekkai uses [`Plausbile`](https://plausible.io/) as an analyst. Minimal data is transferred for anilithics. 
+Such as: browser, OS, status code, url, where the user came from. 
+Most of the data is built on User Agent. It is possible to disable analytics in Kekkai.
 
 
 ??? note 
@@ -85,8 +88,10 @@ Kekkai uses [`Plausbile`](https://plausible.io/) as an analyst. Minimal data is 
     ...
     ```
 
-- `plausible_api`: This is where the Plausible instance is specified. The official instance is specified by default.
-- `plausible_domain`: Kekkai Instance Domain. It should be added to Plausible first, and then to the config. You can add the domain [here](https://plausible.io/sites/new?flow=provisioning).
+- `plausible_api`: This is where the Plausible instance is specified. 
+    The official instance is specified by default.
+- `plausible_domain`: Kekkai Instance Domain. 
+  It should be added to Plausible first, and then to the config. You can add the domain [here](https://plausible.io/sites/new?flow=provisioning).
 - `plausible_token`: Api token for authorization and sending requests. You can create it [here](https://plausible.io/settings/api-keys).
 - `work`: Enable or disable analytics. 
 
@@ -113,5 +118,6 @@ Kekkai uses [`Plausbile`](https://plausible.io/) as an analyst. Minimal data is 
 
 - `currency.chart.save`: Enable or disable saving graphs.
 - `currency.collecting`: Enable or disable cryptocurrency or fiat currency exchange rate collection.
-- `currency.schedule`: Currency collection interval (Configurable via cron. It is recommended to use [crontab.guru](https://crontab.guru), not supported in `Non-standard format`, like `@daily`).
+- `currency.schedule`: Currency collection interval (Configurable via cron. 
+  It is recommended to use [crontab.guru](https://crontab.guru), not supported in `Non-standard format`, like `@daily`).
 - `currency.fiat`: A list of fiat currencies that will be saved to the database.

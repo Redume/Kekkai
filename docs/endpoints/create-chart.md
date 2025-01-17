@@ -41,10 +41,10 @@ Creating a currency rate chart.
         ```
 
 ### Query params
-| Parameter      | Description                                                             |
-|----------------|-------------------------------------------------------------------------|
-| `from_currency`* | `ISO 4217` code of the currency from which the conversion takes place |
-| `conv_currency`* | `ISO 4217` code of the currency to which the conversion is performed  |
+| Parameter         | Description                                                             |
+|-------------------|-------------------------------------------------------------------------|
+| `from_currency`*  | `ISO 4217` code of the currency from which the conversion takes place   |
+| `conv_currency`*  | `ISO 4217` code of the currency to which the conversion is performed    |
 
 ### URL params
 | Parameter     | Description                                                             |
@@ -70,7 +70,11 @@ Creating a currency rate chart.
     === "Curl"
         ```bash
         curl --request GET \
-        --url https://kekkai-api.redume.su/api/getChart/?from_currency=RUB&conv_currency=USD&start_date=2024-10-31&end_date=2024-11-08
+        --url https://kekkai-api.redume.su/api/getChart/?
+        from_currency=RUB&
+        conv_currency=USD&
+        start_date=2024-10-31&
+        end_date=2024-11-08
         ```
 === "Python"
     === "Request"
@@ -108,12 +112,12 @@ Creating a currency rate chart.
         ```
 
 ### Query params
-| Parameter      | Description                                                             |
-|----------------|-------------------------------------------------------------------------|
-| `from_currency`* | `ISO 4217` code of the currency from which the conversion takes place |
-| `conv_currency`* | `ISO 4217` code of the currency to which the conversion is performed  |
-| `start_date`*    | Start date of the period in the format `YYYYY-DD-MM`                  |
-| `end_date`*      | Period end date in the format `YYYYY-DD-MM`                           |
+| Parameter        | Description                                                            |
+|------------------|------------------------------------------------------------------------|
+| `from_currency`* | `ISO 4217` code of the currency from which the conversion takes place  |
+| `conv_currency`* | `ISO 4217` code of the currency to which the conversion is performed   |
+| `start_date`*    | Start date of the period in the format `YYYYY-DD-MM`                   |
+| `end_date`*      | Period end date in the format `YYYYY-DD-MM`                            |
 
 `*` - Required arguments
 

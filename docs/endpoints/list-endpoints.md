@@ -7,7 +7,8 @@ https://kekkai-api.redume.su/api/
 
 
 ## API Endpoints
-Kekkai has 3 API endpoints: `getRate`, `getChart` and `configurations`. Below you will find a list of parameters that each endpoint requires and a description of what the API does.
+Kekkai has 3 API endpoints: `getRate`, `getChart` and `configurations`. 
+Below you will find a list of parameters that each endpoint requires and a description of what the API does.
 
 | Service      | API Endpoint                                           | Description                                                        |
 |--------------|--------------------------------------------------------|--------------------------------------------------------------------|
