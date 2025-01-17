@@ -27,17 +27,6 @@ async function save_crypto() {
                     
                     const point = data['price'].toString().indexOf('.') + 4;
 
-                    const db = await pool.query(
-                        'SELECT * FROM currency WHERE ' +
-                        'from_currency = $1 AND conv_currency = $2 AND date = $3',
-                        [
-                            value,
-                            pair,
-                            new Date(data['last_updated']).toISOString().substring(0, 10),
-                        ],
-                    );
-
-                    if (db['rows'][0]) return;
                     await pool.query(
                         `INSERT INTO currency (from_currency, conv_currency, rate, date) VALUES ($1, $2, $3, $4)`,
                         [
