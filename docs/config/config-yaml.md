@@ -96,28 +96,37 @@ Most of the data is built on User Agent. It is possible to disable analytics in 
 - `work`: Enable or disable analytics. 
 
 ## Currency
-`DuckDuckGo` (fiat currency collection) is used to collect currency rates.
+`DuckDuckGo` (fiat currency collection) and `CoinMarketCap` (cryptocurrency collection) 
+are used to collect currency rates.
 
 ??? note
     ```yaml
     ...
     currency:
-        chart:
-            save: false
-    collecting:
-        fiat: true
-        schedule: '30 8 * * *'
-    fiat:
+      chart:
+        save: false # Enable or disable saving graphs to an image (Boolean)
+      collecting:
+        fiat: true # Turn off or turn on the collection of the fiat currency rate [Boolean]
+        crypto: false
+        schedule: '30 8 * * *' # Currency collection schedule in crontab format [String]
+        crypto_apikey: 'APIKEY'
+      fiat: # List of fiat currency to save the exchange rate [Array]
         - USD
         - RUB
         - EUR
         - UAH
         - TRY
         - KZT
+      crypto:
+        - ETH
+        - TON
+        - USDT
     ```
 
 - `currency.chart.save`: Enable or disable saving graphs.
 - `currency.collecting`: Enable or disable cryptocurrency or fiat currency exchange rate collection.
 - `currency.schedule`: Currency collection interval (Configurable via cron. 
   It is recommended to use [crontab.guru](https://crontab.guru), not supported in `Non-standard format`, like `@daily`).
+- `crypto.crypto_apiKey`: API-key from CoinMarketCap service
 - `currency.fiat`: A list of fiat currencies that will be saved to the database.
+- `currency.crypto`: A list of crypto currencies that will be saved to the database.
