@@ -21,9 +21,11 @@ const fastify = require("fastify")({
 
 const getRateRoute = require("./routes/getRate.js");
 const HomeRoute = require("./routes/home.js");
+const getMetadata = require("./routes/metadata.js");
 
 fastify.register(getRateRoute);
 fastify.register(HomeRoute);
+fastify.register(getMetadata);
 
 fastify.setNotFoundHandler(function (res, reply) {
     return reply.status(404).send({
