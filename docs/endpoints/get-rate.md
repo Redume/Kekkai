@@ -46,12 +46,12 @@ Currencies are identified by standard three-letter `ISO 4217` currency codes.
         ```
 
 ### Query Parameters
-| Parameter       | Description                                                            |
-|-----------------|------------------------------------------------------------------------|
-| `from_currency`* | `ISO 4217` code of the currency from which the conversion takes place |
-| `conv_currency`* | `ISO 4217` code of the currency to which the conversion is performed  |
-| `date`*          | Currency rate date in the format `YYYYY-DD-MM`                        |
-| `conv_amount`   | Multiplier for number conversion (Optional)
+| Parameter         | Description                                                            |
+|-------------------|------------------------------------------------------------------------|
+| `from_currency`*  | `ISO 4217` code of the currency from which the conversion takes place  |
+| `conv_currency`*  | `ISO 4217` code of the currency to which the conversion is performed   |
+| `date`*           | Currency rate date in the format `YYYYY-DD-MM`                         |
+| `conv_amount`     | Multiplier for number conversion (Optional)                            |
 
 `*` - Required arguments
 
