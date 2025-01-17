@@ -4,11 +4,11 @@ Currencies are identified by standard three-letter `ISO 4217` currency codes.
 
 ### Request
 === "Shell"
-=== "Curl"
-```bash
-curl --request GET \
---url https://kekkai-api.redume.su/api/metadata/
-```
+    === "Curl"
+    ```bash
+    curl --request GET \
+    --url https://kekkai-api.redume.su/api/metadata/
+    ```
 
 === "Python"
     === "Requests"
