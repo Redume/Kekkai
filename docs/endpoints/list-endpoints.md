@@ -7,10 +7,11 @@ https://kekkai-api.redume.su/api/
 
 
 ## API Endpoints
-Kekkai has 3 API endpoints: `getRate`, `getChart` and `configurations`. 
+Kekkai has 3 API endpoints: `getRate`, `getChart` and `metadata`. 
 Below you will find a list of parameters that each endpoint requires and a description of what the API does.
 
-| Service      | API Endpoint                                           | Description                                                        |
-|--------------|--------------------------------------------------------|--------------------------------------------------------------------|
-| Get Rate     | `https://kekkai-api.redume.su/api/getRate/`            | Get currency exchange rate for a specific day or period            |
-| Create Chart | `https://kekkai-api.redume.su/api/getChart`            | Creating a chart with exchange rate                                |
+| Service      | API Endpoint                                 | Description                                                                                 |
+|--------------|----------------------------------------------|---------------------------------------------------------------------------------------------|
+| Get Rate     | `https://kekkai-api.redume.su/api/getRate/`  | Get currency exchange rate for a specific day or period                                     |
+| Create Chart | `https://kekkai-api.redume.su/api/getChart/` | Creating a chart with exchange rate                                                         |
+| Metadata     | `https://kekkai-api.redume.su/api/metadata/` | Shows the last and first dates of currency rate collection, as well as available currencies |
