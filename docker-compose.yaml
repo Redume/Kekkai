@@ -11,6 +11,7 @@ services:
     depends_on:
       - server
       - chart
+      - web
 
   server:
     build:
@@ -37,6 +38,17 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+        
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile-web
+    restart: unless-stopped
+    ports:
+      - '3050:3050'
+    volumes:
+      - './CertSSL:/CertSSL'
+      - './config.yaml:/config.yaml'
 
   collect-currency:
     build:
