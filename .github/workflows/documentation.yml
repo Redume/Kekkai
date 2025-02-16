@@ -1,13 +1,35 @@
-name: Deploy docs 
+name: Deploy docs
+
 on:
   push:
     branches:
       - master 
       - main
+
 permissions:
   contents: write
+
 jobs:
+  changes:
+    name: detect what files changed
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      docs: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            docs:
+              - 'docs/**'
+              - 'mkdocs.yml'
+
   deploy:
+    needs: changes
+    if: ${{ needs.changes.outputs.docs == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

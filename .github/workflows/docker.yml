@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - chore/path-filter
   release:
     types:
       - published
@@ -13,7 +14,34 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  changes:
+    name: detect what files changed
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      server: ${{ steps.filter.outputs.server }}
+      chart: ${{ steps.filter.outputs.chart }}
+      CR: ${{ steps.filter.outputs.CR }}
+      web: ${{ steps.filter.outputs.web }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            server:
+              - 'server/**'
+            chart:
+              - 'chart/**'
+            CR:
+              - 'collecy-currency/**'
+            web:
+              - 'web/**'
+
   build-and-push-server:
+    needs: changes
+    if: ${{ needs.changes.outputs.server == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -50,6 +78,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
   build-and-push-chart:
+    needs: changes
+    if: ${{ needs.changes.outputs.chart == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -87,6 +117,8 @@ jobs:
 
 
   build-and-push-CR:
+    needs: changes
+    if: ${{ needs.changes.outputs.CR == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
