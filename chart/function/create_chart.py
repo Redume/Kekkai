@@ -6,6 +6,8 @@ based on historical data retrieved from the database.
 from datetime import datetime
 
 from matplotlib import pyplot as plt
+from scipy.interpolate import make_interp_spline
+import numpy as np
 
 from function.gen_unique_name import generate_unique_name
 from database.server import create_pool
@@ -55,32 +57,32 @@ async def create_chart(
         return None
 
     date, rate = [], []
-    fig = plt.gcf()
 
     for row in data:
-        date.append(str(row['date']))
+        parsed_date = datetime.strptime(row['data'], '%Y-%m-%d%H:%M:%S.%fZ').date()
+        date.append(parsed_date)
         rate.append(row['rate'])
-        width = 18.5 + (len(date) // 5) * 3 
-        fig.set_size_inches(width, 9.5)
 
+    spline = make_interp_spline(range(len(date)), rate, k=2)
+    x = np.arange(len(date))
 
-    if rate[0] < rate[-1]:
-        plt.plot(date, rate, color='green', marker='o')
-    elif rate[0] > rate[-1]:
-        plt.plot(date, rate, color='red', marker='o')
-    else:
-        plt.plot(date, rate, color='grey')
+    newx_2 = np.linspace(0, len(date) - 1, 200)
+    newy_2 = spline_2(newx_2)
+    fig, ax = plt.subplot(figsize=(15, 6))
 
-    plt.xlabel('Date')
-    plt.ylabel('Rate')
+    for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+        label.set_fontsize(10)
 
+    ax.set_xtick(np.linspace(0, len(date) - 1, 10))
+    ax.set_xticklabels([date[int(i)].strftime('%Y-%m-%d') for i in np.linspace(0, len(date) - 1, 10).astype(int)])
 
     name = await generate_unique_name(
         f'{from_currency.upper()}_{conv_currency.upper()}',
         datetime.now()
     )
 
-    fig.savefig(f'../charts/{name}.png')
+    plt.plot(newx_2, newy_2)
+    plt.savefig(f'../charts/{name}.png')
     fig.clear()
 
     return name
