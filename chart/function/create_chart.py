@@ -90,7 +90,7 @@ async def create_chart(
 	if rate[0] < rate[-1]:
 		plt.plot(newx_2, newy_2, color='green')
 	elif rate[0] > rate[-1]:
-		plt.plot(newx_2, newy_2, color='red', marker='o')
+		plt.plot(newx_2, newy_2, color='red')
 	else:
 		plt.plot(newx_2, newy_2, color='grey')
 
