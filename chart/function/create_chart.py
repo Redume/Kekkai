@@ -60,21 +60,20 @@ async def create_chart(
 	date, rate = [], []
 
 	for row in data:
-		parsed_date = datetime.strptime(row['data'], '%Y-%m-%d%H:%M:%S.%fZ').date()
-		date.append(parsed_date)
-		rate.append(row['rate'])
+		date.append(row[0])
+		rate.append(row[1])
 
 	spline = make_interp_spline(range(len(date)), rate, k=2)
 	x = np.arange(len(date))
 
 	newx_2 = np.linspace(0, len(date) - 1, 200)
-	newy_2 = spline_2(newx_2)
-	fig, ax = plt.subplot(figsize=(15, 6))
+	newy_2 = spline(newx_2)
+	fig, ax = plt.subplots(figsize=(15, 6))
 
 	for label in (ax.get_xticklabels() + ax.get_yticklabels()):
 		label.set_fontsize(10)
 
-	ax.set_xtick(np.linspace(0, len(date) - 1, 10))
+	ax.set_xticks(np.linspace(0, len(date) - 1, 10))
 	ax.set_xticklabels(
 		[
 			date[int(i)].strftime('%Y-%m-%d') 
@@ -87,6 +86,8 @@ async def create_chart(
 		datetime.now()
 	)
 
+	
+	plt.plot(newx_2, newy_2)
 	plt.savefig(f'../charts/{name}.png')
 	fig.clear()
 
