@@ -5,3 +5,5 @@ fastapi[standard]~=0.115.2
 starlette~=0.40.0
 user_agents==2.2.0
 asyncpg~=0.30.0
+scipy~=1.15.2
+numpy~=2.2.0
