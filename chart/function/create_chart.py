@@ -46,7 +46,8 @@ async def create_chart(
     async with pool.acquire() as conn:
         data = await conn.fetch(
             'SELECT date, rate FROM currency '
-            'WHERE (date BETWEEN $1 AND $2) AND from_currency = $3 AND conv_currency = $4 ORDER BY date',
+            'WHERE (date BETWEEN $1 AND $2) ' +
+			'AND from_currency = $3 AND conv_currency = $4 ORDER BY date',
             start_date_obj,
             end_date_obj,
             from_currency.upper(),
@@ -74,7 +75,12 @@ async def create_chart(
         label.set_fontsize(10)
 
     ax.set_xtick(np.linspace(0, len(date) - 1, 10))
-    ax.set_xticklabels([date[int(i)].strftime('%Y-%m-%d') for i in np.linspace(0, len(date) - 1, 10).astype(int)])
+    ax.set_xticklabels(
+        [
+            date[int(i)].strftime('%Y-%m-%d') 
+            for i in np.linspace(0, len(date) - 1, 10).astype(int)
+        ]
+        )
 
     name = await generate_unique_name(
         f'{from_currency.upper()}_{conv_currency.upper()}',
