@@ -47,4 +47,3 @@
 
 - [eslint/eslint](https://github.com/eslint/eslint) — [MIT](https://github.com/eslint/eslint/blob/main/LICENSE)
 - [prettier/prettier](https://github.com/prettier/prettier) — [MIT](https://github.com/prettier/prettier/blob/main/LICENSE)
-- [squidfunk/mkdocs-material](https://github.com/squidfunk/mkdocs-material?tab=MIT-1-ov-file) — [MIT](https://github.com/squidfunk/mkdocs-material/blob/master/LICENSE)
