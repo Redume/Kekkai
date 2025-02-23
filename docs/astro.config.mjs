@@ -10,7 +10,16 @@ export default defineConfig({
 			social: {
 				github: 'https://github.com/redume/kekkai',
 			},
-			sidebar: [],
+			sidebar: [
+				{
+					label: 'Getting started',
+					items: [
+						{
+							label: 'Docker', slug: 'getting-started/docker', badge: 'recommended'
+						}
+					],
+				},
+			],
 		}),
 	],
 });
