@@ -23,6 +23,14 @@ export default defineConfig({
 						},
 					],
 				},
+				{
+					label: 'Endpoints',
+					items: [
+						{
+							label: 'Endpoints list', slug: 'docs/endpoints/endpoints-list'
+						}
+					],
+				},
 			],
 		}),
 	],
