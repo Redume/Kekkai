@@ -18,6 +18,9 @@ export default defineConfig({
 							slug: 'docs/getting-started/docker', 
 							badge: 'recommended',
 						}, 
+						{
+							label: 'Contributing', slug: 'docs/getting-started/contributing'
+						},
 					],
 				},
 			],
