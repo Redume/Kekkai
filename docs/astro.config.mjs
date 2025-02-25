@@ -28,7 +28,11 @@ export default defineConfig({
 					items: [
 						{
 							label: 'Endpoints list', slug: 'docs/endpoints/endpoints-list'
-						}
+						},
+						{
+							label: 'Get currency rate - /api/getRate',
+							slug: 'docs/endpoints/getrate'
+						},
 					],
 				},
 			],
