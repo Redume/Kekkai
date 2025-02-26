@@ -43,6 +43,23 @@ export default defineConfig({
 						}
 					],
 				},
+				{
+					label: 'Config',
+					items: [
+						{
+							label: 'Configure .env',
+							slug: 'docs/config/config-env'
+						},
+						{
+							label: 'Configure config.yaml',
+							slug: 'docs/config/config-yaml'
+						},
+						{
+							label: 'Configure Nginx',
+							slug: 'docs/config/config-nginx'
+						}
+					],
+				},
 			],
 		}),
 	],
