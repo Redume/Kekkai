@@ -47,3 +47,4 @@
 
 - [eslint/eslint](https://github.com/eslint/eslint) — [MIT](https://github.com/eslint/eslint/blob/main/LICENSE)
 - [prettier/prettier](https://github.com/prettier/prettier) — [MIT](https://github.com/prettier/prettier/blob/main/LICENSE)
+- [withastro/starlight](https://github.com/withastro/starlight) - [MIT](https://github.com/withastro/starlight/blob/main/LICENSE)
