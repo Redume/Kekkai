@@ -8,18 +8,12 @@ services:
       - ./nginx/:/etc/nginx/
       - ./CertSSL:/etc/nginx/ssl
       - ./assets/logo.png:/etc/nginx/assets/logo.png
-      - ./docs/dist:/usr/share/
+      - ./docs/dist:/etc/nginx/dist
     depends_on:
       - server
       - chart
       - web
       - docs
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
 
   server:
     build:
@@ -63,13 +57,6 @@ services:
       context: ./docs
       dockerfile: Dockerfile
     restart: unless-stopped
-    volumes:
-      - ./docs/dist:/docs/dist  # Bind mount for the dist folder
-    healthcheck:
-      test: ["CMD", "test", "-f", "/docs/dist/.built"]  # Check if the build is complete
-      interval: 5s
-      timeout: 10s
-      retries: 5
 
   collect-currency:
     build:
