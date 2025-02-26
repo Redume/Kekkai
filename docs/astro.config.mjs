@@ -33,6 +33,10 @@ export default defineConfig({
 							label: 'Get currency rate - /api/getRate',
 							slug: 'docs/endpoints/getrate'
 						},
+						{
+							label: 'Create Charts - /api/getChart',
+							slug: 'docs/endpoints/create-chart'
+						},
 					],
 				},
 			],
