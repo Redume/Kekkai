@@ -34,9 +34,13 @@ export default defineConfig({
 							slug: 'docs/endpoints/getrate'
 						},
 						{
-							label: 'Create Charts - /api/getChart',
+							label: 'Create charts - /api/getChart',
 							slug: 'docs/endpoints/create-chart'
 						},
+						{
+							label: 'Get metadata - /api/metadata',
+							slug: 'docs/endpoints/metadata'
+						}
 					],
 				},
 			],
