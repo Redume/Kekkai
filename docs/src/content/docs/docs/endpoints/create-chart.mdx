@@ -1,0 +1,172 @@
+---
+title: Create Charts - /api/getChart
+---
+
+Creating a currency rate chart.
+
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+
+## Creating a graph for a certain period
+### Request
+
+<Tabs>
+    <TabItem label='Shell'>
+        <Tabs>
+            <TabItem label='curl'>
+```shell
+curl --request GET --url https://kekkai-api.redume.su/api/getChart/week?from_currency=RUB&conv_currency=USD
+```
+            </TabItem>
+        </Tabs>
+    </TabItem>
+    <TabItem label='Python'>
+        <Tabs>
+            <TabItem label='requests'>
+```python
+import requests
+
+res = requests.get('https://kekkai-api.redume.su/api/getChart/week', {
+    'from_currency': 'USD',
+    'conv_currency': 'RUB',
+}, timeout=3)
+
+print(res.json())
+```
+            </TabItem>
+        </Tabs>
+    </TabItem>
+    <TabItem label='Node.JS'>
+        <Tabs>
+            <TabItem label='axios'>
+```javascript
+const axios = require('axios');
+
+axios.get('https://kekkai-api.redume.su/api/getChart/week', {
+    timeout: 3000,
+    'from_currency': 'USD',
+    'conv_currency': 'RUB',  
+})
+    .then((res) => {
+        console.log(res['data']);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+            </TabItem>
+        </Tabs>
+    </TabItem>
+</Tabs>
+
+
+
+### Query params
+| Parameter         | Description                                                             |
+|-------------------|-------------------------------------------------------------------------|
+| `from_currency`*  | `ISO 4217` code of the currency from which the conversion takes place   |
+| `conv_currency`*  | `ISO 4217` code of the currency to which the conversion is performed    |
+
+### URL params
+| Parameter     | Description                                                             |
+|---------------|-------------------------------------------------------------------------|
+| `period`      | Available parameters: `week`, `month`, `quarter`, `year`                |
+
+`*` - Required arguments
+
+### Response
+
+<Aside title='Output'>
+```json
+{
+    "status": 201,
+    "message": "http://kekkai-api.redume.su/static/charts/RUB_USD_20241108_DQVDN7.png"
+}
+```
+</Aside>
+
+## Creating a schedule for specific days
+### Request
+
+<Tabs>
+    <TabItem label='Shell'>
+        <Tabs>
+            <TabItem label='curl'>
+```shell
+curl --request GET --url https://kekkai-api.redume.su/api/getChart/?from_currency=RUB&conv_currency=USD&start_date=2024-10-31&end_date=2024-11-08
+```
+            </TabItem>
+        </Tabs>
+    </TabItem>
+    <TabItem label='Python'>
+        <Tabs>
+            <TabItem label='requests'>
+```python
+import requests
+
+res = requests.get('https://kekkai-api.redume.su/api/getChart/', {
+    'from_currency': 'USD',
+    'conv_currency': 'RUB',
+    'start_date': '2024-10-31',
+    'end_date': '2024-11-08'
+}, timeout=3)
+
+print(res.json())
+```
+            </TabItem>
+        </Tabs>
+    </TabItem>
+    <TabItem label='Node.JS'>
+        <Tabs>
+            <TabItem label='axios'>
+```javascript
+const axios = require('axios');
+
+axios.get('https://kekkai-api.redume.su/api/getChart/', {
+    timeout: 3000,
+    'from_currency': 'USD',
+    'conv_currency': 'RUB',  
+    'start_date': '2024-10-31',
+    'end_date': '2024-11-08'
+})
+    .then((res) => {
+        console.log(res['data']);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+            </TabItem>
+        </Tabs>
+    </TabItem>
+</Tabs>
+
+### Query params
+| Parameter        | Description                                                            |
+|------------------|------------------------------------------------------------------------|
+| `from_currency`* | `ISO 4217` code of the currency from which the conversion takes place  |
+| `conv_currency`* | `ISO 4217` code of the currency to which the conversion is performed   |
+| `start_date`*    | Start date of the period in the format `YYYYY-DD-MM`                   |
+| `end_date`*      | Period end date in the format `YYYYY-DD-MM`                            |
+
+`*` - Required arguments
+
+### Response
+
+<Aside title='Output'>
+```json
+{
+    "status": 201,
+    "message": "http://kekkai-api.redume.su/static/charts/RUB_USD_20250226_RX02RN.png"
+}
+```
+</Aside>
+
+## What the name of the chart file consists of
+Example: ``.../RUB_USD_20241108_DQVDN7.png``
+
+- `RUB_USD` - Name of currencies.
+- `20241108` - Schedule request date in `YYYMMDD` format.
+- `DQVDN7` - Random file character identifier.
+
+All charts are in the charts folder, which is in the root directory (`/chart`)
