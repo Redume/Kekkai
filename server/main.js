@@ -8,7 +8,7 @@ const UAParser = require('ua-parser-js');
 require('../shared/database/src/create_table.js')();
 
 const fastify = require('fastify')({
-    logger: config['server']['log']['print'] ? logger : false,
+    logger: config['server']['log']['level'] !== 'none' ? logger : false,
     ...(config['server']['ssl']['work']
         ? {
               https: {
