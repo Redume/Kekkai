@@ -47,7 +47,11 @@ fastify.addHook('onResponse', async (request, reply) => {
 
     routePartFiltered.unshift('/');
 
-    if (!config?.['analytics']['work'] ? config?.['analytics']['work'] : false)
+    if (
+        !config?.['analytics']['enabled']
+            ? config?.['analytics']['enabled']
+            : false
+    )
         return;
     else if (!fastify.printRoutes().includes(routePartFiltered.at(-1))) return;
 
@@ -81,13 +85,17 @@ fastify.addHook('onResponse', async (request, reply) => {
     };
 
     try {
-        await axios.post(config['analytics']['plausible_api'], event, {
-            headers: {
-                Authorization: `Bearer ${config['analytics']['plausible_token']}`,
-                'Content-Type': 'application/json',
-                'User-Agent': userAgent,
+        await axios.post(
+            `https://${config['analytics']['plausible_domain']}/api/event`,
+            event,
+            {
+                headers: {
+                    Authorization: `Bearer ${config['analytics']['plausible_token']}`,
+                    'Content-Type': 'application/json',
+                    'User-Agent': userAgent,
+                },
             },
-        });
+        );
     } catch (error) {
         fastify.log.error('Error sending event to Plausible:', error.message);
     }
