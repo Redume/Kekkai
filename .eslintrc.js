@@ -17,7 +17,8 @@ module.exports = {
           'error', {
             singleQuote: true,
             parser: "flow",
-            tabWidth: 4
+            tabWidth: 4,
+            endOfLine: 'lf'
           },
           ],
     },
