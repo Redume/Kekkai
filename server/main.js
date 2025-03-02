@@ -9,7 +9,7 @@ require('../shared/database/src/create_table.js')();
 
 const fastify = require('fastify')({
     logger: config['server']['log']['level'] !== 'none' ? logger : false,
-    ...(config['server']['ssl']['work']
+    ...(config['server']['ssl']['enabled']
         ? {
               https: {
                   key: fs.readFileSync(
