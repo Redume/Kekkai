@@ -86,7 +86,7 @@ fastify.addHook('onResponse', async (request, reply) => {
 
     try {
         await axios.post(
-            `https://${config['analytics']['plausible_domain']}/api/event`,
+            `https://${config['analytics']['plausible_domain']}/api/event/`,
             event,
             {
                 headers: {
