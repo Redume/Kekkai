@@ -35,10 +35,10 @@ if __name__ == '__main__':
         port=3030,
         ssl_keyfile=
         config['server']['ssl']['private_key']
-        if config['server']['ssl']['work']
+        if config['server']['ssl']['enabled']
         else None,
         ssl_certfile=
         config['server']['ssl']['cert']
-        if config['server']['ssl']['work']
+        if config['server']['ssl']['enabled']
         else None
     )
