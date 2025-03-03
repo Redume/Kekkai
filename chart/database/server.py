@@ -9,7 +9,7 @@ import asyncpg
 
 from utils.load_config import load_config
 
-config = load_config('config.yaml')
+config = load_config('config.hjson')
 
 async def create_pool() -> asyncpg.pool.Pool:
     """

@@ -16,7 +16,7 @@ from routes import get_chart, get_chart_period
 from utils.load_config import load_config
 
 app = FastAPI()
-config = load_config('config.yaml')
+config = load_config('config.hjson')
 
 if not os.path.exists('../charts'):
     os.mkdir('../charts')

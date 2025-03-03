@@ -9,7 +9,7 @@ from user_agents import parse as ua_parse
 
 from utils.load_config import load_config
 
-config = load_config('config.yaml')
+config = load_config('config.hjson')
 
 # pylint: disable=too-few-public-methods
 class PlausibleAnalytics:
