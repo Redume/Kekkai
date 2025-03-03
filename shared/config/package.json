@@ -17,6 +17,6 @@
   "homepage": "https://github.com/Redume/Kekkai#readme",
   "description": "Config management service",
   "dependencies": {
-    "yaml": "^2.5.0"
+    "hjson": "^3.2.2"
   }
 }
