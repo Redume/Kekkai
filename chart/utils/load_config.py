@@ -15,4 +15,6 @@ def load_config(file_path: str) -> dict:
     """
     with open(file_path, 'r', encoding='utf-8') as file:
         hjson_data = hjson.load(file)
-    return json.dumps(hjson_data, indent=4)
+    return json.loads(
+        json.dumps(hjson_data, indent=4)
+    )
