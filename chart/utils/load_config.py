@@ -1,20 +1,18 @@
-# pylint: disable=R0801
 """
-This module provides a function for loading a YAML configuration file.
-The function reads the file content and returns it as a Python dictionary.
+Parsing and converting HJSON config to JSON
 """
-import yaml
+import hjson
+import json
 
 def load_config(file_path: str) -> dict:
     """
-    Loads a YAML configuration file and returns its contents as a dictionary.
+    Load an HJSON file, convert it to a JSON string with indentation, 
+    and return it.
 
-    This function opens the specified YAML file, parses its content, and
-    returns it in dictionary format, making it accessible for use in
-    the application.
+    params: file_path (str): The path to the HJSON file.
 
-    :param file_path: The path to the YAML configuration file to be loaded.
-    :return: A dictionary containing the parsed content of the YAML file.
+    returns str: The JSON string formatted with indentation.
     """
     with open(file_path, 'r', encoding='utf-8') as file:
-        return yaml.safe_load(file)
+        hjson_data = hjson.load(file)
+    return json.dumps(hjson_data, indent=4)
