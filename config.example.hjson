@@ -1,0 +1,57 @@
+{
+    database:
+    {
+      user: DATABASE_USERNAME
+      password: DATABASE_PASSWORD
+      host: localhost
+      name: kekkai
+      port: 5432
+    }
+    server:
+    {
+      host: 0.0.0.0
+      ssl:
+      {
+        private_key: /CertSSL/privkey.pem
+        cert: /CertSSL/fullchain.pem
+        enabled: false
+      }
+      log:
+      {
+        level: info
+      }
+    }
+    analytics:
+    {
+      plausible_domain: plausible.io
+      plausible_token: TOKEN
+      plausiblee_api:  https://plausible.io//api/event/
+      enabled: false
+    }
+    currency:
+    {
+      collecting:
+      {
+        fiat: true
+        crypto: false
+        schedule: 30 8 * * *
+        crypto_apikey: TOKEN
+      }
+      fiat:
+      [
+        USD
+        RUB
+        EUR
+        UAH
+        TRY
+        KZT
+      ]
+      crypto:
+      [
+        ETH
+        TON
+        USDT
+        BTC
+      ]
+    }
+  }

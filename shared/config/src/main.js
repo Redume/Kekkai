@@ -1,10 +1,10 @@
 const fs = require('fs');
-const yaml = require('yaml');
+const hjson = require('hjson');
 
 const config = () => {
-    if (!fs.existsSync('../config.yaml')) return;
+    if (!fs.existsSync('../config.hjson')) throw new Error('Config not found');
 
-    return yaml.parse(fs.readFileSync('../config.yaml', 'utf-8'));
+    return hjson.parse(fs.readFileSync('../config.hjson', 'utf-8'));
 };
 
 module.exports = config;

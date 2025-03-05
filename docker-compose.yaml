@@ -24,7 +24,7 @@ services:
       - '3000:3000'
     volumes:
       - './CertSSL:/CertSSL'
-      - './config.yaml:/config.yaml'
+      - './config.hjson:/config.hjson'
     depends_on:
       - postgres
 
@@ -36,7 +36,7 @@ services:
       - '3030:3030'
     volumes:
       - './CertSSL:/CertSSL'
-      - './config.yaml:/config.yaml'
+      - './config.hjson:/config.hjson'
     depends_on:
       postgres:
         condition: service_healthy
@@ -50,7 +50,7 @@ services:
       - '3050:3050'
     volumes:
       - './CertSSL:/CertSSL'
-      - './config.yaml:/config.yaml'
+      - './config.hjson:/config.hjson'
 
   docs:
     build:
@@ -63,7 +63,7 @@ services:
       dockerfile: Dockerfile-collect-currency
     restart: unless-stopped
     volumes:
-      - './config.yaml:/config.yaml'
+      - './config.hjson:/config.hjson'
     depends_on:
       - postgres
 

@@ -51,8 +51,8 @@ export default defineConfig({
 							slug: 'docs/config/config-env'
 						},
 						{
-							label: 'Configure config.yaml',
-							slug: 'docs/config/config-yaml'
+							label: 'Configure config.hjson',
+							slug: 'docs/config/config-hjson'
 						},
 						{
 							label: 'Configure Nginx',

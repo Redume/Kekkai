@@ -16,7 +16,7 @@ from routes import get_chart, get_chart_period
 from utils.load_config import load_config
 
 app = FastAPI()
-config = load_config('config.yaml')
+config = load_config('config.hjson')
 
 if not os.path.exists('../charts'):
     os.mkdir('../charts')
@@ -35,10 +35,10 @@ if __name__ == '__main__':
         port=3030,
         ssl_keyfile=
         config['server']['ssl']['private_key']
-        if config['server']['ssl']['work']
+        if config['server']['ssl']['enabled']
         else None,
         ssl_certfile=
         config['server']['ssl']['cert']
-        if config['server']['ssl']['work']
+        if config['server']['ssl']['enabled']
         else None
     )

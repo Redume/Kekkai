@@ -9,7 +9,7 @@ from user_agents import parse as ua_parse
 
 from utils.load_config import load_config
 
-config = load_config('config.yaml')
+config = load_config('config.hjson')
 
 # pylint: disable=too-few-public-methods
 class PlausibleAnalytics:
@@ -23,7 +23,7 @@ class PlausibleAnalytics:
     async def __call__(self, request, call_next):
         response = await call_next(request)
 
-        if HTTPStatus(response.status_code).is_client_error or not config['analytics']['work']:
+        if HTTPStatus(response.status_code).is_client_error or not config['analytics']['enabled']:
             return response
 
         user_agent = request.headers.get('user-agent', 'unknown')

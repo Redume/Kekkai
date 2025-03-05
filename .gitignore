@@ -1,12 +1,20 @@
+# IDE & text redactors files
 .idea
 .vscode
 
+# Project
 CertSSL/
 charts/
+
+# Depends
 node_modules/
+
+# Docker compose
 postgres-data/
 
-config.yaml
+# Config
+config.hjson
 .env
 
+# Other
 .DS_Store
