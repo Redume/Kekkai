@@ -13,7 +13,7 @@ async function validateSchedule(schedule) {
 }
 
 async function initialize() {
-    await require('../shared/database/src/create_table')();
+    //await require('../shared/database/src/create_table')();
 }
 
 async function runTasks() {
@@ -21,6 +21,7 @@ async function runTasks() {
 }
 
 async function main() {
+    console.log(config['currency']['collecting']['schedule'])
     await initialize();
     await validateSchedule(config['currency']['collecting']['schedule']);
 
@@ -32,8 +33,6 @@ async function main() {
     );
 }
 
-main().catch((err) => {
-    logger.error('Error in main execution:', err);
-});
+main();
 
 module.exports = { main };
