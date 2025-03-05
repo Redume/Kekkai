@@ -33,7 +33,7 @@
       {
         fiat: true
         crypto: false
-        schedule: 30 * * *
+        schedule: 30 8 * * *
         crypto_apikey: TOKEN
       }
       fiat:
