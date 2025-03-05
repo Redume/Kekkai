@@ -1,66 +1,93 @@
 ---
-title: Configure config.yaml
+title: Configure config.hjson
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 
-Kekkai can be configured using the `config.yaml` file in the working directory. 
-`config.example.yaml`.
+Kekkai can be configured using the `config.hjson` file in the working directory. 
+`config.example.hjson`.
 
-```yaml
+```hjson
 # For more information, see the documentation
 # https://kekkai-docs.redume.su/
 
-database:
-    user: 'DATABASE_USERNAME'
-    password: 'DATABASE_PASSWORD'
-    host: 'DATABASE_HOST'
-    name: 'DATABASE_NAME'
-    port: 5432
-server:
-    host: '0.0.0.0'
-    ssl:
-        private_key: '/CertSSL/privkey.pem'
-        cert: '/CertSSL/fullchain.pem'
-        work: true
-    log:
-        print: true
-        level: 'info'
-analytics:
-    plausible_api: 'https://plausible.io/api/event/'
-    plausible_domain: 'PLAUSIBLE_DOMAIN'
-    plausible_token: 'PLAUSIBLE_TOKEN'
-    work: false
-currency:
-    chart:
-        save: false
-    collecting:
+{
+    database:
+    {
+      user: DATABASE_USERNAME
+      password: DATABASE_PASSWORD
+      host: localhost
+      name: kekkai
+      port: 5432
+    }
+    server:
+    {
+      host: 0.0.0.0
+      ssl:
+      {
+        private_key: /CertSSL/privkey.pem
+        cert: /CertSSL/fullchain.pem
+        enabled: false
+      }
+      log:
+      {
+        level: info
+      }
+    }
+    analytics:
+    {
+      plausible_domain: plausible.io
+      plausible_token: TOKEN
+      enabled: false
+    }
+    currency:
+    {
+      collecting:
+      {
         fiat: true
-        schedule: '30 8 * * *'
-    fiat:
-        - USD
-        - RUB
-        - EUR
-        - UAH
-        - TRY
-        - KZT
+        crypto: false
+        schedule: 30 8 * * *
+        crypto_apikey: TOKEN
+      }
+      fiat:
+      [
+        USD
+        RUB
+        EUR
+        UAH
+        TRY
+        KZT
+      ]
+      crypto:
+      [
+        ETH
+        TON
+        USDT
+        BTC
+      ]
+    }
+  }
 ```
 
 ## Database
 Kekkai is used as a `PostgreSQL` database.
 
 <Aside>
-    If you installed Kekkai via Docker Compose, 
-    then install it in the `database.host` value of `postgres`.
-    The rest of the data does not have to be filled in. 
-    They need to be filled in `.env`.
+    If you installed Kekkai via `Docker Compose`, 
+    set it to `database.host` for postgres. 
+    The password (database.password) should be the same as in `.env`, 
+    the rest of the data doesn't need to be filled in, 
+    it should be in `.env`
 
     What should it look like:
-    ```yaml
+    ```hjson
     database:
-        ...
-        host: 'postgres'
-        ...
+    {
+      ...
+      password: PASSWORD_FROM_ENV
+      host: postgres
+      ...
+    }
     ...
     ```
 </Aside>
@@ -96,7 +123,7 @@ analytics:
     plausible_api: 'https://plausible.io/api/event/'
     plausible_domain: 'PLAUSIBLE_DOMAIN'
     plausible_token: 'PLAUSIBLE_TOKEN'
-    work: true
+    enabled: true
 ...
 ```
 
@@ -107,7 +134,7 @@ analytics:
   You can add the domain [here](https://plausible.io/sites/new?flow=provisioning).
 - `plausible_token`: Api token for authorization and sending requests. 
 You can create it [here](https://plausible.io/settings/api-keys).
-- `work`: Enable or disable analytics. 
+- `enabled`: Enable or disable analytics. 
 
 ## Currency
 `DuckDuckGo` (fiat currency collection) and `CoinMarketCap` (cryptocurrency collection) 
@@ -116,25 +143,32 @@ are used to collect currency rates.
 
 ```yaml
 ...
-currency:
-    chart:
-        save: false # Enable or disable saving graphs to an image (Boolean)
-    collecting:
-        fiat: true # Turn off or turn on the collection of the fiat currency rate [Boolean]
+    currency:
+    {
+      collecting:
+      {
+        fiat: true
         crypto: false
-        schedule: '30 8 * * *' # Currency collection schedule in crontab format [String]
-        crypto_apikey: 'APIKEY'
-    fiat: # List of fiat currency to save the exchange rate [Array]
-        - USD
-        - RUB
-        - EUR
-        - UAH
-        - TRY
-        - KZT
-    crypto:
-        - ETH
-        - TON
-        - USDT
+        schedule: 30 8 * * *
+        crypto_apikey: TOKEN
+      }
+      fiat:
+      [
+        USD
+        RUB
+        EUR
+        UAH
+        TRY
+        KZT
+      ]
+      crypto:
+      [
+        ETH
+        TON
+        USDT
+        BTC
+      ]
+    }
 ```
 
 - `currency.chart.save`: Enable or disable saving graphs.
