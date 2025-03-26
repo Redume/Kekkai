@@ -81,7 +81,6 @@ fastify.addHook('onResponse', async (request, reply) => {
     };
 
     try {
-<<<<<<< HEAD
         await axios.post(
             `https://${config['analytics']['plausible_domain']}/api/event/`,
             event,
@@ -91,15 +90,8 @@ fastify.addHook('onResponse', async (request, reply) => {
                     'Content-Type': 'application/json',
                     'User-Agent': userAgent,
                 },
-=======
-        await axios.post(config['analytics']['plausible_api'], event, {
-            headers: {
-                Authorization: `Bearer ${config['analytics']['plausible_token']}`,
-                'Content-Type': 'application/json',
-                'User-Agent': userAgent,
->>>>>>> parent of da7134f (chore(server): Changed the name of the keys. Made it easier to change the domain)
             },
-        });
+        );
     } catch (error) {
         fastify.log.error('Error sending event to Plausible:', error.message);
     }
