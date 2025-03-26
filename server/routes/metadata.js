@@ -11,6 +11,7 @@ module.exports = async function metadata(fastify) {
         );
 
         return res.status(200).send({
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             first_date: first_date.rows[0]?.date
                 ? first_date.rows[0]?.date
                 : 'None',
