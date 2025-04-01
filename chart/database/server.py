@@ -1,7 +1,8 @@
 """
 This module initializes the database connection pool using asyncpg.
 
-It reads database configuration from a YAML file and creates a connection pool
+It reads database configuration from a YAML file 
+and creates a connection pool
 that can be used throughout the application for database operations.
 """
 
@@ -12,7 +13,7 @@ import json
 
 import asyncpg
 
-from utils.load_config import load_config
+from utils.config.load_config import load_config
 
 config = load_config('config.hjson')
 
@@ -53,8 +54,10 @@ class Database:
     - Manage database connections efficiently.
 
     Attributes:
-        dsn (str): The Data Source Name (DSN) for connecting to the database.
-        pool (Optional[asyncpg.Pool]): The connection pool. None if not connected.
+        dsn (str): The Data Source Name (DSN) 
+            for connecting to the database.
+        pool (Optional[asyncpg.Pool]): The connection pool. 
+            None if not connected.
 
     Example:
         ```python
@@ -65,10 +68,11 @@ class Database:
         ```
 
     Raises:
-        RuntimeError: If connection to the database fails or table creation fails.
+        RuntimeError: If connection to the database fails 
+            or table creation fails.
     """
     def __init__(self, dsn: str):
-        """ Initilization Database"""
+        """Initilization Database"""
         self.dsn = dsn
         self.pool: Optional[asyncpg.Pool] = None
 
