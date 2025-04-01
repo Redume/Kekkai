@@ -1,6 +1,7 @@
 from datetime import date
+from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, root_validator
 
 class Currency(BaseModel):
     from_currency: str = Field(
@@ -11,9 +12,13 @@ class Currency(BaseModel):
         ...,
         description='Currency to which conversion takes place'
         )
-    rate: float = Field(..., description='Currency rate')
-    currency_date: date = Field(
-        ...,
-        alias='date',
-        description='Currency rate date in the format YYYYY-MM-DD'
-        )
+    start_date: Optional[date] = Field(
+        default=None,
+        description='Beginnings of the period'
+    )
+    end_date: Optional[date] = Field(default=None, description='End of period')
+    period: Optional[str] = Field(
+        default=None,
+        description='Date Period. ' \
+        'Arguments week/month/quarter/year are accepted'
+    )
