@@ -2,116 +2,94 @@
 This module provides functionality to generate currency rate charts
 based on historical data retrieved from the database.
 """
-
 from datetime import datetime
+from typing import Optional
 
 from matplotlib import pyplot as plt
 from scipy.interpolate import make_interp_spline
 import numpy as np
 
+from schemas.currency import Currency
+from database.server import Database
+from utils.config.load_config import load_config
+from utils.config.get_dsn import get_dsn
 from function.gen_unique_name import generate_unique_name
-from database.server import create_pool
 
-async def create_chart(
-        from_currency: str,
-        conv_currency: str,
-        start_date: str,
-        end_date: str
-) -> (str, None):
+config = load_config('config.hjson')
+
+async def create_chart(currency: Currency, db: Database) -> Optional[str]:
     """
-    Generates a line chart of currency rates for a given date range.
+    Generates a currency exchange rate chart based on historical data.
 
-    The chart shows the exchange rate trend between `from_currency` and
-    `conv_currency` within the specified `start_date` and `end_date` range.
-    The generated chart is saved as a PNG file, and the function returns the
-    file name. If data is invalid or insufficient, the function returns `None`.
+    This function retrieves exchange rate data 
+    from the database for a specified  currency pair and date range. 
+    It applies interpolation to smooth the data 
+    and generates a chart, which is saved as an image file.
 
     Args:
-        from_currency (str): The base currency (e.g., "USD").
-        conv_currency (str): The target currency (e.g., "EUR").
-        start_date (str): The start date in the format 'YYYY-MM-DD'.
-        end_date (str): The end date in the format 'YYYY-MM-DD'.
+        currency (Currency): An object containing the currency pair 
+            and date range.
+        db (Database): An instance of the database connection.
 
     Returns:
-        str | None: The name of the saved chart file, or `None` if the operation fails.
+        Optional[str]: The filename of the saved chart image, 
+            or None if no data is available.
     """
-    pool = await create_pool()
+    data = await db.fetchmany('SELECT date, rate FROM currency '
+    'WHERE (date BETWEEN $1 AND $2) '
+    'AND from_currency = $3 AND conv_currency = $4 ORDER BY date',
+    currency.start_date,
+    currency.end_date,
+    currency.from_currency.upper(),
+    currency.conv_currency.upper()
+    )
 
-    if not validate_date(start_date) or not validate_date(end_date):
+    if not data:
         return None
 
-    start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
-    end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
+    dates = [datetime.strptime(row["date"], '%Y-%m-%d') for row in data]
+    rates = [row["rate"] for row in data]
 
-    async with pool.acquire() as conn:
-        data = await conn.fetch(
-            'SELECT date, rate FROM currency '
-            'WHERE (date BETWEEN $1 AND $2) ' +
-            'AND from_currency = $3 AND conv_currency = $4 ORDER BY date',
-            start_date_obj,
-            end_date_obj,
-            from_currency.upper(),
-            conv_currency.upper()
-        )
+    x_values = np.arange(len(dates))
+    spline = make_interp_spline(x_values, rates, k=2)
+    new_x = np.linspace(0, len(dates) - 1, 200)
+    new_y = spline(new_x)
 
-    if not data or len(data) <= 1:
-        return None
-
-    date, rate = [], []
-
-    for row in data:
-        date.append(row[0])
-        rate.append(row[1])
-
-    spline = make_interp_spline(range(len(date)), rate, k=2)
-    x = np.arange(len(date))
-
-    newx_2 = np.linspace(0, len(date) - 1, 200)
-    newy_2 = spline(newx_2)
     fig, ax = plt.subplots(figsize=(15, 6))
 
-    for label in (ax.get_xticklabels() + ax.get_yticklabels()):
-        label.set_fontsize(10)
+    ax.set_xticks(np.linspace(0, len(dates) - 1, 10))
 
-    ax.set_xticks(np.linspace(0, len(date) - 1, 10))
+    current_year = datetime.now().year
+
     ax.set_xticklabels(
         [
-            date[int(i)].strftime('%Y-%m-%d') 
-            for i in np.linspace(0, len(date) - 1, 10).astype(int)
-        ]
-        )
+            dates[int(i)].strftime('%m-%d') 
+                if dates[int(i)].year == current_year
+            else dates[int(i)].strftime('%Y-%m-%d')
+            for i in np.linspace(0, len(dates) - 1, 10).astype(int)
+        ],
+    )
+
+    ax.tick_params(axis='both', labelsize=10)
+
+    if rates[0] < rates[-1]:
+        color = 'green'
+    elif rates[0] > rates[-1]:
+        color = 'red'
+    else:
+        color = 'grey'
+
+    ax.plot(new_x, new_y, color=color, linewidth=2)
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
 
     name = await generate_unique_name(
-        f'{from_currency.upper()}_{conv_currency.upper()}',
+        f'{currency.from_currency.upper()}_{currency.conv_currency.upper()}',
         datetime.now()
     )
 
-    
-    if rate[0] < rate[-1]:
-        plt.plot(newx_2, newy_2, color='green')
-    elif rate[0] > rate[-1]:
-        plt.plot(newx_2, newy_2, color='red')
-    else:
-        plt.plot(newx_2, newy_2, color='grey')
-
     plt.savefig(f'../charts/{name}.png')
-    fig.clear()
+    plt.close(fig)
 
     return name
-
-
-def validate_date(date_str: str) -> bool:
-    """
-    Validates whether the provided string is a valid date in the format 'YYYY-MM-DD'.
-
-    Args:
-        date_str (str): The date string to validate.
-
-    Returns:
-        bool: `True` if the string is a valid date, `False` otherwise.
-    """
-    try:
-        datetime.strptime(date_str, '%Y-%m-%d')
-        return True
-    except ValueError:
-        return False
