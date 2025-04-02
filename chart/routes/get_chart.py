@@ -1,54 +1,61 @@
 """
-This module contains the route for retrieving a chart based on a given currency pair and date range.
-It defines the `/api/getChart/` endpoint that processes requests for generating charts.
-"""
-from fastapi import APIRouter, status, Request, Response
+Module for handling currency exchange rate chart requests.
 
+This module defines an API route that processes requests for historical 
+exchange rate data visualization. It validates request parameters, fetches 
+data, and returns a formatted chart response.
+"""
+from datetime import datetime
+
+from fastapi import APIRouter, status, Depends, HTTPException, Response, Request
+
+from schemas.currency import Currency
 from function.create_chart import create_chart
 from .get_chart_period import prepare_chart_response
 
-# pylint: disable=duplicate-code
 router = APIRouter()
 
-# pylint: disable=too-many-arguments, too-many-positional-arguments
-@router.get("/api/getChart/", status_code=status.HTTP_201_CREATED)
-async def get_chart(
-        response: Response,
-        request: Request,
-        from_currency: str = None,
-        conv_currency: str = None,
-        start_date: str = None,
-        end_date: str = None,
-):
+@router.get('/api/getChart/', status_code=status.HTTP_201_CREATED)
+async def get_chart(req: Request, currency: Currency = Depends()) -> dict:
     """
-    Fetches a chart for a given currency pair and date range.
+    Endpoint for retrieving a currency exchange rate chart.
 
-    :param response: The response object used for returning the HTTP response.
-    :param request: The request object containing details about the incoming request.
-    :param from_currency: The base currency for conversion.
-    :param conv_currency: The target currency for conversion.
-    :param start_date: The start date for the chart data.
-    :param end_date: The end date for the chart data.
-    :return: A chart or an error message if the request is invalid.
+    This endpoint generates a chart based on historical exchange rate data
+    for a given currency pair within a specified date range.
+
+    Route:
+        GET /api/getChart/
+
+    Query Parameters:
+        - from_currency (str): The base currency code.
+        - conv_currency (str): The target currency code.
+        - start_date (datetime): The start date 
+            of the exchange rate data range.
+        - end_date (datetime): The end date 
+            of the exchange rate data range.
+
+    Responses:
+        - 201 Created: Returns the generated chart data.
+        - 400 Bad Request: If required parameters are missing or invalid.
     """
-    if not from_currency or not conv_currency:
-        response.status_code = status.HTTP_400_BAD_REQUEST
-        return {
-            'status': status.HTTP_400_BAD_REQUEST,
-            'message': 'The from_currency and conv_currency fields are required.',
-        }
+    if not currency.from_currency or not currency.conv_currency:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='The from_currency and conv_currency fields are required.'
+        )
 
-    if not start_date or not end_date:
-        response.status_code = status.HTTP_400_BAD_REQUEST
-        return {
-            'status': status.HTTP_400_BAD_REQUEST,
-            'message': 'The start_date and end_date fields are required.',
-        }
+    if not currency.start_date or not currency.end_date:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='The start_date and end_date fields are required.'
+        )
 
-    chart = await create_chart(
-        from_currency,
-        conv_currency,
-        start_date,
-        end_date
-    )
-    return await prepare_chart_response(response, request, chart)
+    if currency.start_date > currency.end_date:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The start_date cannot be later than the end_date."
+        )
+
+    data = await create_chart(currency, req.app.state.db)
+
+    return await prepare_chart_response(req, data)
