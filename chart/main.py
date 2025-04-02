@@ -9,17 +9,26 @@ import os
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from starlette.staticfiles import StaticFiles
+
+from utils.lifespan import lifespan
+from utils.config.load_config import load_config
+from utils.exception_handler import custom_validation_exception
 
 from middleware.plausible_analytics import PlausibleAnalytics
 from routes import get_chart, get_chart_period
-from utils.load_config import load_config
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 config = load_config('config.hjson')
 
 if not os.path.exists('../charts'):
     os.mkdir('../charts')
+
+app.add_exception_handler(
+    RequestValidationError,
+    custom_validation_exception
+)
 
 app.mount('/static/charts', StaticFiles(directory='../charts/'))
 app.middleware('http')(PlausibleAnalytics())
@@ -29,16 +38,4 @@ app.include_router(get_chart_period.router)
 
 
 if __name__ == '__main__':
-    uvicorn.run(
-        app,
-        host=config['server']['host'],
-        port=3030,
-        ssl_keyfile=
-        config['server']['ssl']['private_key']
-        if config['server']['ssl']['enabled']
-        else None,
-        ssl_certfile=
-        config['server']['ssl']['cert']
-        if config['server']['ssl']['enabled']
-        else None
-    )
+    uvicorn.run(app, host=config['server']['host'], port=3030)
