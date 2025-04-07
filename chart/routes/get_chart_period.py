@@ -8,7 +8,7 @@ over a specified time period (week, month, quarter, or year).
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-from fastapi import APIRouter, status, Request, Response
+from fastapi import APIRouter, status, Request, Response, HTTPException
 
 from function.create_chart import create_chart
 
@@ -69,14 +69,10 @@ async def get_chart_period(
         end_date.strftime('%Y-%m-%d')
     )
 
-    return await prepare_chart_response(response, request, chart)
+    return await prepare_chart_response(request, chart)
 
 
-async def prepare_chart_response(
-        response: Response,
-        request: Request,
-        chart_name: str
-):
+async def prepare_chart_response(request: Request, chart_name: str) -> dict:
     """
     Prepares the response to return the URL of the generated chart.
 
@@ -93,8 +89,10 @@ async def prepare_chart_response(
         if no chart is found.
     """
     if not chart_name:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {'message': 'No data found.', 'status_code': status.HTTP_404_NOT_FOUND}
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Not data found.'
+        )
 
     host = request.headers.get("host")
     url_scheme = request.headers.get("X-Forwarded-Proto", request.url.scheme)
