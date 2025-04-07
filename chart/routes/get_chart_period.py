@@ -80,13 +80,17 @@ async def prepare_chart_response(
     """
     Prepares the response to return the URL of the generated chart.
 
-    If the chart data is not found, it returns a 404 error with an appropriate message.
+    If the chart data is not found, 
+        it returns a 404 error with an appropriate message.
     Otherwise, it returns a URL to access the chart image.
 
     :param response: The response object used to set status and message.
-    :param request: The request object used to retrieve details of the incoming request.
-    :param chart_name: The name of the generated chart (used to build the URL).
-    :return: A dictionary with the chart URL or an error message if no chart is found.
+    :param request: The request object used 
+        to retrieve details of the incoming request.
+    :param chart_name: The name of the generated chart 
+        (used to build the URL).
+    :return: A dictionary with the chart URL or an error message 
+        if no chart is found.
     """
     if not chart_name:
         response.status_code = status.HTTP_404_NOT_FOUND
