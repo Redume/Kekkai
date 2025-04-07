@@ -1,3 +1,14 @@
-node_modules/
-docs/
+.git
 .gitignore
+Dockerfile*
+docker-compose.yaml
+__pycache__
+.pyc
+.vscode/
+.idea/
+dist/
+.astro/
+build/
+node_modules/
+*.DS_Store
+*.md
