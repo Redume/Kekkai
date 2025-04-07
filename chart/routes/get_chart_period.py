@@ -93,9 +93,8 @@ async def prepare_chart_response(
         return {'message': 'No data found.', 'status_code': status.HTTP_404_NOT_FOUND}
 
     host = request.headers.get("host")
-    url_schema = request.url.scheme
+    url_scheme = request.headers.get("X-Forwarded-Proto", request.url.scheme)
 
     return {
-        'status': status.HTTP_201_CREATED,
-        'message': f'{url_schema}://{host}/static/charts/{chart_name}.png',
+        'detail': f'{url_scheme}://{host}/static/charts/{chart_name}.png',
     }
