@@ -87,7 +87,7 @@ async def prepare_chart_response(request: Request, chart_name: str) -> dict:
     if not chart_name:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail='Not data found.'
+            detail='No data found.'
         )
 
     host = request.headers.get("host")
