@@ -24,16 +24,20 @@ async def get_chart_period(
     """
     Fetches a chart for a given currency pair and a specific period.
 
-    The period can be one of the following: 'week', 'month', 'quarter', 'year'.
-    Based on the selected period, it calculates the start date and retrieves the chart data.
+    The period can be one of the following: 
+        'week', 'month', 'quarter', 'year'.
+    Based on the selected period, 
+        it calculates the start date and retrieves the chart data.
 
     :param response: The response object used to set status and message.
-    :param request: The request object used to retrieve details of the incoming request.
+    :param request: The request object used 
+        to retrieve details of the incoming request.
     :param from_currency: The base currency in the pair (e.g., 'USD').
     :param conv_currency: The target currency in the pair (e.g., 'EUR').
     :param period: The time period for which the chart is requested
     (e.g., 'week', 'month', 'quarter', 'year').
-    :return: A response containing the chart URL or an error message if parameters are invalid.
+    :return: A response containing the chart URL or an error message 
+        if parameters are invalid.
     """
     if not currency.from_currency or not currency.conv_currency:
         raise HTTPException(
