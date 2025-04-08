@@ -8,21 +8,19 @@ over a specified time period (week, month, quarter, or year).
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-from fastapi import APIRouter, status, Request, Response, HTTPException
+from fastapi import APIRouter, status, Request, HTTPException, Depends
 
 from function.create_chart import create_chart
+from schemas.currency import Currency
 
 # pylint: disable=duplicate-code
 router = APIRouter()
 
 @router.get("/api/getChart/{period}", status_code=status.HTTP_201_CREATED)
 async def get_chart_period(
-        response: Response,
-        request: Request,
-        from_currency: str = None,
-        conv_currency: str = None,
-        period: str = None,
-):
+    request: Request,
+    currency: Currency = Depends()
+    ) -> dict:
     """
     Fetches a chart for a given currency pair and a specific period.
 
@@ -37,40 +35,38 @@ async def get_chart_period(
     (e.g., 'week', 'month', 'quarter', 'year').
     :return: A response containing the chart URL or an error message if parameters are invalid.
     """
-    if not from_currency or not conv_currency:
-        response.status_code = status.HTTP_400_BAD_REQUEST
-        return {
-            'status': status.HTTP_400_BAD_REQUEST,
-            'message': 'The from_currency and conv_currency fields are required.',
-        }
-
-    if period not in ['week', 'month', 'quarter', 'year']:
-        response.status_code = status.HTTP_400_BAD_REQUEST
-        return {'message': 'Invalid period.', 'status_code': status.HTTP_400_BAD_REQUEST}
+    if not currency.from_currency or not currency.conv_currency:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='The from_currency and conv_currency fields are required.'
+        )
 
     days, month, years = 0, 0, 0
 
-    if period == 'week':
+    if currency.period == 'week':
         days = -7
-    elif period == 'month':
+    elif currency.period == 'month':
         month = -1
-    elif period == 'quarter':
+    elif currency.period == 'quarter':
         month = -3
-    elif period == 'year':
+    elif currency.period == 'year':
         years = -1
 
     end_date = datetime.now()
-    start_date = end_date + relativedelta(months=month, days=days, years=years)
+    start_date = end_date + relativedelta(
+        months=month,
+        days=days,
+        years=years
+    )
 
     chart = await create_chart(
-        from_currency,
-        conv_currency,
+        currency.from_currency,
+        currency.conv_currency,
         start_date.strftime('%Y-%m-%d'),
         end_date.strftime('%Y-%m-%d')
     )
 
     return await prepare_chart_response(request, chart)
-
 
 async def prepare_chart_response(request: Request, chart_name: str) -> dict:
     """
