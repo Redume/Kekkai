@@ -22,3 +22,14 @@ class Currency(BaseModel):
         description='Date Period. ' \
         'Arguments week/month/quarter/year are accepted'
     )
+
+    @root_validator(pre=True)
+    def validate_period(cls, values):
+        period = values.get('period')
+
+        if period and period not in ['week', 'month', 'quarter', 'year']:
+            raise ValueError(
+                "Period must be one of 'week', 'month', 'quarter', or 'year'."
+                )
+
+        return values
