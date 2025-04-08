@@ -50,6 +50,15 @@ async def create_chart(currency: Currency, db: Database) -> Optional[str]:
     dates = [datetime.strptime(row["date"], '%Y-%m-%d') for row in data]
     rates = [row["rate"] for row in data]
 
+    if len(dates) < 3:
+        return None
+
+    x_values = np.arange(len(dates))
+    try:
+        spline = make_interp_spline(x_values, rates, k=2)
+    except ValueError as e:
+        return None
+
     x_values = np.arange(len(dates))
     spline = make_interp_spline(x_values, rates, k=2)
     new_x = np.linspace(0, len(dates) - 1, 200)

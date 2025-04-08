@@ -18,7 +18,7 @@ router = APIRouter()
 
 @router.get("/api/getChart/{period}", status_code=status.HTTP_201_CREATED)
 async def get_chart_period(
-    request: Request,
+    req: Request,
     currency: Currency = Depends()
     ) -> dict:
     """
@@ -56,23 +56,24 @@ async def get_chart_period(
     elif currency.period == 'year':
         years = -1
 
-    end_date = datetime.now()
-    start_date = end_date + relativedelta(
+    currency.end_date = datetime.now()
+    currency.start_date = currency.end_date + relativedelta(
         months=month,
         days=days,
         years=years
     )
 
-    chart = await create_chart(
-        currency.from_currency,
-        currency.conv_currency,
-        start_date.strftime('%Y-%m-%d'),
-        end_date.strftime('%Y-%m-%d')
-    )
+    chart = await create_chart(currency, req.app.state.db)
 
-    return await prepare_chart_response(request, chart)
+    if not chart:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='No data found.'
+        )
 
-async def prepare_chart_response(request: Request, chart_name: str) -> dict:
+    return await prepare_chart_response(req, chart)
+
+async def prepare_chart_response(req: Request, chart_name: str) -> dict:
     """
     Prepares the response to return the URL of the generated chart.
 
