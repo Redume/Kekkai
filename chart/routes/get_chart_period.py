@@ -49,7 +49,7 @@ async def get_chart_period(
 
     match period:
         case 'week':
-            days -7
+            days = -7
         case 'month':
             month = -1
         case 'quarter':
