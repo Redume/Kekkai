@@ -7,7 +7,7 @@ from http import HTTPStatus
 import httpx
 from user_agents import parse as ua_parse
 
-from utils.load_config import load_config
+from utils.config.load_config import load_config
 
 config = load_config('config.hjson')
 
