@@ -47,14 +47,15 @@ async def get_chart_period(
 
     days, month, years = 0, 0, 0
 
-    if currency.period == 'week':
-        days = -7
-    elif currency.period == 'month':
-        month = -1
-    elif currency.period == 'quarter':
-        month = -3
-    elif currency.period == 'year':
-        years = -1
+    match period:
+        case 'week':
+            days -7
+        case 'month':
+            month = -1
+        case 'quarter':
+            month = -3
+        case 'year':
+            years = -1
 
     currency.end_date = datetime.now()
     currency.start_date = currency.end_date + relativedelta(
