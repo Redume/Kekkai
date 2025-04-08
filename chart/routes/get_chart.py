@@ -7,7 +7,7 @@ data, and returns a formatted chart response.
 """
 from datetime import datetime
 
-from fastapi import APIRouter, status, Depends, HTTPException, Response, Request
+from fastapi import APIRouter, status, Depends, HTTPException, Request
 
 from schemas.currency import Currency
 from function.create_chart import create_chart
