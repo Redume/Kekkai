@@ -1,8 +1,8 @@
 """
 Parsing and converting HJSON config to JSON
 """
-import hjson
 import json
+import hjson
 
 def load_config(file_path: str) -> dict:
     """
