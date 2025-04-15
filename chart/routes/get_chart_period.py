@@ -47,7 +47,7 @@ async def get_chart_period(
 
     days, month, years = 0, 0, 0
 
-    match period:
+    match currency.period:
         case 'week':
             days = -7
         case 'month':
@@ -96,8 +96,8 @@ async def prepare_chart_response(req: Request, chart_name: str) -> dict:
             detail='No data found.'
         )
 
-    host = request.headers.get("host")
-    url_scheme = request.headers.get("X-Forwarded-Proto", request.url.scheme)
+    host = req.headers.get("host")
+    url_scheme = req.headers.get("X-Forwarded-Proto", req.url.scheme)
 
     return {
         'detail': f'{url_scheme}://{host}/static/charts/{chart_name}.png',
