@@ -7,7 +7,7 @@ from http import HTTPStatus
 import httpx
 from user_agents import parse as ua_parse
 
-from utils.load_config import load_config
+from utils.config.load_config import load_config
 
 config = load_config('config.hjson')
 
@@ -16,14 +16,16 @@ class PlausibleAnalytics:
     """
     Middleware for sending events to Plausible Analytics.
 
-    This middleware intercepts each incoming request, collects metadata such as
-    user-agent, request path, and response status, and sends it as an event to
+    This middleware intercepts each incoming request,
+    collects metadata such as user-agent, 
+    request path, and response status, and sends it as an event to
     Plausible Analytics.
     """
     async def __call__(self, request, call_next):
         response = await call_next(request)
 
-        if HTTPStatus(response.status_code).is_client_error or not config['analytics']['enabled']:
+        if (HTTPStatus(response.status_code).is_client_error
+            or not config['analytics']['enabled']):
             return response
 
         user_agent = request.headers.get('user-agent', 'unknown')
@@ -50,17 +52,22 @@ class PlausibleAnalytics:
                     config['analytics']['plausible_api'],
                     json=event,
                     headers={
-                        "Authorization": f"Bearer {config['analytics']['plausible_token']}",
+                        "Authorization": 
+                            f"Bearer {config['analytics']['plausible_token']}",
                         "Content-Type": "application/json",
-                        "User-Agent": request.headers.get('user-agent', 'unknown'),
+                        "User-Agent": request.headers.get(
+                            'user-agent', 
+                            'unknown'
+                            ),
                     },
                 )
             except httpx.RequestError as e:
-                print(f"Request error while sending event to Plausible: {e}")
+                print(
+                    f"Request error while sending event to Plausible: {e}"
+                    )
             except httpx.HTTPStatusError as e:
-                print(f"HTTP status error while sending event to Plausible: {e}")
-            # pylint: disable=broad-exception-caught
-            except Exception as e:
-                print(f"Unexpected error sending event to Plausible: {e}")
+                print(
+                    f"HTTP status error while sending event to Plausible: {e}"
+                    )
 
         return response
