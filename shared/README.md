@@ -5,4 +5,4 @@ This repository contains shared libraries used across the project. These librari
 - [pinojs/pino](https://github.com/pinojs/pino) - [MIT](https://github.com/pinojs/pino/blob/main/LICENSE)
 - [pinojs/pino-prettier](https://github.com/pinojs/pino-pretty) - [MIT](https://github.com/pinojs/pino-pretty/blob/master/LICENSE)
 - [brianc/pg](https://github.com/brianc/node-postgres) - [MIT](https://github.com/brianc/node-postgres/blob/master/LICENSE)
-- [eemeli/yaml](https://github.com/eemeli/yaml) - [ISC](https://github.com/eemeli/yaml/blob/main/LICENSE)
+- [hjson/hjson-js](https://github.com/hjson/hjson-js) - [MIT](https://github.com/hjson/hjson-js/blob/master/LICENSE)
