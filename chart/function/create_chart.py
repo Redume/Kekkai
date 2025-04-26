@@ -98,7 +98,7 @@ async def create_chart(currency: Currency, db: Database) -> Optional[str]:
         datetime.now()
     )
 
-    plt.savefig(f'../charts/{name}.png')
+    plt.savefig(f'../charts/{name}.jpeg')
     plt.close(fig)
 
     return name
