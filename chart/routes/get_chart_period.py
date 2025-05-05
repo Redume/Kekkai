@@ -100,5 +100,5 @@ async def prepare_chart_response(req: Request, chart_name: str) -> dict:
     url_scheme = req.headers.get("X-Forwarded-Proto", req.url.scheme)
 
     return {
-        'detail': f'{url_scheme}://{host}/static/charts/{chart_name}.jpeg',
+        'detail': f'{url_scheme}://{host}/static/charts/{chart_name}.png',
     }
