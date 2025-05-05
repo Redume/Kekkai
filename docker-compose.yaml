@@ -57,16 +57,6 @@ services:
       context: ./docs
       dockerfile: Dockerfile
 
-  collect-currency:
-    build:
-      context: ./
-      dockerfile: Dockerfile-collect-currency
-    restart: unless-stopped
-    volumes:
-      - './config.hjson:/config.hjson'
-    depends_on:
-      - postgres
-
   postgres:
     image: postgres:latest
     restart: unless-stopped
@@ -85,8 +75,6 @@ volumes:
   server:
     driver: local
   chart:
-    driver: local
-  collect-currency:
     driver: local
   postgres:
     driver: local

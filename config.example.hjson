@@ -28,30 +28,4 @@
       plausiblee_api:  https://plausible.io//api/event/
       enabled: false
     }
-    currency:
-    {
-      collecting:
-      {
-        fiat: true
-        crypto: false
-        schedule: 30 8 * * *
-        crypto_apikey: TOKEN
-      }
-      fiat:
-      [
-        USD
-        RUB
-        EUR
-        UAH
-        TRY
-        KZT
-      ]
-      crypto:
-      [
-        ETH
-        TON
-        USDT
-        BTC
-      ]
-    }
   }
