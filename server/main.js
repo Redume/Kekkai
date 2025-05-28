@@ -47,6 +47,7 @@ fastify.addHook('onResponse', async (request, reply) => {
 
     routePartFiltered.unshift('/');
 
+    if (request.headers['DNT'] === 1) return;
     if (!config?.['analytics']['work'] ? config?.['analytics']['work'] : false)
         return;
     else if (!fastify.printRoutes().includes(routePartFiltered.at(-1))) return;

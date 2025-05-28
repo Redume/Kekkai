@@ -24,6 +24,9 @@ class PlausibleAnalytics:
     async def __call__(self, request, call_next):
         response = await call_next(request)
 
+        if request.headers.get('DNT', 0) == 1:
+            return response
+
         if (HTTPStatus(response.status_code).is_client_error
             or not config['analytics']['enabled']):
             return response
