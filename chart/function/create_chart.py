@@ -4,6 +4,7 @@ based on historical data retrieved from the database.
 """
 from datetime import datetime
 from typing import Optional
+from io import BytesIO
 
 from matplotlib import pyplot as plt
 from scipy.interpolate import make_interp_spline
@@ -13,11 +14,10 @@ from schemas.currency import Currency
 from database.server import Database
 from utils.config.load_config import load_config
 from utils.config.get_dsn import get_dsn
-from function.gen_unique_name import generate_unique_name
 
 config = load_config('config.hjson')
 
-async def create_chart(currency: Currency, db: Database) -> Optional[str]:
+async def create_chart(currency: Currency, db: Database) -> Optional[BytesIO]:
     """
     Generates a currency exchange rate chart based on historical data.
 
@@ -93,12 +93,9 @@ async def create_chart(currency: Currency, db: Database) -> Optional[str]:
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
 
-    name = await generate_unique_name(
-        f'{currency.from_currency.upper()}_{currency.conv_currency.upper()}',
-        datetime.now()
-    )
-
-    plt.savefig(f'../charts/{name}.png')
+    buf = BytesIO()
+    fig.savefig(buf, format="jpeg", bbox_inches="tight")
     plt.close(fig)
+    buf.seek(0)
 
-    return name
+    return buf

@@ -8,15 +8,15 @@ data, and returns a formatted chart response.
 from datetime import datetime
 
 from fastapi import APIRouter, status, Depends, HTTPException, Request
+from fastapi.responses import StreamingResponse
 
 from schemas.currency import Currency
 from function.create_chart import create_chart
-from .get_chart_period import prepare_chart_response
 
 router = APIRouter()
 
-@router.get('/api/getChart/', status_code=status.HTTP_201_CREATED)
-async def get_chart(req: Request, currency: Currency = Depends()) -> dict:
+@router.get('/api/getChart/', status_code=status.HTTP_200_OK)
+async def get_chart(req: Request, currency: Currency = Depends()) -> StreamingResponse:
     """
     Endpoint for retrieving a currency exchange rate chart.
 
@@ -56,6 +56,12 @@ async def get_chart(req: Request, currency: Currency = Depends()) -> dict:
             detail="The start_date cannot be later than the end_date."
         )
 
-    data = await create_chart(currency, req.app.state.db)
+    chart = await create_chart(currency, req.app.state.db)
 
-    return await prepare_chart_response(req, data)
+    if chart is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='No data found.'
+        )
+
+    return StreamingResponse(chart, media_type="image/jpeg")

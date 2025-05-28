@@ -4,13 +4,9 @@ This is the main application file for the chart service using FastAPI.
 The application serves static files, provides endpoints for generating charts,
 and integrates with Plausible Analytics for tracking usage.
 """
-
-import os
-
 import uvicorn
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
-from starlette.staticfiles import StaticFiles
 
 from utils.lifespan import lifespan
 from utils.config.load_config import load_config
@@ -22,15 +18,11 @@ from routes import get_chart, get_chart_period
 app = FastAPI(lifespan=lifespan)
 config = load_config('config.hjson')
 
-if not os.path.exists('../charts'):
-    os.mkdir('../charts')
-
 app.add_exception_handler(
     RequestValidationError,
     custom_validation_exception
 )
 
-app.mount('/static/charts', StaticFiles(directory='../charts/'))
 app.middleware('http')(PlausibleAnalytics())
 
 app.include_router(get_chart.router)
