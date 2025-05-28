@@ -31,6 +31,8 @@ jobs:
               - 'chart/**'
             web:
               - 'web/**'
+            parser:
+              - 'web/**'
 
   build-and-push-server:
     needs: changes
@@ -130,3 +132,37 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
+
+  build-and-push-parser:
+    needs: changes
+    if: ${{ needs.changes.outputs.parser == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_PREFIX }}-parser
+          tags: |
+            type=raw,value=latest
+            type=ref,event=branch
+            type=sha
+      - uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile-parser
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+
