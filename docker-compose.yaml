@@ -25,6 +25,7 @@ services:
     volumes:
       - './CertSSL:/CertSSL'
       - './config.hjson:/config.hjson'
+      - './schemas:/shared/database/schemas'
     depends_on:
       - postgres
 
@@ -37,6 +38,7 @@ services:
     volumes:
       - './CertSSL:/CertSSL'
       - './config.hjson:/config.hjson'
+      - './schemas:/database/schemas'
     depends_on:
       postgres:
         condition: service_healthy

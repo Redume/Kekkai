@@ -5,7 +5,7 @@ const logger = require('../../logger/src/main.js');
 
 async function create_table() {
     const schema = fs.readFileSync(
-        '../shared/database/data/schema.sql',
+        '../shared/database/schemas/data.sql',
         'utf8',
     );
 
