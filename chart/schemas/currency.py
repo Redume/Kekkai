@@ -2,9 +2,9 @@
 This module provides a model for handling currency conversion operations.
 """
 from datetime import date
-from typing import Optional
+from typing import Optional, Literal
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field
 
 class Currency(BaseModel):
     """
@@ -34,7 +34,7 @@ class Currency(BaseModel):
         default=None,
         description='End of period'
     )
-    period: Optional[str] = Field(
+    period: Optional[Literal['week', 'month', 'quarter', 'year']] = Field(
         default=None,
         description='Date Period.' \
         'Arguments week/month/quarter/year are accepted'
