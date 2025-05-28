@@ -1,7 +1,6 @@
 const logger = require('../shared/logger/src/main.js');
 const config = require('../shared/config/src/main.js')();
 
-const fs = require('fs');
 const axios = require('axios');
 const UAParser = require('ua-parser-js');
 
@@ -9,20 +8,6 @@ require('../shared/database/src/create_table.js')();
 
 const fastify = require('fastify')({
     logger: config['server']['log']['level'] !== 'none' ? logger : false,
-    ...(config['server']['ssl']['enabled']
-        ? {
-              https: {
-                  key: fs.readFileSync(
-                      config['server']['ssl']['private_key'],
-                      'utf8',
-                  ),
-                  cert: fs.readFileSync(
-                      config['server']['ssl']['cert'],
-                      'utf8',
-                  ),
-              },
-          }
-        : false),
 });
 
 const getRateRoute = require('./routes/getRate.js');
