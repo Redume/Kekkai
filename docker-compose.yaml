@@ -43,6 +43,17 @@ services:
       postgres:
         condition: service_healthy
 
+  parser:
+    build:
+      context: ./
+      dockerfile: Dockerfile-parser
+    restart: unless-stopped
+    volumes:
+      - './config.hjson:/config.hjson'
+      - './schemas:/shared/database/schemas'
+    depends_on:
+      - postgres
+
   web:
     build:
       context: ./
@@ -77,6 +88,8 @@ volumes:
   server:
     driver: local
   chart:
+    driver: local
+  parser:
     driver: local
   postgres:
     driver: local

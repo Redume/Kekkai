@@ -19,7 +19,42 @@
     {
       plausible_domain: plausible.io
       plausible_token: TOKEN
-      plausiblee_api:  https://plausible.io//api/event/
+      plausiblee_api:  https://plausible.io/api/event/
       enabled: false
     }
+    currency: {
+      services: {
+        enabled: [
+          'coinmarketcap'
+        ]
+        coinmarketcap: {
+          "api_key": TOKEN_COINMARKETCAP"
+          "base_url": https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest
+        }
+        duckduckgo: {
+          "base_url": https://duckduckgo.com/js/spice/currency/1/
+        }
+      }
+      fiat:
+      [
+        USD,
+        RUB,
+        EUR,
+        UAH,
+        TRY,
+        KZT,
+        CNY
+        ]
+        crypto:
+        [
+          ETH,
+          BTC,
+          USDT,
+          TON
+        ]
+        api_keys: {
+          coinmarketcap: TOKEN_COINMARKETCAP
+        }
+    }
+    schedule: 30 8 * * *
   }
