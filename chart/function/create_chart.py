@@ -56,20 +56,16 @@ async def create_chart(currency: Currency, db: Database) -> Optional[BytesIO]:
     x_values = np.arange(len(dates))
     try:
         spline = make_interp_spline(x_values, rates, k=2)
-    except ValueError as e:
+    except ValueError:
         return None
 
-    x_values = np.arange(len(dates))
-    spline = make_interp_spline(x_values, rates, k=2)
     new_x = np.linspace(0, len(dates) - 1, 200)
     new_y = spline(new_x)
 
     fig, ax = plt.subplots(figsize=(15, 6))
 
     ax.set_xticks(np.linspace(0, len(dates) - 1, 10))
-
     current_year = datetime.now().year
-
     ax.set_xticklabels(
         [
             dates[int(i)].strftime('%m-%d') 
