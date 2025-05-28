@@ -10,12 +10,6 @@
     server:
     {
       host: 0.0.0.0
-      ssl:
-      {
-        private_key: /CertSSL/privkey.pem
-        cert: /CertSSL/fullchain.pem
-        enabled: false
-      }
       log:
       {
         level: info
