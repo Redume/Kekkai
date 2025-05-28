@@ -13,7 +13,7 @@ from utils.config.load_config import load_config
 from utils.exception_handler import custom_validation_exception
 
 from middleware.plausible_analytics import PlausibleAnalytics
-from routes import get_chart, get_chart_period
+from routes import get_chart
 
 app = FastAPI(lifespan=lifespan)
 config = load_config('config.hjson')
@@ -26,8 +26,6 @@ app.add_exception_handler(
 app.middleware('http')(PlausibleAnalytics())
 
 app.include_router(get_chart.router)
-app.include_router(get_chart_period.router)
-
 
 if __name__ == '__main__':
     uvicorn.run(app, host=config['server']['host'], port=3030)

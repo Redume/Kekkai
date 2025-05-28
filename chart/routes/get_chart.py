@@ -6,6 +6,7 @@ exchange rate data visualization. It validates request parameters, fetches
 data, and returns a formatted chart response.
 """
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 from fastapi import APIRouter, status, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
@@ -44,17 +45,37 @@ async def get_chart(req: Request, currency: Currency = Depends()) -> StreamingRe
             detail='The from_currency and conv_currency fields are required.'
         )
 
-    if not currency.start_date or not currency.end_date:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail='The start_date and end_date fields are required.'
-        )
+    days, month, years = 0, 0, 0
 
-    if currency.start_date > currency.end_date:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="The start_date cannot be later than the end_date."
+    if currency.period:
+        match currency.period:
+            case 'week':
+                days = -7
+            case 'month':
+                month = -1
+            case 'quarter':
+                month = -3
+            case 'year':
+                years = -1
+
+        currency.end_date = datetime.now()
+        currency.start_date = currency.end_date + relativedelta(
+            months=month,
+            days=days,
+            years=years
         )
+    else:
+        if not currency.start_date or not currency.end_date:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail='The start_date and end_date fields are required.'
+            )
+
+        if currency.start_date > currency.end_date:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail='The start_date cannot be later than the end_date.'
+            )
 
     chart = await create_chart(currency, req.app.state.db)
 
