@@ -23,7 +23,6 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - './CertSSL:/CertSSL'
       - './config.hjson:/config.hjson'
       - './schemas:/shared/database/schemas'
     depends_on:
@@ -36,7 +35,6 @@ services:
     ports:
       - '3030:3030'
     volumes:
-      - './CertSSL:/CertSSL'
       - './config.hjson:/config.hjson'
       - './schemas:/database/schemas'
     depends_on:
@@ -62,7 +60,6 @@ services:
     ports:
       - '3050:3050'
     volumes:
-      - './CertSSL:/CertSSL'
       - './config.hjson:/config.hjson'
 
   docs:
