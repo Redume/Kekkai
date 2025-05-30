@@ -5,9 +5,9 @@ It reads database configuration from a YAML file
 and creates a connection pool
 that can be used throughout the application for database operations.
 """
-
+from decimal import Decimal
 from datetime import datetime, date
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Union
 from pathlib import Path
 import json
 
@@ -17,28 +17,31 @@ from utils.config.load_config import load_config
 
 config = load_config('config.hjson')
 
-def custom_encoder(obj):
+def custom_encoder(obj) -> Optional[Union[float, str]]:
     """
-    Custom JSON encoder for non-serializable objects.
+    JSON encoder for handling non-standard serializable objects.
 
-    This function is used as the default encoder in json.dumps 
-    to convert objects
-    that are not natively JSON serializable into a JSON-friendly format. 
-    In particular, it converts date and datetime objects 
-    to their ISO 8601 string representation.
+    This function serves as a custom encoder for `json.dumps`, 
+    converting objects that are not directly JSON serializable 
+    into appropriate JSON-compatible representations. Specifically:
+
+    - Converts `date` and `datetime` objects into Unix timestamp floats.
+    - Converts `Decimal` objects into strings to preserve precision.
 
     Args:
-        obj: The object to encode.
+        obj: The object to be serialized.
 
     Returns:
-        str: The ISO 8601 formatted string if obj is a date or datetime.
+        float or str: Unix timestamp for date/datetime, 
+        or string for Decimal.
 
     Raises:
-        TypeError: If the object is not a date or datetime instance 
-        and cannot be serialized.
+        TypeError: If the object type is unsupported for serialization.
     """
     if isinstance(obj, (date, datetime)):
-        return obj.isoformat()
+        return datetime.fromordinal(obj.toordinal()).timestamp()
+    if isinstance(obj, Decimal):
+        return str(obj)
 
     raise TypeError(
         f"Object of type {obj.__class__.__name__} is not JSON serializable"
