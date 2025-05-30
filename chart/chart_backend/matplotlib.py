@@ -1,6 +1,13 @@
 """
-This module provides functionality to generate currency rate charts
-based on historical data retrieved from the database.
+Module for generating smoothed currency exchange rate charts.
+
+This module provides an asynchronous function to create a visual
+representation of historical currency exchange rates. The function
+uses spline interpolation to smooth data points and matplotlib
+to generate a JPEG chart image returned as a binary stream.
+
+It requires the Currency schema for input parameters and uses
+matplotlib and scipy for plotting and interpolation.
 """
 from datetime import datetime
 from typing import Optional
@@ -17,42 +24,32 @@ from utils.config.get_dsn import get_dsn
 
 config = load_config('config.hjson')
 
-async def create_chart(currency: Currency, db: Database) -> Optional[BytesIO]:
+async def create_chart(currency: Currency, dates: list, rates: list) -> Optional[BytesIO]:
     """
-    Generates a currency exchange rate chart based on historical data.
+    Generates a smoothed currency exchange rate chart image 
+    from historical data.
 
-    This function retrieves exchange rate data 
-    from the database for a specified  currency pair and date range. 
-    It applies interpolation to smooth the data 
-    and generates a chart, which is saved as an image file.
+    This asynchronous function receives historical exchange rate data 
+    for aspecified currency pair over a given date range. 
+    It applies spline interpolation to smooth the rate curve, 
+    then creates a matplotlib plot
+    with formatted date labels on the x-axis. The resulting plot is saved
+    as a JPEG image in a binary stream.
 
     Args:
-        currency (Currency): An object containing the currency pair 
-            and date range.
-        db (Database): An instance of the database connection.
+        currency (Currency): An object containing details about 
+            the currency pair and period.
+        dates (list): A list of datetime objects 
+        representing the dates of the data points.
+        rates (list):  A list of float values representing 
+            exchange rates corresponding to the dates.
 
     Returns:
-        Optional[str]: The filename of the saved chart image, 
-            or None if no data is available.
+        Optional[BytesIO]: A binary stream containing 
+            the JPEG image of the chart,
+        or None if the interpolation fails or there is insufficient data.
     """
-    data = await db.fetchmany('SELECT date, rate FROM currency '
-    'WHERE (date BETWEEN $1 AND $2) '
-    'AND from_currency = $3 AND conv_currency = $4 ORDER BY date',
-    currency.start_date,
-    currency.end_date,
-    currency.from_currency.upper(),
-    currency.conv_currency.upper()
-    )
-
-    if not data:
-        return None
-
-    dates = [datetime.strptime(row["date"], '%Y-%m-%d') for row in data]
-    rates = [row["rate"] for row in data]
-
-    if len(dates) < 3:
-        return None
-
+    print(dates)
     x_values = np.arange(len(dates))
     try:
         spline = make_interp_spline(x_values, rates, k=2)

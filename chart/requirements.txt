@@ -7,3 +7,4 @@ user_agents==2.2.0
 asyncpg~=0.30.0
 scipy~=1.15.2
 numpy~=2.2.0
+typst~=0.13.0

@@ -1,9 +1,13 @@
 """
 Module for handling currency exchange rate chart requests.
 
-This module defines an API route that processes requests for historical 
-exchange rate data visualization. It validates request parameters, fetches 
-data, and returns a formatted chart response.
+Defines an API endpoint that processes requests to visualize historical 
+currency exchange rate data. 
+It validates input parameters, fetches data from the database, 
+and returns a dynamically generated chart image as a response.
+
+Supports multiple backends for chart generation, 
+including Typst and Matplotlib.
 """
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -12,32 +16,40 @@ from fastapi import APIRouter, status, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 
 from schemas.currency import Currency
-from function.create_chart import create_chart
+from chart_backend import matplotlib, typst
+from database.server import Database
 
 router = APIRouter()
 
 @router.get('/api/getChart/', status_code=status.HTTP_200_OK)
 async def get_chart(req: Request, currency: Currency = Depends()) -> StreamingResponse:
     """
-    Endpoint for retrieving a currency exchange rate chart.
+    API endpoint to generate and return a currency exchange rate chart.
 
-    This endpoint generates a chart based on historical exchange rate data
-    for a given currency pair within a specified date range.
+    Processes GET requests to produce 
+    a chart visualizing historical exchange rate data
+    for a specified currency pair and time range.
 
-    Route:
-        GET /api/getChart/
+    Args:
+        req (Request): The FastAPI request object.
+        currency (Currency): Dependency-injected currency
+            query parameters including:
+            - from_currency: base currency code.
+            - conv_currency: target currency code.
+            - start_date: start of the data range (datetime).
+            - end_date: end of the data range (datetime).
+            - period: optional predefined period 
+                like 'week', 'month', etc.
+            - backend: chart rendering backend, 
+                e.g., 'typst' or 'matplotlib'.
 
-    Query Parameters:
-        - from_currency (str): The base currency code.
-        - conv_currency (str): The target currency code.
-        - start_date (datetime): The start date 
-            of the exchange rate data range.
-        - end_date (datetime): The end date 
-            of the exchange rate data range.
+    Returns:
+        StreamingResponse: A streaming response containing 
+        the generated chart image (PNG).
 
-    Responses:
-        - 201 Created: Returns the generated chart data.
-        - 400 Bad Request: If required parameters are missing or invalid.
+    Raises:
+        HTTPException: For invalid or missing query parameters 
+        or if no data is found.
     """
     if not currency.from_currency or not currency.conv_currency:
         raise HTTPException(
@@ -76,8 +88,47 @@ async def get_chart(req: Request, currency: Currency = Depends()) -> StreamingRe
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail='The start_date cannot be later than the end_date.'
             )
+    
+    db: Database = req.app.state.db
 
-    chart = await create_chart(currency, req.app.state.db)
+    data = await db.fetchmany('SELECT date, rate FROM currency '
+    'WHERE (date BETWEEN $1 AND $2) '
+    'AND from_currency = $3 AND conv_currency = $4 ORDER BY date',
+    currency.start_date,
+    currency.end_date,
+    currency.from_currency.upper(),
+    currency.conv_currency.upper()
+    )
+
+    if not data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='No data to plot',
+        )
+
+    dates = [datetime.fromtimestamp(row["date"]) for row in data]
+    rates = [float(row["rate"]) for row in data]
+
+    current_year = datetime.now().year
+
+    labels = [
+        d.strftime('%m-%d') if d.year == current_year 
+        else d.strftime('%Y-%m-%d')
+        for d in dates
+    ]
+
+    if len(dates) < 3:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='No data to plot',
+        )
+
+    chart = None
+    match currency.backend:
+        case 'typst':
+            chart = await typst.create_chart(currency, dates, rates)
+        case 'matplotlib':
+            chart = await matplotlib.create_chart(currency, dates, rates)
 
     if chart is None:
         raise HTTPException(
@@ -85,4 +136,4 @@ async def get_chart(req: Request, currency: Currency = Depends()) -> StreamingRe
             detail='No data found.'
         )
 
-    return StreamingResponse(chart, media_type="image/jpeg")
+    return StreamingResponse(chart, media_type="image/png")
