@@ -1,5 +1,7 @@
-""" Load DSN for database """
+"""Load DSN for database"""
+
 from typing import Dict, Any
+
 
 def get_dsn(config: Dict[str, Any]) -> str:
     """
@@ -10,6 +12,4 @@ def get_dsn(config: Dict[str, Any]) -> str:
     Returns str: DSN string.
     """
     # pylint: disable=consider-using-f-string
-    return "postgresql://{user}:{password}@{host}:{port}/{name}".format(
-        **config
-        )
+    return "postgresql://{user}:{password}@{host}:{port}/{name}".format(**config)

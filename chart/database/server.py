@@ -1,10 +1,11 @@
 """
 This module initializes the database connection pool using asyncpg.
 
-It reads database configuration from a YAML file 
+It reads database configuration from a YAML file
 and creates a connection pool
 that can be used throughout the application for database operations.
 """
+
 from decimal import Decimal
 from datetime import datetime, date
 from typing import Optional, List, Dict, Any, Union
@@ -15,14 +16,15 @@ import asyncpg
 
 from utils.config.load_config import load_config
 
-config = load_config('config.hjson')
+config = load_config("config.hjson")
+
 
 def custom_encoder(obj) -> Optional[Union[float, str]]:
     """
     JSON encoder for handling non-standard serializable objects.
 
-    This function serves as a custom encoder for `json.dumps`, 
-    converting objects that are not directly JSON serializable 
+    This function serves as a custom encoder for `json.dumps`,
+    converting objects that are not directly JSON serializable
     into appropriate JSON-compatible representations. Specifically:
 
     - Converts `date` and `datetime` objects into Unix timestamp floats.
@@ -32,7 +34,7 @@ def custom_encoder(obj) -> Optional[Union[float, str]]:
         obj: The object to be serialized.
 
     Returns:
-        float or str: Unix timestamp for date/datetime, 
+        float or str: Unix timestamp for date/datetime,
         or string for Decimal.
 
     Raises:
@@ -43,9 +45,8 @@ def custom_encoder(obj) -> Optional[Union[float, str]]:
     if isinstance(obj, Decimal):
         return str(obj)
 
-    raise TypeError(
-        f"Object of type {obj.__class__.__name__} is not JSON serializable"
-        )
+    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+
 
 class Database:
     """
@@ -57,9 +58,9 @@ class Database:
     - Manage database connections efficiently.
 
     Attributes:
-        dsn (str): The Data Source Name (DSN) 
+        dsn (str): The Data Source Name (DSN)
             for connecting to the database.
-        pool (Optional[asyncpg.Pool]): The connection pool. 
+        pool (Optional[asyncpg.Pool]): The connection pool.
             None if not connected.
 
     Example:
@@ -71,9 +72,10 @@ class Database:
         ```
 
     Raises:
-        RuntimeError: If connection to the database fails 
+        RuntimeError: If connection to the database fails
             or table creation fails.
     """
+
     def __init__(self, dsn: str):
         """Initilization Database"""
         self.dsn = dsn
@@ -85,10 +87,7 @@ class Database:
             self.pool = await asyncpg.create_pool(self.dsn)
             await self._create_table()
         except Exception as e:
-            raise RuntimeError(
-                f"Failed to connect to the database: {e}"
-                ) \
-            from e
+            raise RuntimeError(f"Failed to connect to the database: {e}") from e
 
     async def disconnect(self) -> None:
         """Close all connections in the pool"""
@@ -98,7 +97,7 @@ class Database:
     async def _create_table(self) -> None:
         """Create table from SQL-file"""
         sql_file = Path(__file__).parent / "schemas" / "data.sql"
-        with open(sql_file, 'r', encoding='utf-8') as file:
+        with open(sql_file, "r", encoding="utf-8") as file:
             sql = file.read()
 
         async with self.pool.acquire() as conn:
@@ -106,7 +105,7 @@ class Database:
 
     async def fetch(self, query: str, *args) -> List[Dict]:
         """
-        Fetch a single row from the database 
+        Fetch a single row from the database
         and return it as a JSON response.
 
         Args:
@@ -114,8 +113,8 @@ class Database:
             *args: Parameters to be used in the query.
 
         Returns:
-            Dict[str, Any]: 
-                A dictionary representing the fetched row. 
+            Dict[str, Any]:
+                A dictionary representing the fetched row.
                 `[]` if no rows are found.
         """
         if not self.pool:
@@ -124,13 +123,15 @@ class Database:
         async with self.pool.acquire() as conn:
             result = await conn.fetchrow(query, *args)
 
-        return json.loads(
-            json.dumps(dict(result), default=custom_encoder)
-        ) if result else []
+        return (
+            json.loads(json.dumps(dict(result), default=custom_encoder))
+            if result
+            else []
+        )
 
     async def fetchmany(self, query: str, *args) -> List[Dict[str, Any]]:
         """
-        Fetch multiple rows from the database 
+        Fetch multiple rows from the database
         and return them as a JSON response.
 
         Args:
@@ -138,8 +139,8 @@ class Database:
             *args: Parameters to be used in the query.
 
         Returns:
-            List[Dict[str, Any]]: 
-                A list of dictionaries representing the fetched rows. 
+            List[Dict[str, Any]]:
+                A list of dictionaries representing the fetched rows.
                 `[]` if no rows are found.
         """
         if not self.pool:
@@ -148,9 +149,13 @@ class Database:
         async with self.pool.acquire() as conn:
             results = await conn.fetch(query, *args)
 
-        return json.loads(
-            json.dumps([dict(row) for row in results], default=custom_encoder)
-        ) if results else []
+        return (
+            json.loads(
+                json.dumps([dict(row) for row in results], default=custom_encoder)
+            )
+            if results
+            else []
+        )
 
     async def update(self, query: str, *args) -> List[Dict[str, Any]]:
         """
@@ -161,7 +166,7 @@ class Database:
             *args: Parameters to be passed into the query.
 
         Returns:
-            List[Dict[str, Any]]: A list of dictionaries representing 
+            List[Dict[str, Any]]: A list of dictionaries representing
             the updated rows, or None if no rows were affected.
 
         Raises:
@@ -173,12 +178,11 @@ class Database:
         async with self.pool.acquire() as conn:
             if "RETURNING" in query.upper():
                 rows = await conn.fetch(query, *args)
-                return {
-                    "updated_rows": len(rows), 
-                    "data": [
-                        dict(row) for row in rows
-                        ]
-                        } if rows else {"updated_rows": 0, "data": []}
+                return (
+                    {"updated_rows": len(rows), "data": [dict(row) for row in rows]}
+                    if rows
+                    else {"updated_rows": 0, "data": []}
+                )
             else:
                 result = await conn.execute(query, *args)
                 updated_rows = int(result.split()[-1])
@@ -193,8 +197,8 @@ class Database:
             *args: Parameters to be passed into the query.
 
         Returns:
-            Dict[str, Any]: 
-                A dictionary with the inserted row(s) if the query contains 
+            Dict[str, Any]:
+                A dictionary with the inserted row(s) if the query contains
                 "RETURNING", otherwise a confirmation message.
 
         Raises:
@@ -206,10 +210,11 @@ class Database:
         async with self.pool.acquire() as conn:
             if "RETURNING" in query.upper():
                 rows = await conn.fetch(query, *args)
-                return {
-                    "inserted_rows": len(rows),
-                    "data": [dict(row) for row in rows]
-                } if rows else {"inserted_rows": 0, "data": []}
+                return (
+                    {"inserted_rows": len(rows), "data": [dict(row) for row in rows]}
+                    if rows
+                    else {"inserted_rows": 0, "data": []}
+                )
             else:
                 result = await conn.execute(query, *args)
                 inserted_rows = int(result.split()[-1])
