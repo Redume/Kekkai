@@ -134,4 +134,4 @@ async def get_chart(req: Request, currency: Currency = Depends()) -> StreamingRe
             status_code=status.HTTP_400_BAD_REQUEST, detail="No data found."
         )
 
-    return StreamingResponse(chart, media_type="image/png")
+    return StreamingResponse(chart)
