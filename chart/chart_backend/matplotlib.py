@@ -52,7 +52,6 @@ async def create_chart(
             the JPEG image of the chart,
         or None if the interpolation fails or there is insufficient data.
     """
-    print(dates)
     x_values = np.arange(len(dates))
     try:
         spline = make_interp_spline(x_values, rates, k=2)
