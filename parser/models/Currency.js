@@ -17,7 +17,7 @@ const currencySchema = Joi.object({
         'date.base': 'date must be a valid ISO date',
         'any.required': 'date is required',
     }),
-    rate: Joi.number().precision(30).positive().required().messages({
+    rate: Joi.number().positive().required().messages({
         'number.base': 'rate must be a number',
         'number.positive': 'rate must be a positive number',
         'number.precision': 'rate must have no more than 6 decimal places',

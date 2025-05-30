@@ -14,6 +14,19 @@ const servicesDir = path.join(__dirname, 'services');
 let fiatFetched = false;
 let cryptoFetched = false;
 
+function truncate_number(value, decimals) {
+    const valueStr = value.toString();
+    const dotIndex = valueStr.indexOf('.');
+    if (dotIndex === -1) return valueStr;
+    const desiredLength = dotIndex + decimals + 1;
+    let truncated = valueStr.slice(0, desiredLength);
+
+    if (parseFloat(truncated) === 0 && value > 0) {
+        return valueStr;
+    }
+    return truncated;
+}
+
 async function main() {
     if (!config['schedule'])
         throw new Error('The crontab schedule is not set.');
@@ -76,7 +89,7 @@ async function main() {
                             [
                                 currency.from_currency,
                                 currency.conv_currency,
-                                currency.rate,
+                                truncate_number(currency.rate, 30),
                                 currency.date,
                             ],
                         );
