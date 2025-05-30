@@ -37,9 +37,7 @@ module.exports = {
                             from_currency: fromCurrency,
                             conv_currency: convCurrency,
                             rate: data.price,
-                            date: new Date(data['last_updated'])
-                                .toISOString()
-                                .substring(0, 10),
+                            date: data['last_updated'],
                         };
                     })
                     .catch((err) => {

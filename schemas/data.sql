@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS currency(
     from_currency TEXT NOT NULL,
     conv_currency TEXT NOT NULL,
     rate NUMERIC NOT NULL,
-    date DATE NOT NULL
+    date TIMESTAMP NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS currency_from_currency_conv_currency_idx

@@ -32,9 +32,7 @@ module.exports = {
                             from_currency: fromCurrency,
                             conv_currency: convCurrency,
                             rate: rate,
-                            date: new Date(data['timestamp'])
-                                .toISOString()
-                                .substring(0, 10),
+                            date: data['timestamp'],
                         };
                     })
                     .catch((err) => {
