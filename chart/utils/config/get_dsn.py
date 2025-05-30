@@ -1,6 +1,6 @@
 """Load DSN for database"""
 
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 def get_dsn(config: Dict[str, Any]) -> str:

@@ -11,7 +11,7 @@ currency exchange rate queries and chart generation.
 """
 
 from datetime import date
-from typing import Optional, Literal
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 

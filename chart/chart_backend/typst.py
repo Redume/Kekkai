@@ -10,17 +10,16 @@ The function expects a list of datetime objects for dates and corresponding
 exchange rates, along with currency details and display parameters.
 """
 
-from datetime import datetime
-from typing import Optional
-from io import BytesIO
 import json
+from datetime import datetime
+from io import BytesIO
+from typing import Optional
 
 import typst
-
-from schemas.currency import Currency
 from database.server import Database
-from utils.config.load_config import load_config
+from schemas.currency import Currency
 from utils.config.get_dsn import get_dsn
+from utils.config.load_config import load_config
 
 config = load_config("config.hjson")
 

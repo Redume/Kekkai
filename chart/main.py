@@ -8,13 +8,11 @@ and integrates with Plausible Analytics for tracking usage.
 import uvicorn
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
-
-from utils.lifespan import lifespan
-from utils.config.load_config import load_config
-from utils.exception_handler import custom_validation_exception
-
 from middleware.plausible_analytics import PlausibleAnalytics
 from routes import get_chart
+from utils.config.load_config import load_config
+from utils.exception_handler import custom_validation_exception
+from utils.lifespan import lifespan
 
 app = FastAPI(lifespan=lifespan)
 config = load_config("config.hjson")

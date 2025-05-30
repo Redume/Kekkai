@@ -11,14 +11,13 @@ including Typst and Matplotlib.
 """
 
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
-from fastapi import APIRouter, status, Depends, HTTPException, Request
-from fastapi.responses import StreamingResponse
-
-from schemas.currency import Currency
 from chart_backend import matplotlib, typst
 from database.server import Database
+from dateutil.relativedelta import relativedelta
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.responses import StreamingResponse
+from schemas.currency import Currency
 
 router = APIRouter()
 

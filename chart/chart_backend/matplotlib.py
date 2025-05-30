@@ -11,17 +11,16 @@ matplotlib and scipy for plotting and interpolation.
 """
 
 from datetime import datetime
-from typing import Optional
 from io import BytesIO
+from typing import Optional
 
-from matplotlib import pyplot as plt
-from scipy.interpolate import make_interp_spline
 import numpy as np
-
-from schemas.currency import Currency
 from database.server import Database
-from utils.config.load_config import load_config
+from matplotlib import pyplot as plt
+from schemas.currency import Currency
+from scipy.interpolate import make_interp_spline
 from utils.config.get_dsn import get_dsn
+from utils.config.load_config import load_config
 
 config = load_config("config.hjson")
 

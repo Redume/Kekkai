@@ -6,14 +6,13 @@ and creates a connection pool
 that can be used throughout the application for database operations.
 """
 
-from decimal import Decimal
-from datetime import datetime, date
-from typing import Optional, List, Dict, Any, Union
-from pathlib import Path
 import json
+from datetime import date, datetime
+from decimal import Decimal
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
 
 import asyncpg
-
 from utils.config.load_config import load_config
 
 config = load_config("config.hjson")

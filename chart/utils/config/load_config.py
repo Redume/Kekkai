@@ -3,6 +3,7 @@ Parsing and converting HJSON config to JSON
 """
 
 import json
+
 import hjson
 
 
