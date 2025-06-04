@@ -61,8 +61,8 @@ jobs:
             type=sha
       - uses: docker/build-push-action@v5
         with:
-          file: Dockerfile-server
-          context: .
+          file: ./server/Dockerfile
+          context: ./server
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -127,8 +127,8 @@ jobs:
             type=sha
       - uses: docker/build-push-action@v5
         with:
-          file: Dockerfile-web
-          context: .
+          file: ./web/Dockerfile
+          context: ./web
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -160,8 +160,8 @@ jobs:
             type=sha
       - uses: docker/build-push-action@v5
         with:
-          file: Dockerfile-parser
-          context: .
+          file: ./parser/Dockerfile
+          context: ./parser
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

@@ -17,8 +17,8 @@ services:
 
   server:
     build:
-      context: ./
-      dockerfile: Dockerfile-server
+      context: .
+      dockerfile: server/Dockerfile
     restart: unless-stopped
     ports:
       - '3000:3000'
@@ -31,6 +31,7 @@ services:
   chart:
     build:
       context: ./chart
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - '3030:3030'
@@ -43,8 +44,8 @@ services:
 
   parser:
     build:
-      context: ./
-      dockerfile: Dockerfile-parser
+      context: .
+      dockerfile: parser/Dockerfile
     restart: unless-stopped
     volumes:
       - './config.hjson:/config.hjson'
@@ -54,8 +55,8 @@ services:
 
   web:
     build:
-      context: ./
-      dockerfile: Dockerfile-web
+      context: .
+      dockerfile: web/Dockerfile
     restart: unless-stopped
     ports:
       - '3050:3050'
