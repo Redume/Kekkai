@@ -1,4 +1,4 @@
-This microservice generates graphs of currency exchange rates using Python and the `matplotlib` library. 
+This microservice generates graphs of currency exchange rates using Python and the `matplotlib` and `typst` library. 
 It retrieves historical exchange rate data from an internal database and visualizes the data in the form of line charts
 
 
@@ -11,4 +11,5 @@ It retrieves historical exchange rate data from an internal database and visuali
 - [encode/uvicorn](https://github.com/encode/uvicorn) — [BSD-3-Clause](https://github.com/encode/uvicorn/blob/master/LICENSE.md)
 - [fastapi/fastapi](https://github.com/fastapi/fastapi) — [MIT](https://github.com/fastapi/fastapi/blob/master/LICENSE)
 - [selwin/python-user-agents](https://github.com/selwin/python-user-agents) — [MIT](https://github.com/selwin/python-user-agents/blob/master/LICENSE.txt)
-- [MagicStack/asyncpg](https://github.com/MagicStack/asyncpg)—- [Apache-2.0](https://github.com/MagicStack/asyncpg/blob/master/LICENSE)
+- [MagicStack/asyncpg](https://github.com/MagicStack/asyncpg) — [Apache-2.0](https://github.com/MagicStack/asyncpg/blob/master/LICENSE)
+- [messense/typst-py](https://github.com/messense/typst-py/) — [Apache-2.0](https://github.com/messense/typst-py/blob/main/LICENSE)
