@@ -1,5 +1,6 @@
 const axios = require('axios');
 const config = require('../../shared/config/src/main.js')();
+const logger = require('../../shared/logger/src/main.js');
 
 module.exports = {
     info: {
@@ -24,7 +25,7 @@ module.exports = {
                         );
                         const rate = data['to'][0]['mid'];
 
-                        console.log(
+                        logger.info(
                             `Data fetched from ${serviceName}: ${fromCurrency} -> ${convCurrency}, Rate: ${rate}`,
                         );
 
@@ -36,7 +37,7 @@ module.exports = {
                         };
                     })
                     .catch((err) => {
-                        console.error(err);
+                        logger.error(err);
                         return null;
                     });
             }),

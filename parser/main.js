@@ -7,6 +7,7 @@ const { validateCurrency } = require('./models/Currency.js');
 const pool = require('../shared/database/src/postgresql.js');
 const create_table = require('../shared/database/src/create_table.js');
 const config = require('../shared/config/src/main.js')();
+const logger = require('../shared/logger/src/main.js');
 
 const services = [];
 const servicesDir = path.join(__dirname, 'services');
@@ -33,16 +34,16 @@ async function main() {
     else if (!cron.isValidCron(config['schedule'], { alias: true }))
         throw new Error('The crontab is invalid.');
 
-    console.log('Loading services...');
+    logger.info('Loading services...');
     config['currency']['services']['enabled'].forEach((serviceName) => {
         const servicePath = path.join(servicesDir, `${serviceName}.js`);
         if (fs.existsSync(servicePath)) {
             const serviceModule = require(servicePath);
 
             services.push(serviceModule);
-            console.log(`Service ${serviceName} loaded successfully`);
+            logger.info(`Service ${serviceName} loaded successfully`);
         } else {
-            console.error(
+            logger.error(
                 `Service file for ${serviceName} not found at ${servicePath}`,
             );
         }
@@ -51,7 +52,7 @@ async function main() {
     await create_table();
 
     schedule.scheduleJob(config['schedule'], async () => {
-        console.log('Running scheduled task at:', new Date());
+        logger.info('Running scheduled task at:', new Date());
 
         fiatFetched = false;
         cryptoFetched = false;
@@ -60,7 +61,7 @@ async function main() {
             const results = await srv.parseCurrencies();
 
             if (Array.isArray(results) && results.length > 0) {
-                console.log(
+                logger.info(
                     `Data received from ${srv.info.name || 'unknown service'}:`,
                     results.length,
                     'items',
@@ -69,14 +70,14 @@ async function main() {
                 for (const result of results) {
                     try {
                         if (srv.info.type === 'fiat' && fiatFetched) {
-                            console.log(
+                            logger.info(
                                 'Skipping fiat currency collection as data has already been fetched.',
                             );
                             continue;
                         }
 
                         if (srv.info.type === 'crypto' && cryptoFetched) {
-                            console.log(
+                            logger.info(
                                 'Skipping crypto currency collection as data has already been fetched.',
                             );
                             continue;
@@ -94,31 +95,31 @@ async function main() {
                                 currency.date,
                             ],
                         );
-                        console.log(
+                        logger.info(
                             `Inserted data for ${currency.from_currency} -> ${currency.conv_currency}, Rate: ${rate}`,
                         );
                     } catch (validationError) {
-                        console.error('Validation failed for data:', result);
-                        console.error(validationError);
+                        logger.error('Validation failed for data:', result);
+                        logger.error(validationError);
                     }
                 }
 
                 if (srv.info.type === 'crypto') {
                     cryptoFetched = true;
-                    console.log('Crypto currency data fetched successfully.');
+                    logger.info('Crypto currency data fetched successfully.');
                 }
 
                 if (srv.info.type === 'fiat') {
                     fiatFetched = true;
-                    console.log('Fiat currency data fetched successfully.');
+                    logger.info('Fiat currency data fetched successfully.');
                 }
             } else {
-                console.error('Data not received for writing to the database.');
+                logger.error('Data not received for writing to the database.');
             }
         }
     });
 
-    console.log(`Scheduled task is running on schedule: ${config['schedule']}`);
+    logger.info(`Scheduled task is running on schedule: ${config['schedule']}`);
 }
 
-main().catch(console.error);
+main().catch(logger.error);
