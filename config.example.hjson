@@ -34,6 +34,10 @@
         duckduckgo: {
           "base_url": https://duckduckgo.com/js/spice/currency/1/
         }
+        exchangeratapi: {
+          api_key: TOKEN_EXCHANGERATE
+          base_url: https://v6.exchangerate-api.com/v6/
+        }
       }
       fiat:
       [
