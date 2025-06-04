@@ -18,6 +18,7 @@ config.hjson
 
 # Other
 .DS_Store
+__pycache__
 
 # Virtual env
 .venv
