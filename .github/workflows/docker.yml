@@ -32,7 +32,7 @@ jobs:
             web:
               - 'web/**'
             parser:
-              - 'web/**'
+              - 'parser/**'
 
   build-and-push-server:
     needs: changes
