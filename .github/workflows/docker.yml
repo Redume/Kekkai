@@ -9,6 +9,10 @@ env:
   REGISTRY: ghcr.io
   IMAGE_PREFIX: ghcr.io/${{ github.repository_owner }}/kekkai
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   changes:
     name: Detect changed files
@@ -39,9 +43,6 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.server == 'true' }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - uses: actions/checkout@v4
@@ -62,7 +63,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           file: ./server/Dockerfile
-          context: ./server
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -128,7 +129,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           file: ./web/Dockerfile
-          context: ./web
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -161,7 +162,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           file: ./parser/Dockerfile
-          context: ./parser
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
