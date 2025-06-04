@@ -19,6 +19,7 @@ jobs:
       server: ${{ steps.filter.outputs.server }}
       chart: ${{ steps.filter.outputs.chart }}
       web: ${{ steps.filter.outputs.web }}
+      parser: ${{ steps.filter.outputs.parser }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
