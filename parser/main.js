@@ -83,18 +83,19 @@ async function main() {
                         }
 
                         const currency = await validateCurrency(result);
+                        const rate = truncate_number(currency.rate, 30);
 
                         await pool.query(
                             'INSERT INTO currency (from_currency, conv_currency, rate, date) VALUES ($1, $2, $3, $4)',
                             [
                                 currency.from_currency,
                                 currency.conv_currency,
-                                truncate_number(currency.rate, 30),
+                                rate,
                                 currency.date,
                             ],
                         );
                         console.log(
-                            `Inserted data for ${currency.from_currency} -> ${currency.conv_currency}, Rate: ${currency.rate}`,
+                            `Inserted data for ${currency.from_currency} -> ${currency.conv_currency}, Rate: ${rate}`,
                         );
                     } catch (validationError) {
                         console.error('Validation failed for data:', result);
