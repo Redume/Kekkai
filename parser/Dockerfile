@@ -31,6 +31,6 @@ COPY --from=shared-logger /node_modules /node_modules
 
 # Copy all the other files
 COPY ./parser/ ./
-COPY ./shared/ ./shared/
+COPY shared /shared
 
 CMD ["node", "main.js"]

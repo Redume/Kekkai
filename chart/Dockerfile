@@ -1,10 +1,14 @@
-FROM python:3.13
+FROM python:3.13-slim
 
-WORKDIR /
+WORKDIR /app
 
-COPY . .
+COPY chart/requirements.txt .
 
-RUN pip3 install --no-cache-dir --upgrade -r ./requirements.txt
+COPY chart/ /app/
+
+COPY shared/database/schemas/data.sql /app/database/schemas/data.sql
+
+RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
 
 EXPOSE 3030
 CMD ["python", "main.py"]

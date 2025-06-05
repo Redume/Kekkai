@@ -24,20 +24,18 @@ services:
       - '3000:3000'
     volumes:
       - './config.hjson:/config.hjson'
-      - './schemas:/shared/database/schemas'
     depends_on:
       - postgres
 
   chart:
     build:
-      context: ./chart
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: chart/Dockerfile
     restart: unless-stopped
     ports:
       - '3030:3030'
     volumes:
-      - './config.hjson:/config.hjson'
-      - './schemas:/database/schemas'
+      - './config.hjson:/app/config.hjson'
     depends_on:
       postgres:
         condition: service_healthy
@@ -49,7 +47,6 @@ services:
     restart: unless-stopped
     volumes:
       - './config.hjson:/config.hjson'
-      - './schemas:/shared/database/schemas'
     depends_on:
       - postgres
 
