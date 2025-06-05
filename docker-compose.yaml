@@ -9,10 +9,10 @@ services:
       - ./CertSSL:/etc/nginx/ssl
       - ./assets/logo.png:/etc/nginx/assets/logo.png
       - ./docs/dist:/etc/nginx/dist
+      - ./web:/etc/nginx/static/
     depends_on:
       - server
       - chart
-      - web
       - docs
 
   server:
@@ -49,16 +49,6 @@ services:
       - './config.hjson:/config.hjson'
     depends_on:
       - postgres
-
-  web:
-    build:
-      context: .
-      dockerfile: web/Dockerfile
-    restart: unless-stopped
-    ports:
-      - '3050:3050'
-    volumes:
-      - './config.hjson:/config.hjson'
 
   docs:
     build:
