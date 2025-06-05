@@ -29,10 +29,12 @@ jobs:
           filters: |
             server:
               - 'server/**'
+              - 'shared/**'
             chart:
               - 'chart/**'
             parser:
               - 'parser/**'
+              - 'shared/**'
 
   build-server:
     name: Build server
