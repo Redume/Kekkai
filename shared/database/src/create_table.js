@@ -1,10 +1,22 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const pool = require('./postgresql.js');
-
+const path = require('path');
 const logger = require('../../logger/src/main.js');
 
 async function create_table() {
-    const schema = fs.readFileSync('/shared/database/schemas/data.sql', 'utf8');
+    const filePath = path.join(
+        __dirname,
+        '../shared/database/schemas/data.sql',
+    );
+
+    let schema;
+    try {
+        schema = await fs.readFile(filePath, 'utf8');
+        console.log('File read successfully!');
+    } catch (err) {
+        console.error('File does not exist or error reading file:', filePath);
+        return;
+    }
 
     const queries = schema
         .split(';')
