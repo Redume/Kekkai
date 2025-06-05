@@ -4,10 +4,7 @@ const pool = require('./postgresql.js');
 const logger = require('../../logger/src/main.js');
 
 async function create_table() {
-    const schema = fs.readFileSync(
-        '../shared/database/schemas/data.sql',
-        'utf8',
-    );
+    const schema = fs.readFileSync('/shared/database/schemas/data.sql', 'utf8');
 
     const queries = schema
         .split(';')
