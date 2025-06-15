@@ -19,7 +19,7 @@
     {
       plausible_domain: plausible.io
       plausible_token: TOKEN
-      plausiblee_api:  https://plausible.io/api/event/
+      plausible_api:  https://plausible.io/api/event/
       enabled: false
     }
     currency: {
