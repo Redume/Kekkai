@@ -32,9 +32,8 @@ fastify.addHook('onResponse', async (request, reply) => {
 
     routePartFiltered.unshift('/');
 
-    if (request.headers['DNT'] === 1) return;
-    if (!config?.['analytics']['work'] ? config?.['analytics']['work'] : false)
-        return;
+    if (request.headers['dnt'] === '1') return;
+    if (!config?.['analytics']['enabled']) return;
     else if (!fastify.printRoutes().includes(routePartFiltered.at(-1))) return;
 
     const userAgent = request.headers['user-agent'];

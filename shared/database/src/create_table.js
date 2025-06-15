@@ -4,7 +4,7 @@ const path = require('path');
 const logger = require('../../logger/src/main.js');
 
 async function create_table() {
-    const filePath = path.join('/shared/database/schemas/data.sql');
+    const filePath = path.join(__dirname, '../schemas/data.sql');
 
     let schema;
     try {
