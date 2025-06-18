@@ -8,10 +8,9 @@ async function getDay(from_currency, conv_currency, date, conv_amount) {
 
     const data = await pool.query(
         'SELECT from_currency, conv_currency, date, rate FROM currency ' +
-            'WHERE from_currency = $1 AND conv_currency = $2 AND date = $3',
+            'WHERE from_currency = $1 AND conv_currency = $2 AND date::date = $3::date',
         [from_currency.toUpperCase(), conv_currency.toUpperCase(), date],
     );
-
 
     if (data?.['rows'].length <= 0) return 'Missing data';
 

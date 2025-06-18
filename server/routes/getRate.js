@@ -18,7 +18,7 @@ module.exports = async function getRateRoute(fastify) {
                     query['from_currency'],
                     query['conv_currency'],
                     query['date'],
-                    query['conv_amount'] ? query['conv_amount'] : 0
+                    query['conv_amount'] ? query['conv_amount'] : 0,
                 );
             else if (query['start_date'] && query['end_date'])
                 rate_res = await rate.getPeriod(
