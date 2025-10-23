@@ -56,6 +56,8 @@ services:
     build:
       context: ./docs
       dockerfile: Dockerfile
+    volumes:
+      - 'docs:/docs'
 
   postgres:
     image: postgres:17
@@ -80,3 +82,4 @@ volumes:
     driver: local
   postgres:
     driver: local
+  docs:
