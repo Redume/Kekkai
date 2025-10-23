@@ -57,7 +57,8 @@ services:
       context: ./docs
       dockerfile: Dockerfile
     volumes:
-      - 'docs:/docs'
+      - ./docs/dist:/doc
+    command: [ "sh", "-c", "npm ci && npm run build && cp -r ./build/* /doc/ || cp -r ./dist/* /doc/" ]
 
   postgres:
     image: postgres:17
@@ -82,4 +83,3 @@ volumes:
     driver: local
   postgres:
     driver: local
-  docs:
