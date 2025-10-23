@@ -10,6 +10,8 @@ services:
       - ./assets/logo.png:/etc/nginx/assets/logo.png
       - ./docs/dist:/etc/nginx/dist
       - ./web:/etc/nginx/static/
+    env_file:
+      - .env
     depends_on:
       - server
       - chart
