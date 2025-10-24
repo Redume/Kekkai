@@ -57,8 +57,8 @@ services:
       context: ./docs
       dockerfile: Dockerfile
     volumes:
-      - ./docs/dist:/doc
-    command: [ "sh", "-c", "npm ci && npm run build && cp -r ./build/* /doc/ || cp -r ./dist/* /doc/" ]
+      - ./docs/dist:/docs
+    command: sh -c 'cp -r /app/dist/* /docs'
 
   postgres:
     image: postgres:17
