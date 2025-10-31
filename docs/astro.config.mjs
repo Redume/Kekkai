@@ -53,10 +53,6 @@ export default defineConfig({
 						{
 							label: 'Configure config.hjson',
 							slug: 'docs/config/config-hjson'
-						},
-						{
-							label: 'Configure Nginx',
-							slug: 'docs/config/config-nginx'
 						}
 					],
 				},
