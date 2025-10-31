@@ -15,7 +15,7 @@ import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
         <Tabs>
             <TabItem label='curl'>
 ```shell
-curl --request GET --url https://kekkai-api.redume.su/api/getChart/week?from_currency=RUB&conv_currency=USD
+curl --request GET --url 'https://kekkai-api.redume.su/api/getChart/week?from_currency=RUB&conv_currency=USD' --output 'chart.jpg'
 ```
             </TabItem>
         </Tabs>
@@ -84,7 +84,7 @@ axios.get('https://kekkai-api.redume.su/api/getChart/week', {
         <Tabs>
             <TabItem label='curl'>
 ```shell
-curl --request GET --url https://kekkai-api.redume.su/api/getChart/?from_currency=RUB&conv_currency=USD&start_date=2024-10-31&end_date=2024-11-08
+curl --request GET --url 'https://kekkai-api.redume.su/api/getChart/?from_currency=RUB&conv_currency=USD&start_date=2024-10-31&end_date=2024-11-08' --output 'chart.jpg'
 ```
             </TabItem>
         </Tabs>

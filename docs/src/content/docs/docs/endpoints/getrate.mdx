@@ -15,7 +15,7 @@ import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
         <Tabs>
             <TabItem label='curl'>
 ```shell
-curl --request GET --url https://kekkai-api.redume.su/api/getRate/?from_currency=RUB&conv_currency=USD&date=2024-10-16
+curl --request GET --url 'https://kekkai-api.redume.su/api/getRate/?from_currency=RUB&conv_currency=USD&date=2024-10-16'
 ```
             </TabItem>
         </Tabs>
@@ -101,7 +101,7 @@ Getting the list of the array with currency rate for a certain period of time.
         <Tabs>
             <TabItem label='curl'>
 ```shell
-curl --request GET --url https://kekkai-api.redume.su/api/getRate/?from_currency=RUB&conv_currency=USD&start_date=2024-10-16&end_date=2024-10-20
+curl --request GET --url 'https://kekkai-api.redume.su/api/getRate/?from_currency=RUB&conv_currency=USD&start_date=2024-10-16&end_date=2024-10-20'
 ```
             </TabItem>
         </Tabs>
