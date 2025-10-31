@@ -20,28 +20,17 @@ import { Steps, Code } from '@astrojs/starlight/components';
 
 2. Change config files
 
-    In nginx.conf, you need to specify your domain or ipv4 address
+    In .env, you need to specify your domain or ipv4 address
     <Code code='
-    ...
-    listen 443 ssl;
-    server_name localhost; # Your domain
-    ...
-    ' lang='txt' title='nginx.conf' />
+    DOMAIN=example.com
+    ' lang='txt' title='.env' />
 
-
-    To set up SSL. Create folder `CertSSL`
-    ```
-    mkdir CertSLL
-    ```
-
-    After that, copy the SSL certificates to the CertSSL folder, 
-    if the names are different, 
-    then change either the name of the certificates or in `nginx.conf`
+    Write the path to your certificates in the .env config file.
 
     <Code code='
-    ssl_certificate /etc/nginx/ssl/fullchain.pem;
-    ssl_certificate_key /etc/nginx/ssl/privkey.pem;
-    ' lang='txt' title='nginx.conf' />
+    SSL_CERT=/etc/nginx/ssl/privkey.pem
+    SSL_CERT_KEY=/etc/nginx/ssl/privkey.pem
+    ' lang='txt' title='.env' />
 
     <Code code=
     "
