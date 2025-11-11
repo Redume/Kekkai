@@ -17,7 +17,6 @@
 > [!NOTE]
 > The first free Open-Source Tool for Saving Historical Currency data
 
-
 <p align="center">
     <img src="assets/banner.png" alt="kekkai banner">
 </p>
@@ -62,3 +61,7 @@ of the information obtained from external services.
 - [eslint/eslint](https://github.com/eslint/eslint) — [MIT](https://github.com/eslint/eslint/blob/main/LICENSE)
 - [prettier/prettier](https://github.com/prettier/prettier) — [MIT](https://github.com/prettier/prettier/blob/main/LICENSE)
 - [withastro/starlight](https://github.com/withastro/starlight) - [MIT](https://github.com/withastro/starlight/blob/main/LICENSE)
+
+## Links to other related projects
+- [Shirino](https://github.com/redume/shirino) - Telegram bot showing currency rate and charts via inline commands
+- [ESP32-Currency](https://github.com/redume/ESP32-Currency) - Currency exchange rate chart on an ESP32 microcontroller with an ST7735S display 
