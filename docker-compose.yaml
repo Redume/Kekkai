@@ -60,6 +60,13 @@ services:
       - ./docs/dist:/docs
     command: sh -c 'cp -r /app/dist/* /docs'
 
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    volumes:
+      - ./web:/web
+
   postgres:
     image: postgres:17
     restart: unless-stopped

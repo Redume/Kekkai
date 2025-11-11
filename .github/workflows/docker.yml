@@ -22,6 +22,7 @@ jobs:
       chart: ${{ steps.filter.outputs.chart }}
       parser: ${{ steps.filter.outputs.parser }}
       docs: ${{ steps.filter.outputs.docs }}
+      web: ${{ steps.filter.outputs.web }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -38,6 +39,8 @@ jobs:
               - 'shared/**'
             docs:
               - 'docs/**'
+            web:
+              - 'web/**'
 
   build-server:
     name: Build server
@@ -182,6 +185,44 @@ jobs:
         with:
           file: ./docs/Dockerfile
           context: ./docs
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+
+  build-web:
+    name: Build web
+    needs: detect-changes
+    if: needs.detect-changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_PREFIX }}-web
+          tags: |
+            type=raw,value=latest
+            type=ref,event=branch
+            type=sha
+
+      - uses: docker/build-push-action@v5
+        with:
+          file: ./web/Dockerfile
+          context: ./web
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
