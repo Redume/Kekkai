@@ -1,27 +1,42 @@
 const axios = require('axios');
 const config = require('../../shared/config/src/main.js')();
 const logger = require('../../shared/logger/src/main.js');
+const token_rotate = require('../utils/token_rotate.js');
+
+const exchangeratapi = config['currency']['services']['exchangeratapi'];
+
+const active = [0];
 
 module.exports = {
     info: {
         name: 'ExchangeRateAPI',
         type: 'fiat',
     },
-    parseCurrencies: async () => {
-        const promises = config['currency']['fiat'].map((fromCurrency) =>
-            config['currency']['fiat'].map((convCurrency) => {
-                if (fromCurrency === convCurrency) return Promise.resolve(null);
 
-                const exchangeratapi =
-                    config['currency']['services']['exchangeratapi'];
+    parseCurrencies: async () => {
+        const fiatList = config['currency']['fiat'];
+
+        const promises = fiatList.flatMap((fromCurrency) =>
+            fiatList.map((convCurrency) => {
+                if (fromCurrency === convCurrency) {
+                    return Promise.resolve(null);
+                }
+
                 const serviceName = module.exports.info.name;
 
+                const url = `${exchangeratapi['base_url']}/${exchangeratapi['api_key'][active[0]]}/pair/${fromCurrency}/${convCurrency}`;
+
                 return axios
-                    .get(
-                        `${exchangeratapi['base_url']}/${exchangeratapi['api_key']}/pair/${fromCurrency}/${convCurrency}`,
-                    )
+                    .get(url)
                     .then((res) => {
                         const data = res.data;
+
+                        if (!data || typeof data.conversion_rate !== 'number') {
+                            logger.error(
+                                `Invalid data from ${serviceName} for ${fromCurrency} -> ${convCurrency}`,
+                            );
+                            return null;
+                        }
 
                         logger.info(
                             `Data fetched from ${serviceName}: ${fromCurrency} -> ${convCurrency}, Rate: ${data.conversion_rate}`,
@@ -35,15 +50,20 @@ module.exports = {
                         };
                     })
                     .catch((err) => {
-                        console.error(err);
+                        logger.error(
+                            `Error fetching ${fromCurrency} -> ${convCurrency} from ${serviceName}`,
+                        );
+                        logger.error(err);
+                        token_rotate(exchangeratapi['api_key'], active);
                         return null;
                     });
             }),
         );
 
-        const flattenedPromises = promises.flat();
-        const results = await Promise.all(flattenedPromises);
+        const results = await Promise.all(promises);
 
-        return results.filter((result) => result !== null);
+        return results.filter(
+            (result) => result !== null && result !== undefined,
+        );
     },
 };

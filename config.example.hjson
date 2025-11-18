@@ -28,14 +28,18 @@
           'coinmarketcap'
         ]
         coinmarketcap: {
-          "api_key": TOKEN_COINMARKETCAP"
+          "api_key": [
+            'TOKEN_COINMARKETCAP'
+          ]
           "base_url": https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest
         }
         duckduckgo: {
           "base_url": https://duckduckgo.com/js/spice/currency/1/
         }
         exchangeratapi: {
-          api_key: TOKEN_EXCHANGERATE
+          "api_key": [
+            'TOKEN_EXCHANGERATE'
+          ]
           base_url: https://v6.exchangerate-api.com/v6/
         }
       }
@@ -56,9 +60,6 @@
           USDT,
           TON
         ]
-        api_keys: {
-          coinmarketcap: TOKEN_COINMARKETCAP
-        }
     }
     schedule: 30 8 * * *
   }

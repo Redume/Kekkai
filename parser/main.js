@@ -29,10 +29,11 @@ function truncate_number(value, decimals) {
 }
 
 async function main() {
-    if (!config['schedule'])
+    if (!config['schedule']) {
         throw new Error('The crontab schedule is not set.');
-    else if (!cron.isValidCron(config['schedule'], { alias: true }))
+    } else if (!cron.isValidCron(config['schedule'], { alias: true })) {
         throw new Error('The crontab is invalid.');
+    }
 
     logger.info('Loading services...');
     config['currency']['services']['enabled'].forEach((serviceName) => {
@@ -58,31 +59,45 @@ async function main() {
         cryptoFetched = false;
 
         for (const srv of services) {
-            const results = await srv.parseCurrencies();
+            const serviceName = srv.info && srv.info.name ? srv.info.name : 'unknown service';
+            const serviceType = srv.info && srv.info.type ? srv.info.type : 'unknown';
 
-            if (Array.isArray(results) && results.length > 0) {
+            try {
+                if (serviceType === 'fiat' && fiatFetched) {
+                    logger.info(
+                        `Skipping fiat service ${serviceName} because fiat data has already been fetched.`,
+                    );
+                    continue;
+                }
+
+                if (serviceType === 'crypto' && cryptoFetched) {
+                    logger.info(
+                        `Skipping crypto service ${serviceName} because crypto data has already been fetched.`,
+                    );
+                    continue;
+                }
+
+                const results = await srv.parseCurrencies();
+
+                if (!Array.isArray(results) || results.length === 0) {
+                    logger.error(
+                        `Service ${serviceName} did not return any data.`,
+                    );
+                    continue;
+                }
+
                 logger.info(
-                    `Data received from ${srv.info.name || 'unknown service'}:`,
+                    `Data received from ${serviceName}:`,
                     results.length,
                     'items',
                 );
 
+                let insertedCount = 0;
+
                 for (const result of results) {
+                    if (!result) continue;
+
                     try {
-                        if (srv.info.type === 'fiat' && fiatFetched) {
-                            logger.info(
-                                'Skipping fiat currency collection as data has already been fetched.',
-                            );
-                            continue;
-                        }
-
-                        if (srv.info.type === 'crypto' && cryptoFetched) {
-                            logger.info(
-                                'Skipping crypto currency collection as data has already been fetched.',
-                            );
-                            continue;
-                        }
-
                         const currency = await validateCurrency(result);
                         const rate = truncate_number(currency.rate, 30);
 
@@ -95,6 +110,8 @@ async function main() {
                                 currency.date,
                             ],
                         );
+                        insertedCount += 1;
+
                         logger.info(
                             `Inserted data for ${currency.from_currency} -> ${currency.conv_currency}, Rate: ${rate}`,
                         );
@@ -104,17 +121,30 @@ async function main() {
                     }
                 }
 
-                if (srv.info.type === 'crypto') {
-                    cryptoFetched = true;
-                    logger.info('Crypto currency data fetched successfully.');
-                }
+                if (insertedCount > 0) {
+                    if (serviceType === 'crypto') {
+                        cryptoFetched = true;
+                        logger.info(
+                            `Crypto currency data fetched successfully from ${serviceName}.`,
+                        );
+                    }
 
-                if (srv.info.type === 'fiat') {
-                    fiatFetched = true;
-                    logger.info('Fiat currency data fetched successfully.');
+                    if (serviceType === 'fiat') {
+                        fiatFetched = true;
+                        logger.info(
+                            `Fiat currency data fetched successfully from ${serviceName}.`,
+                        );
+                    }
+                } else {
+                    logger.error(
+                        `Service ${serviceName} did not produce any valid records; other enabled services (if any) will be tried.`,
+                    );
                 }
-            } else {
-                logger.error('Data not received for writing to the database.');
+            } catch (err) {
+                logger.error(
+                    `Error while fetching data from service ${serviceName}:`,
+                );
+                logger.error(err);
             }
         }
     });
