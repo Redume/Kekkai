@@ -19,6 +19,8 @@ config.hjson
 # Other
 .DS_Store
 __pycache__
+.ruff_cache
+.zed
 
 # Virtual env
 .venv
