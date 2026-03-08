@@ -109,13 +109,6 @@ async def get_chart(req: Request, currency: Currency = Depends()) -> StreamingRe
     dates = [datetime.fromtimestamp(row["date"]) for row in data]
     rates = [float(row["rate"]) for row in data]
 
-    current_year = datetime.now().year
-
-    labels = [
-        d.strftime("%m-%d") if d.year == current_year else d.strftime("%Y-%m-%d")
-        for d in dates
-    ]
-
     if len(dates) < 3:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
