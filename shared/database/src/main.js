@@ -15,19 +15,9 @@ async function getDay(from_currency, conv_currency, date, conv_amount) {
     if (data?.['rows'].length <= 0) return 'Missing data';
 
     if (conv_amount) {
-        let conv_rate = (data?.['rows']?.[0]?.['rate'] || 0) * conv_amount;
-        let formatted_rate;
-    
-        if (conv_rate.toString().length >= 21) {
-            formatted_rate = conv_rate.toLocaleString("en-US", { 
-                useGrouping: false, 
-                maximumFractionDigits: 4
-            });
-        } else {
-            formatted_rate = conv_rate.toString();
-        }
-
-        data['rows'][0]['conv_amount'] = formatted_rate;
+        let rate = data?.['rows']?.[0]?.['rate'] || 0;
+        let final_value = multiplyHuge(conv_amount, rate);
+        data['rows'][0]['conv_amount'] = final_value;
     }
 
     logger.debug(data['rows'][0]);
@@ -57,6 +47,27 @@ async function getPeriod(from_currency, conv_currency, start_date, end_date) {
     logger.debug(data['rows']);
 
     return data['rows'];
+}
+
+function multiplyHuge(amount, rate) {
+    const rateStr = rate.toString();
+    const decimalPlaces = rateStr.includes('.') ? rateStr.split('.')[1].length : 0;
+    
+    const bigAmount = BigInt(amount.toString().split('.')[0]); 
+    const bigRate = BigInt(rateStr.replace('.', ''));
+    
+    let result = (bigAmount * bigRate).toString();
+    
+    if (decimalPlaces > 0) {
+        const splitIndex = result.length - decimalPlaces;
+        if (splitIndex > 0) {
+            result = result.slice(0, splitIndex) + '.' + result.slice(splitIndex);
+        } else {
+            result = '0.' + result.padStart(decimalPlaces, '0');
+        }
+    }
+    
+    return result;
 }
 
 module.exports = { getDay, getPeriod };
