@@ -23,7 +23,7 @@ services:
       dockerfile: server/Dockerfile
     restart: unless-stopped
     ports:
-      - '3000:3000'
+      - '${SERVER_PORT}:${SERVER_PORT}'
     volumes:
       - './config.hjson:/config.hjson'
     depends_on:
@@ -35,7 +35,7 @@ services:
       dockerfile: chart/Dockerfile
     restart: unless-stopped
     ports:
-      - '3030:3030'
+      - '${CHART_PORT}:${CHART_PORT}'
     volumes:
       - './config.hjson:/app/config.hjson'
     depends_on:
@@ -72,7 +72,7 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - '5432:5432'
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
     healthcheck:
