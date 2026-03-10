@@ -15,7 +15,7 @@ async function getDay(from_currency, conv_currency, date, conv_amount) {
     if (data?.['rows'].length <= 0) return 'Missing data';
 
     if (conv_amount) {
-        let conv_rate = data?.['rows'][0]['rate'] * conv_amount;
+        let conv_rate = BigInt(data?.['rows'][0]['rate'] * conv_amount).toString();
         data['rows'][0]['conv_amount'] = Number(conv_rate.toFixed(2));
     }
 
