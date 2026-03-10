@@ -15,7 +15,19 @@ async function getDay(from_currency, conv_currency, date, conv_amount) {
     if (data?.['rows'].length <= 0) return 'Missing data';
 
     if (conv_amount) {
-        data['rows'][0]['conv_amount'] = BigInt(data?.['rows'][0]['rate'] * conv_amount).toString();
+        let conv_rate = (data?.['rows']?.[0]?.['rate'] || 0) * conv_amount;
+        let formatted_rate;
+    
+        if (conv_rate.toString().length >= 21) {
+            formatted_rate = conv_rate.toString();
+        } else {
+            formatted_rate = conv_rate.toLocaleString("en-US", { 
+                useGrouping: false, 
+                maximumFractionDigits: 4
+            });
+        }
+
+        data['rows'][0]['conv_amount'] = formatted_rate;
     }
 
     logger.debug(data['rows'][0]);
