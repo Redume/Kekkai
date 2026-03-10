@@ -19,12 +19,12 @@ async function getDay(from_currency, conv_currency, date, conv_amount) {
         let formatted_rate;
     
         if (conv_rate.toString().length >= 21) {
-            formatted_rate = conv_rate.toString();
-        } else {
             formatted_rate = conv_rate.toLocaleString("en-US", { 
                 useGrouping: false, 
                 maximumFractionDigits: 4
             });
+        } else {
+            formatted_rate = conv_rate.toString();
         }
 
         data['rows'][0]['conv_amount'] = formatted_rate;
