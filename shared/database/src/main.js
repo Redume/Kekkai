@@ -4,7 +4,7 @@ const logger = require('../../logger/src/main.js');
 function toPlainString(num) {
     const s = String(num);
     if (!s.includes('e') && !s.includes('E')) return s;
-    return Number(num).toFixed(20).replace(/\.?0+$/, '');
+    return BigInt(Math.round(Number(num))).toString();
 }
 
 function multiplyHuge(amount, rate) {
@@ -21,6 +21,7 @@ function multiplyHuge(amount, rate) {
 
     const bigA = BigInt(amountStr.replace('.', ''));
     const bigR = BigInt(rateStr.replace('.', ''));
+
     let result = (bigA * bigR).toString();
 
     if (totalDecimals > 0) {
@@ -35,8 +36,8 @@ function multiplyHuge(amount, rate) {
 
 async function getDay(from_currency, conv_currency, date, conv_amount) {
     if (!from_currency || !conv_currency)
-        return new Error('fromCurrency and convCurrency are required');
-    else if (!date) return new Error('date is required');
+        return 'fromCurrency and convCurrency are required';
+    else if (!date) return 'date is required';
 
     const data = await pool.query(
         'SELECT from_currency, conv_currency, date, rate FROM currency ' +
@@ -61,9 +62,9 @@ async function getDay(from_currency, conv_currency, date, conv_amount) {
 
 async function getPeriod(from_currency, conv_currency, start_date, end_date) {
     if (!from_currency || !conv_currency)
-        return new Error('from_currency and conv_currency are required');
+        return 'from_currency and conv_currency are required';
     else if (!start_date || !end_date)
-        return new Error('start_date and end_date are required');
+        return 'start_date and end_date are required';
 
     const data = await pool.query(
         'SELECT * FROM currency WHERE ' +

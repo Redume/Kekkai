@@ -3,6 +3,7 @@ const rate = require('../../shared/database/src/main.js');
 module.exports = async function getRateRoute(fastify) {
     fastify.get('/api/getRate/', async function (req, res) {
         const query = req.query;
+
         if (!query['from_currency'] || !query['conv_currency']) {
             return res.status(400).send({
                 status: 400,
@@ -10,6 +11,7 @@ module.exports = async function getRateRoute(fastify) {
                     'The from_currency and conv_currency fields are required',
             });
         }
+
         let rate_res;
 
         try {
@@ -36,9 +38,9 @@ module.exports = async function getRateRoute(fastify) {
                         'Read more in the documentation',
                 });
 
-            if (typeof rate_res !== 'object')
-                return res.status(400).send({
-                    status: 400,
+            if (typeof rate_res === 'string')
+                return res.status(404).send({
+                    status: 404,
                     message: rate_res,
                 });
             else return res.status(200).send(rate_res);
