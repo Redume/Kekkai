@@ -1,6 +1,38 @@
 const pool = require('./postgresql.js');
 const logger = require('../../logger/src/main.js');
 
+function toPlainString(num) {
+    const s = String(num);
+    if (!s.includes('e') && !s.includes('E')) return s;
+    return Number(num).toFixed(20).replace(/\.?0+$/, '');
+}
+
+function multiplyHuge(amount, rate) {
+    const amountStr = toPlainString(amount);
+    const rateStr = toPlainString(rate);
+
+    const aDecimals = amountStr.includes('.')
+        ? amountStr.split('.')[1].length
+        : 0;
+    const rDecimals = rateStr.includes('.')
+        ? rateStr.split('.')[1].length
+        : 0;
+    const totalDecimals = aDecimals + rDecimals;
+
+    const bigA = BigInt(amountStr.replace('.', ''));
+    const bigR = BigInt(rateStr.replace('.', ''));
+    let result = (bigA * bigR).toString();
+
+    if (totalDecimals > 0) {
+        result = result.padStart(totalDecimals + 1, '0');
+        const splitIndex = result.length - totalDecimals;
+        result = result.slice(0, splitIndex) + '.' + result.slice(splitIndex);
+        result = result.replace(/\.?0+$/, '');
+    }
+
+    return result;
+}
+
 async function getDay(from_currency, conv_currency, date, conv_amount) {
     if (!from_currency || !conv_currency)
         return new Error('fromCurrency and convCurrency are required');
@@ -14,13 +46,16 @@ async function getDay(from_currency, conv_currency, date, conv_amount) {
 
     if (data?.['rows'].length <= 0) return 'Missing data';
 
+    data['rows'][0]['rate'] = toPlainString(data['rows'][0]['rate']);
+
     if (conv_amount) {
-        let conv_rate = data?.['rows'][0]['rate'] * conv_amount;
-        data['rows'][0]['conv_amount'] = Number(conv_rate.toFixed(2));
+        data['rows'][0]['conv_amount'] = multiplyHuge(
+            conv_amount,
+            data['rows'][0]['rate'],
+        );
     }
 
     logger.debug(data['rows'][0]);
-
     return data['rows'][0];
 }
 
@@ -43,30 +78,13 @@ async function getPeriod(from_currency, conv_currency, start_date, end_date) {
 
     if (data?.['rows'].length <= 0) return 'Missing data';
 
+    data['rows'] = data['rows'].map((row) => ({
+        ...row,
+        rate: toPlainString(row.rate),
+    }));
+
     logger.debug(data['rows']);
-
     return data['rows'];
-}
-
-function multiplyHuge(amount, rate) {
-    const rateStr = rate.toString();
-    const decimalPlaces = rateStr.includes('.') ? rateStr.split('.')[1].length : 0;
-    
-    const bigAmount = BigInt(amount.toString().split('.')[0]); 
-    const bigRate = BigInt(rateStr.replace('.', ''));
-    
-    let result = (bigAmount * bigRate).toString();
-    
-    if (decimalPlaces > 0) {
-        const splitIndex = result.length - decimalPlaces;
-        if (splitIndex > 0) {
-            result = result.slice(0, splitIndex) + '.' + result.slice(splitIndex);
-        } else {
-            result = '0.' + result.padStart(decimalPlaces, '0');
-        }
-    }
-    
-    return result;
 }
 
 module.exports = { getDay, getPeriod };
